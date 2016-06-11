@@ -1,0 +1,9 @@
+== Testing
+
+//====
+
+include::04-09-testing-method-security.adoc[]
+
+include::04-10-spring-mvc-test-integration.adoc[]
+
+//====

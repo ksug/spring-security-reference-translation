@@ -1,0 +1,5 @@
+#ignore list
+*.html
+*.pdf
+*.epub
+*.mobi

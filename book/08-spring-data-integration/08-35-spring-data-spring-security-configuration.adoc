@@ -1,0 +1,20 @@
+[[data-configuration]]
+== Spring Data & Spring Security Configuration
+
+To use this support, provide a bean of type `SecurityEvaluationContextExtension`.
+In Java Configuration, this would look like:
+
+[source,java]
+----
+@Bean
+public SecurityEvaluationContextExtension securityEvaluationContextExtension() {
+	return new SecurityEvaluationContextExtension();
+}
+----
+
+In XML Configuration, this would look like:
+
+[source,xml]
+----
+<bean class="org.springframework.security.data.repository.query.SecurityEvaluationContextExtension"/>
+----

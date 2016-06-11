@@ -1,0 +1,29 @@
+[[advanced-topics]]
+= Additional Topics
+In this part we cover features which require a knowledge of previous chapters as well as some of the more advanced and less-commonly used features of the framework.
+
+//====
+
+include::07-24-domain-object-security.adoc[]
+
+include::07-25-pre-authentication-scenarios.adoc[]
+
+include::07-26-ldap-authentication.adoc[]
+
+include::07-27-jsp-tag-libraries.adoc[]
+
+include::07-28-java-authentication-and-authorization-provider.adoc[]
+
+include::07-29-cas-authentication.adoc[]
+
+include::07-30-x509-authentication.adoc[]
+
+include::07-31-run-as-authentication-replacement.adoc[]
+
+include::07-32-spring-security-crypto-module.adoc[]
+
+include::07-33-concurrency-support.adoc[]
+
+include::07-34-spring-mvc-integration.adoc[]
+
+//====
