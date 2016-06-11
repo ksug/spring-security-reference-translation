@@ -1,6 +1,6 @@
 = Spring Security Reference
 Ben Alex; Luke Taylor; Rob Winch; Gunnar Hillert
-:description: 스프링부트를 기반으로 한 애플리케이션 개발가이드
+:description: 스프링시큐리티 참조문서 번역 - 한국스프링유저그룹-스프링시큐리티문서번역팀
 :doctype: book
 :docinfo:
 :toc:
@@ -10,7 +10,6 @@ Ben Alex; Luke Taylor; Rob Winch; Gunnar Hillert
 :front-cover-image: image:book/cover.jpg[width=1050,height=1600]
 //==== placeholders
 :spring-security: 스프링 시큐리티
-:include-dir: _includes
 :security-api-url: http://docs.spring.io/spring-security/site/docs/current/apidocs/
 
 Spring Security is a powerful and highly customizable authentication and access-control framework. It is the de-facto standard for securing Spring-based applications.
