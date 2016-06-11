@@ -16,7 +16,7 @@ Ben Alex; Luke Taylor; Rob Winch; Gunnar Hillert
 Spring Security is a powerful and highly customizable authentication and access-control framework. It is the de-facto standard for securing Spring-based applications.
 ////
 
-{spring-security}는 강력하고 높은 수준으로 인증을 사용자정의 가능한 접근제어 프레임워크다. 사실상 스프링 기반 애플리케이션의 표준이다.
+{spring-security}는 인증에 대해서 높은 수준으로 사용자정의 가능하고 강력한 접근제어 프레임워크다. 사실상 스프링 기반 애플리케이션의 표준이라 할 수 있다.
 
 
 //==============================================================================
