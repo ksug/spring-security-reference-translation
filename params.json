@@ -1,0 +1,6 @@
+{
+  "name": "Spring-security-reference-translation",
+  "tagline": "KSUG, Spring Security reference document translation",
+  "body": "### Spring Security 참조문서 번역\r\n[스프링 시큐리티 4.1.0.RELEASE](https://github.com/spring-projects/spring-security/tree/4.1.0.RELEASE/docs/manual/src/docs/asciidoc) 참조문서 번역 진행\r\n\r\n### Authors and Contributors\r\n* 원저자: Ben Alex; Luke Taylor; Rob Winch; Gunnar Hillert\r\n* 번역공헌자: 송인경, 아라한사, 오승목, 조경숙, 허니몬\r\n\r\n\r\n\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
