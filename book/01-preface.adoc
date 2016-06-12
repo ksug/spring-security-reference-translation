@@ -1,3 +1,4 @@
+////
 [[preface]]
 = Preface
 Spring Security provides a comprehensive security solution for Java EE-based enterprise software applications. As you will discover as you venture through this reference guide, we have tried to provide you a useful and highly configurable security system.
