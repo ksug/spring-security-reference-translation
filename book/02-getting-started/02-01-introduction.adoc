@@ -1,4 +1,5 @@
-////[[introduction]]
+////
+[[introduction]]
 == Introduction
 
 
@@ -12,6 +13,11 @@ People use Spring Security for many reasons, but most are drawn to the project a
 [[스프링 시큐리티 소개]]
 == 스프링 시큐리티 소개
 
+[[Acegi Security란 무엇인가]]
+== 스프링 시큐리티란 
+스프링 시큐리티는 Java EE 기반의 Enterprise 소프트웨어 어플리케이션을 위한 전반적인 보안 솔루션을 제공한다. 특히 스프링 시큐리티는 enterpise 소프트웨어 개발을 위한 선구적인 Java EE 솔루션인 스프링 프레임웍에 기반하여 빌드하는 프로젝트를 지원한다. 만약 어플리케이션을 개발하는데 스프링을 사용하고 있지 않다면 이 가이드를 꼼꼼하게 읽기를 권장한다. 그렇지 않고 스프링과 어느정도 친숙한 사용자라면 - 특히 dependency injection 을 다뤄본 사용자라면 - 보다 쉽게 스프링 시큐리티를 시작할 수 있을 것이다. 
+
+사람들은 제각기 다양한 목적을 갖고 스프링 시큐리티를 사용한다.
 
 [[what-is-acegi-security]]
 
