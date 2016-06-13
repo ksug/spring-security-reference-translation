@@ -1,17 +1,43 @@
 [[m3to4]]
+////
 == Migrating from 3.x to 4.x
+////
+== 3.x 에서 4.x 으로 이주하기
 
+////
 NOTE: Upgrading from Spring Security 4.0.x is passive.
 These instructions are for users who are updating from Spring Security 3.2.x to 4.1.x.
+////
+[NOTE]
+====
+{spring-security} 4.0.x  을 업그레이드하는 방법은 다루지 않는다. 여기서는 {spring-security} 3.2.x 에서 4.1.x 으로 업데이트하려는 사용자를 대상으로 설명한다.
+====
 
+////
 As exploits against applications evolve, so must Spring Security.
 As a major release version, the Spring Security team took the opportunity to make some non-passive changes which focus on:
+////
 
+애플리케이션에 대한 공격은 {spring-security}를 진화하게 했다.  중요한 출시버전마다, {spring-security} 팀은 자연스런 변화를 유도하는 방향에 촛점을 맞춰왔다:
+
+////
 * Ensuring Spring Security is more https://www.owasp.org/index.php/Establish_secure_defaults[secure by default]
 * Minimizing https://www.owasp.org/index.php/Information_Leakage[Information Leakage]
 * Removing deprecated APIs
+////
+* 더 많은 것을 제공 https://www.owasp.org/index.php/Establish_secure_defaults[secure by default]
+* 최소화 https://www.owasp.org/index.php/Information_Leakage[Information Leakage]
+* 제외대상 API 제거
 
+////
 For complete details on migrating from Spring Security 3 to Spring Security 4 refer to one of the guides below:
+////
+{spring-security} 3에서 {spring-security} 4로 이주하는 자세한 내용에 대해서는 다음의 가이드 중에 하나를 참조하기 바란다.
+
+////
+* http://docs.spring.io/spring-security/site/migrate/current/3-to-4/html5/migrate-3-to-4-xml.html[Migrating from Spring Security 3.x to 4.x (XML Configuration)]
+* http://docs.spring.io/spring-security/site/migrate/current/3-to-4/html5/migrate-3-to-4-jc.html[Migrating from Spring Security 3.x to 4.x (Java Configuration)]
+////
 
 * http://docs.spring.io/spring-security/site/migrate/current/3-to-4/html5/migrate-3-to-4-xml.html[Migrating from Spring Security 3.x to 4.x (XML Configuration)]
 * http://docs.spring.io/spring-security/site/migrate/current/3-to-4/html5/migrate-3-to-4-jc.html[Migrating from Spring Security 3.x to 4.x (Java Configuration)]
