@@ -1,9 +1,36 @@
+////
 [[getting-started]]
 = Getting Started
 
 The later parts of this guide provide an in-depth discussion of the framework architecture and implementation classes, which you need to understand if you want to do any serious customization. In this part, we'll introduce Spring Security 4.0, give a brief overview of the project's history and take a slightly gentler look at how to get started using the framework. In particular, we'll look at namespace configuration which provides a much simpler way of securing your application compared to the traditional Spring bean approach where you have to wire up all the implementation classes individually.
 
 We'll also take a look at the sample applications that are available. It's worth trying to run these and experimenting with them a bit even before you read the later sections - you can dip back into them as your understanding of the framework increases. Please also check out the http://spring.io/spring-security[project website] as it has useful information on building the project, plus links to articles, videos and tutorials.
+
+//====
+
+include::02-01-introduction.adoc[]
+
+include::02-02-whats-new-spring-security.adoc[]
+
+include::02-03-java-configuration.adoc[]
+
+include::02-04-security-namespace-configuration.adoc[]
+
+include::02-05-sample-applications.adoc[]
+
+include::02-06-spring-seuciryt-community.adoc[]
+
+//====
+
+////
+
+[[getting-started]]
+= 시작하기
+
+이 가이드의 가장 마지막 파트에서는 프레임웍 아키텍처와 구현체 클래스에 대한 깊이 있는 논의를 제공한다. 규모 있는 커스터마이징을 하고자 할 때 여기에 대해 이해하고 넘어가는 것이 반드시 필요할 것이다. 이 파트에서는 스프링 시큐리티 4.0을 소개하고, 이 프로젝트의 역사를 간략하게 기술하고자 한다. 또한 프레임웍을 사용하기 위하여 어떻게 시작해야 하는 지를 가볍게 설명하려고 한다. 특히 여기에서는 namespace 기반 설정 방식에 대해 살펴볼 것이다. 모든 구현체 클래스들을 각각 설정해주어야 하는 전통적인 스프링 Bean 방식의 접근 방법과 달리 namepsace 기반 설정 방식은 어플리케이션 보안을 훨씬 더 간편하게 설정할 수 있도록 도와준다.
+
+
+여기에서 또한 샘플 어플리케이션을 활용하고자 한다. 다음에 이어질 내용들을 읽기 전에 일단 어플리케이션을 실행해보고 조금이라도 샘플 어플리케이션을 경험해보는 것은 그 자체로 의미가 있다. 프레임웍에 대한 이해도가 높아질 수록 당신은 그들에게 깊숙이 빠져들 것이다. link:http://spring.io/spring-security[project website]를 확인해보라. 이 웹사이트는 아티클이나 영상, 튜토리얼 뿐 아니라 프로젝트를 빌드하는 데에 있어서도 유용한 정보들을 제공한다.
 
 //====
 
