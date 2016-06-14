@@ -39,3 +39,5 @@ include::book/08-spring-data-integration/08-spring-data-integration.adoc[]
 
 include::book/09-appendix/09-appendix.adoc[]
 //==============================================================================
+
+//test
