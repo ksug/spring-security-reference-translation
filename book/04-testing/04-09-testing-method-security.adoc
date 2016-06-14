@@ -6,7 +6,8 @@ This section demonstrates how to  use Spring Security's Test support to test met
 We first introduce a `MessageService` that requires the user to be authenticated in order to access it.
 ////
 
-이 섹션은 테스트 메서드를 기반으로 보안에 대한 {spring-security} 테스트를 어떻게 사용하는지 설명한다.
+이 섹션에서는 테스트 메서드를 기반으로 보안에 대한 {spring-security} 테스트를 어떻게 사용하는지 설명한다.
+먼저 소개할 `MessageService` 는 서비스에 접근하면 사용자에게 인증을 요청한다.
 
 [source,java]
 ----
@@ -21,8 +22,12 @@ public class HelloMessageService implements MessageService {
 }
 ----
 
+////
 The result of `getMessage` is a String saying "Hello" to the current Spring Security `Authentication`.
 An example of the output is displayed below.
+////
+`getMessage` 의 결과는 문자열로 "`Hello`" 와 함께 현재 {spring-security} `Authentication` 를 표시한다.
+예제 결과물은 아래 출력된다:
 
 [source,text]
 ----
