@@ -1,8 +1,12 @@
 [[test-method]]
-== Testing Method Security
-
+//== Testing Method Security
+== 메서드 보안 테스트
+////
 This section demonstrates how to  use Spring Security's Test support to test method based security.
 We first introduce a `MessageService` that requires the user to be authenticated in order to access it.
+////
+
+이 섹션은 테스트 메서드를 기반으로 보안에 대한 {spring-security} 테스트를 어떻게 사용하는지 설명한다.
 
 [source,java]
 ----
