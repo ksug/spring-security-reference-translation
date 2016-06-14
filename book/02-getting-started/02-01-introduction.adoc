@@ -42,9 +42,9 @@ At an authentication level, Spring Security supports a wide range of authenticat
 
 * HTTP X.509 client certificate exchange (an IETF RFC-based standard)
 
-//// * LDAP (a very common approach to cross-platform authentication needs, especially in large environments) ////
+<!-- * LDAP (a very common approach to cross-platform authentication needs, especially in large environments) -->
 * LDAP (cross-platform 인증 환경에 있어 가장 일반적으로 쓰이는 방식이다. 특히 규모가 큰 시스템에 적합하다.)
-//// Form-based authentication (for simple user interface needs) /////
+<!-- Form-based authentication (for simple user interface needs) -->
 * Form 기반 인증 (간단한 UI를 통하여 인증되는 방식)
 
 //// * OpenID authentication ////
@@ -56,10 +56,10 @@ At an authentication level, Spring Security supports a wide range of authenticat
 
 * Transparent authentication context propagation for Remote Method Invocation (RMI) and HttpInvoker (a Spring remoting protocol)
 
-//// * Automatic "remember-me" authentication (so you can tick a box to avoid re-authentication for a predetermined period of time) ////
+<!-- * Automatic "remember-me" authentication (so you can tick a box to avoid re-authentication for a predetermined period of time) -->
 * 'remember-me' 기능을 이용한 자동 인증(체크박스를 통해 일정 시간 동안 재인증을 방지할 수 있다)
 
-////* Anonymous authentication (allowing every unauthenticated call to automatically assume a particular security identity)////
+<!-- * Anonymous authentication (allowing every unauthenticated call to automatically assume a particular security identity) -->
 * 익명 인증 (특정 보안 주체-역주:익명 유저-를 자동으로 지정하여 권한이 필요없는 모든 기능을 수행하도록 함)
 
 * Run-as authentication (which is useful if one call should proceed with a different security identity)
