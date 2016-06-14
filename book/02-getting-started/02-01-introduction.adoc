@@ -121,7 +121,9 @@ Spring Security began in late 2003 as "The Acegi Security System for Spring". A 
 
 그러한 점을 염두에 두고, 간소한 시큐리티 구현체가 만들어졌지만 릴리즈되지는 않았습니다. 스프링 커뮤니티의 다른 멤버가 몇 주후에 시큐리티에 관해 문의를 하였고, 당시 코드가 그들에게 제공되었습니다. 몇몇 다른 요청들이 뒤따라왔고, 2004년 1월 거의 20명의 사람들이 코드를 사용하고 있었습니다. 소스포즈 프로젝트에 제안한 개척자들이 순서대로 합류하였으며, 예상대로 2004년 3월 자리를 잡기 시작합니다(established) 
 
+////
 With that in mind, a simple security implementation was built and not released. A few weeks later another member of the Spring community inquired about security, and at the time this code was offered to them. Several other requests followed, and by January 2004 around twenty people were using the code. These pioneering users were joined by others who suggested a SourceForge project was in order, which was duly established in March 2004.
+////
 
 초기에는 프로젝트는 자체적인 인증 모듈이 없었습니다. 시큐리티에 관리되는 콘테이너는 인증에 집중하기보다는 Acegi 시큐리티한 인증 처리 프로세스에 의존하였습니다. 이것은 처음에 적합했지만 점점 더 많은 사용자들의 추가적인 콘테이너 지원을 요청하였습니다. 콘테이너특징적인 인증 인터페이스 영역의 근본적인 한계는 뚜렷했습니다. 또, 콘테이너의 클래스패스에 새로운 JAR를 추가해야되는 것과 관련된 이슈또한 있었고, 이는 최종 사용자의 혼란과 잘못된 설정의 주된 요인이었습니다. 
 
