@@ -49,9 +49,11 @@ At an authentication level, Spring Security supports a wide range of authenticat
 // * OpenID authentication
 * OpenID 인증
 
-* Authentication based on pre-established request headers (such as Computer Associates Siteminder)
+//* Authentication based on pre-established request headers (such as Computer Associates Siteminder)
+* 미리 설정해놓은 request header 값에 기반한 인증 방식 (Computer Associates Siteminder 참고)
 
-* JA-SIG Central Authentication Service (otherwise known as CAS, which is a popular open source single sign-on system)
+//* JA-SIG Central Authentication Service (otherwise known as CAS, which is a popular open source single sign-on system)
+* JA-SIG 중앙 인증 서비스 (CAS로 알려져 있으며 꽤 인기 있는 오픈 소스 SSO 시스템이다)
 
 * Transparent authentication context propagation for Remote Method Invocation (RMI) and HttpInvoker (a Spring remoting protocol)
 
@@ -61,11 +63,13 @@ At an authentication level, Spring Security supports a wide range of authenticat
 // * Anonymous authentication (allowing every unauthenticated call to automatically assume a particular security identity) 
 * 익명 인증 (특정 보안 주체-역주:익명 유저-를 자동으로 지정하여 권한이 필요없는 모든 기능을 수행하도록 함)
 
-* Run-as authentication (which is useful if one call should proceed with a different security identity)
+//* Run-as authentication (which is useful if one call should proceed with a different security identity)
+* Run-as 인증 (다른 보안 주체와 통신해야 할 때 매우 유용하다)
 
 * Java Authentication and Authorization Service (JAAS)
 
-* JEE container autentication (so you can still use Container Managed Authentication if desired)
+//* JEE container autentication (so you can still use Container Managed Authentication if desired)
+JEE container 인증 (원한다면 Container Managed Authentication 을 계속해서 사용할 수 있다)
 
 * Kerberos
 
