@@ -95,13 +95,16 @@ At an authentication level, Spring Security supports a wide range of authenticat
 
 * Atlassian Crowd *
 
-* Your own authentication systems (see below)
+* 사용자가 직접 만든 인증 시스템(아래 내용 참고)
+//* Your own authentication systems (see below)
 
 
 
 (* Denotes provided by a third party
-
+////
 Many independent software vendors (ISVs) adopt Spring Security because of this significant choice of flexible authentication models. Doing so allows them to quickly integrate their solutions with whatever their end clients need, without undertaking a lot of engineering or requiring the client to change their environment. If none of the above authentication mechanisms suit your needs, Spring Security is an open platform and it is quite simple to write your own authentication mechanism. Many corporate users of Spring Security need to integrate with "legacy" systems that don't follow any particular security standards, and Spring Security is happy to "play nicely" with such systems.
+////
+대다수의 독립 소프트웨어 벤더(ISVs)는 스프링 시큐리티가 가진 인증 모델의 유연성에 중점을 두고 스프링 시큐리티를 적용한다. 이렇게 하면 그들과 그들의 고객이 무엇을 필요로 하든, 솔루션에 맞게 환경을 변경하거나 막대한 개발을 하지 않아도 인증 모델과 솔루션을 쉽게 통합할 수 있기 때문이다. 위에 기술한 인증 메카니즘 중 본인의 필요에 맞는 게 하나도 없더라도, 스프링 시큐리티는 오픈 플랫폼이어서 어떤 인증 플랫폼에도 적용하는 것이 매우 간단하다. 스프링 시큐리티의 사용자들 중 상당수는 그 어떤 보안 표준을 따르지 않고 만들어진 "레거시" 시스템과의 통합을 원한다. 그리고 스프링 시큐리티는 그러한 시스템들과 매우 멋지게 공존한다. 
 
 Irrespective of the authentication mechanism, Spring Security provides a deep set of authorization capabilities. There are three main areas of interest  - authorizing web requests, authorizing whether methods can be invoked, and authorizing access to individual domain object instances. To help you understand the differences, consider the authorization capabilities found in the Servlet Specification web pattern security, EJB Container Managed Security and file system security respectively. Spring Security provides deep capabilities in all of these important areas, which we'll explore later in this reference guide.
 
