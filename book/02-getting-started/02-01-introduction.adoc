@@ -143,7 +143,7 @@ Acegi Security 는 2007년 말에 이르러 공식적인 스프링 프로젝트�
 
 오늘날 스프링 시큐리티는 규모가 크고 활동이 매우 활발한 오픈소스 커뮤니티에서 다뤄지고 있다. 서포트 포럼에는 스프링 시큐리티에 대한 수천개의 메세지들이 있다. 또한 자발적으로 코드를 더해주는 개발자들과 정기적으로 패치를 공유하고 동료를 지원해주는 활발한 커뮤니티가 스프링 시큐리티를 든든히 뒷받침해주고 있다.
 
-
+////
 [[release-numbering]]
 === Release Numbering
 It is useful to understand how Spring Security release numbers work, as it will help you identify the effort (or lack thereof) involved in migrating to future releases of the project. Each release uses a standard triplet of integers: MAJOR.MINOR.PATCH. The intent is that MAJOR versions are incompatible, large-scale upgrades of the API. MINOR versions should largely retain source and binary compatibility with older minor versions, thought there may be some design changes and incompatible updates. PATCH level should be perfectly compatible, forwards and backwards, with the possible exception of changes which are to fix bugs and defects.
@@ -151,7 +151,15 @@ It is useful to understand how Spring Security release numbers work, as it will 
 The extent to which you are affected by changes will depend on how tightly integrated your code is. If you are doing a lot of customization you are more likely to be affected than if you are using a simple namespace configuration.
 
 You should always test your application thoroughly before rolling out a new version.
+////
+[[release-numbering]]
+=== Release Numbering
+스프링 시큐리티의 릴리즈 버전 넘버가 어떻게 달라지는 지 이해하는 것은 매우 유용하다. 릴리즈 버전 넘버를 이해하면, 추후 프로젝트를 새로운 버전으로 이관할 때 어느 정도의 에포트가 들 것인지(혹은 들지 않을 것인지) 확인할 수 있다. 각각의 릴리즈는 표준적인 세 개의 숫자 배열을 사용한다. 각각의 숫자는 Major.Minor.Patch를 의미한다. Major 버전을 표기하는 것은 본 API가 이전 버전과 호환되지 않는 대규모 업그레이드가 이루어졌음을 알리는 것이다. Minor 버전은 아마도 몇몇 디자인이 변경되었거나 호환되지 않는 업데이트가 있을 수 있지만, 대부분 이전 minor 버전의 소스를 유지하고 있어 호환 가능하다는 것을 뜻한다. Patch 레벨은 버그나 결함들을 수정하였기 때문에 이에 대한 Exception 이 나타날 수 있지만, 완전히 호환 가능하다는 것을 의미한다. 
 
+
+릴리즈에 의한 변화의 규모가 어느정도인지에 따라 얼마나 세심하게 코드를 통합시켜야 하는 지가 결정된다. 만약 당신이 단순하게 namespace configuration 을 사용했을 때보다 커스터마이징을 많이 했을 때 변화에 대한 영향을 더욱 많이 받을 것이다.
+
+그러므로 새로운 버전으로 올리기 전에 언제나 어플리케이션을 꼼꼼히 테스트해야만 한다.
 
 [[get-spring-security]]
 === Getting Spring Security
