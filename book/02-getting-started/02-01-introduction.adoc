@@ -120,13 +120,6 @@ Irrespective of the authentication mechanism, Spring Security provides a deep se
 Spring Security began in late 2003 as "The Acegi Security System for Spring". A question was posed on the Spring Developers' mailing list asking whether there had been any consideration given to a Spring-based security implementation. At the time the Spring community was relatively small (especially compared with the size today!), and indeed Spring itself had only existed as a SourceForge project from early 2003. The response to the question was that it was a worthwhile area, although a lack of time currently prevented its exploration.
 
 With that in mind, a simple security implementation was built and not released. A few weeks later another member of the Spring community inquired about security, and at the time this code was offered to them. Several other requests followed, and by January 2004 around twenty people were using the code. These pioneering users were joined by others who suggested a SourceForge project was in order, which was duly established in March 2004.
-////
-[[history]]
-=== 스프링 시큐리티의 역사 
-스프링 시큐리티는 2003년 말에 "The Acegi Security Systme for Spring" 이라는 이름으로 시작되었다. 시작은 Spring 개발자 메일링 리스트에 누군가 스프링 기반의 보안 모듈을 만들지 않겠느냐는 제안을 던지면서부터였다. 그때 스프링 커뮤니티는 매우 작았고(지금 규모에 비해서) 2003년 초까지 SourceForge(역주:최근의 github 과 같은 소스 코드 레파지토리/커뮤니티이다)에서만 존재하고 있었다. 제안에 대한 답변은 탐구해 볼 시간이 부족하긴하지만 일단 해볼만한 가치가 있는 일이라는 것이었다. 
-
-이 제안을 염두에 두어 아주 간단한 보안 모듈이 개발되었지만 릴리즈되지는 않았다. 몇 주가 지난 후 스프링 커뮤니티에 새로운 멤버들이 보안 영역에 참여하게 되었다. 그때 이 코드들은 모두 그들에게 넘어갔다. 이후 몇 가지 요구사항들이 뒤따랐고 2004년 1월에는 약 20여명의 사람들이 이 코드를 사용하게 되었다. 모두 SourceForge 프로젝트에 제안한 사람들로부터 초대된 사람들이었다. 정식으로 설립된 것은 2004년 5월이었다. 
-
 
 In those early days, the project didn't have any of its own authentication modules. Container Managed Security was relied upon for the authentication process, with Acegi Security instead focusing on authorization. This was suitable at first, but as more and more users requested additional container support, the fundamental limitation of container-specific authentication realm interfaces became clear. There was also a related issue of adding new JARs to the container's classpath, which was a common source of end user confusion and misconfiguration.
 
@@ -135,6 +128,20 @@ Acegi Security-specific authentication services were subsequently introduced. Ar
 Acegi Security became an official Spring Portfolio project towards the end of 2007 and was rebranded as "Spring Security".
 
 Today Spring Security enjoys a strong and active open source community. There are thousands of messages about Spring Security on the support forums. There is an active core of developers who work on the code itself and an active community which also regularly share patches and support their peers.
+////
+[[history]]
+=== 스프링 시큐리티의 역사 
+스프링 시큐리티는 2003년 말에 "The Acegi Security Systme for Spring" 이라는 이름으로 시작되었다. 시작은 Spring 개발자 메일링 리스트에 누군가 스프링 기반의 보안 모듈을 만들지 않겠느냐는 제안을 던지면서부터였다. 그때 스프링 커뮤니티는 매우 작았고(지금 규모에 비해서) 2003년 초까지 SourceForge(역주:최근의 github 과 같은 소스 코드 레파지토리/커뮤니티이다)에서만 존재하고 있었다. 제안에 대한 답변은 탐구해 볼 시간이 부족하긴하지만 일단 해볼만한 가치가 있는 일이라는 것이었다. 
+
+이 제안을 염두에 두어 아주 간단한 보안 모듈이 개발되었지만 릴리즈되지는 않았다. 몇 주가 지난 후 스프링 커뮤니티에 새로운 멤버들이 보안 영역에 참여하게 되었다. 그때 이 코드들은 모두 그들에게 넘어갔다. 이후 몇 가지 요구사항들이 뒤따랐고 2004년 1월에는 약 20여명의 사람들이 이 코드를 사용하게 되었다. 모두 SourceForge 프로젝트에 제안한 사람들로부터 초대된 사람들이었다. 정식으로 설립된 것은 2004년 5월이었다. 
+
+초기에는 프로젝트 내에 우리들만의 인증 모듈은 하나도 없었다. 인증 프로세스는 Container Managed Security 에 의존하고 있었고 Acegi Security 는 대신 권한 관리 쪽에 역량을 집중했다. 처음에는 이것이 괜찮았으나, 가면 갈수록 사용자들이 추가적인 container 의 도움을 요청하게 되자 container 기반 인증 인터페이스의 근본적인 한계가 뚜렷해졌다. 또한 container의 클래스패스에 새로운 JAR을 추가하는 것 역시 End-User 들의 혼란과 오설정(misconfiguration)을 불러 일으키는 공통된 원인으로 지목되었다. 
+
+Acegi Securiy의 인증 서비스는 나중에 소개할 것이다. 몇 년이 지나 Acegi Security 팀은 공식적으로 Spring Project의 서브 프로젝트가 되었다. 1.0.0 최종 릴리즈 버전은 2006년 5월에 출시되었다. - 그리고 그 뒤로 2년 6개월 정도가 지나 그 동안 여러 소프트웨어 프로젝트의 active 사용자들이 생겨났고 수많은 개선 작업들이 있었으며 마찬가지로 커뮤니티의 많은 지원이 있었다. 
+
+Acegi Security 는 2007년 말에 이르러 공식적인 스프링 프로젝트의 포트폴리오가 되었고 이후 "Spring Security"로 이름을 바꾸었다. 
+
+오늘날 스프링 시큐리티는 규모가 크고 활동이 매우 활발한 오픈소스 커뮤니티에서 다뤄지고 있다. 서포트 포럼에는 스프링 시큐리티에 대한 수천개의 메세지들이 있다. 또한 자발적으로 코드를 더해주는 개발자들과 정기적으로 패치를 공유하고 동료를 지원해주는 활발한 커뮤니티가 스프링 시큐리티를 든든히 뒷받침해주고 있다.
 
 
 [[release-numbering]]
