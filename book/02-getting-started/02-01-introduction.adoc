@@ -10,6 +10,14 @@ Spring Security provides comprehensive security services for Java EE-based enter
 People use Spring Security for many reasons, 
 
 but most are drawn to the project after finding the security features of Java EE's Servlet Specification or EJB Specification lack the depth required for typical enterprise application scenarios. Whilst mentioning these standards, it's important to recognise that they are not portable at a WAR or EAR level. Therefore, if you switch server environments, it is typically a lot of work to reconfigure your application's security in the new target environment. Using Spring Security overcomes these problems, and also brings you dozens of other useful, customisable security features.
+
+[[what-is-acegi-security]]
+
+As you probably know two major areas of application security are "authentication" and "authorization" (or "access-control"). These are the two main areas that Spring Security targets. "Authentication" is the process of establishing a principal is who they claim to be (a "principal" generally means a user, device or some other system which can perform an action in your application)."Authorization" refers to the process of deciding whether a principal is allowed to perform an action within your application. To arrive at the point where an authorization decision is needed, the identity of the principal has already been established by the authentication process. These concepts are common, and not at all specific to Spring Security.
+
+
+At an authentication level, Spring Security supports a wide range of authentication models. Most of these authentication models are either provided by third parties, or are developed by relevant standards bodies such as the Internet Engineering Task Force. In addition, Spring Security provides its own set of authentication features. Specifically, Spring Security currently supports authentication integration with all of these technologies:
+
 ////
 
 [[introduction]]
@@ -21,20 +29,14 @@ but most are drawn to the project after finding the security features of Java EE
 
 사람들은 제각기 다양한 목적을 갖고 스프링 시큐리티를 사용하는데, 아마도 이 중 대부분은 이미 Java EE 서블렛이나 EJB 스펙이 enterprise 어플리케이션 시나리오에 필요한 보안 기준들을 제대로 충족시키지 못한다는 사실을 발견한 후 여기로 오게 되었을 것이다. 보안 기준을 검토할 때, Java EE 서블렛이나 EJB 스펙은 WAR 혹은 EAR 레벨에 이식되지 않는다는 사실을 알아야만 한다. 이 말인즉슨 당신이 서버 환경을 변경해야 할 때, 변경할 환경에 맞추어 어플리케이션의 보안 설정들도 재설정해야 한다는 것을 뜻한다. 스프링 시큐리티를 사용한다면 이러한 문제들을 극복할 수 있다. 그리고 그에 더하여 그 이상의 유용성과 유연함(customisable)을 제공받을 수 있을 것이다. 
 
-
 [[what-is-acegi-security]]
 === acegi 시큐리티란 무엇인가
 여러분이 아마 아시다시피, 어플리케이션보안의  두 주요 부분은 인증(authentication)과 인가(authorization 혹은 접근제어access-control) 입니다. 인증과 인가는 스프링 시큐리티가 목표로하는 두 주요 부분입니다. 인증(Authentication) 은 접근주체(principal)을 만드는 과정입니다. 여기서 접근주체란 일반적으로 당신의 어플리케이션에서 어떠한 행동을 하려하는 사용자나 디바이스 혹은 어떤 다른 시스템을 말합니다. 
 
-인가(Authroization)은 어떤 접근주체(Principal)이 당신의 어플리케이션에서 어떠한 행동을 취할 수 있는 것이 허용되는지 아닌지 에 대한 것을 결정하는 과정을 나타냅니다. 인가결정이 필요한 지점에 이르기 위해 접근주체의 식별자는 인증 과정에서 이미 설정과되어있어야 합니다. 이러한 과정은 스프링 시큐리티만의 특별한 과정이 아닙니다.
 
-인가를 하기 위해서, 스프링 시큐리티는 다양한 인증모델을 지원하는데, 대부분의 이러한 인증 모델은 서드파티에 의해 제공되거나 인터넷 엔지니어링 전담반같은 관련된 표준부처에 의해 개발됩니다. 추가적으로 스프링 시큐리티는 스프링 시큐리티 고유의 인증 특징들을 제공합니다. 특별히 스프링 시큐리티는 이러한 모든 기술들과의 통합을 지원합니다.
-////
-As you probably know two major areas of application security are "authentication" and "authorization" (or "access-control"). These are the two main areas that Spring Security targets. "Authentication" is the process of establishing a principal is who they claim to be (a "principal" generally means a user, device or some other system which can perform an action in your application)."Authorization" refers to the process of deciding whether a principal is allowed to perform an action within your application. To arrive at the point where an authorization decision is needed, the identity of the principal has already been established by the authentication process. These concepts are common, and not at all specific to Spring Security.
+어플리케이션 보안에서 가장 중요한 두 가지 키워드는 바로 인증(authentication)와 권한 부여(authorization)다. 이것들은 스프링 시큐리티가 목표로 삼는 주요 영역이기도 하다. 인증(authentication)은 요청에 따라 보안 주체(principal)를 생성하는 프로세스에 대한 것이다.(보안 주체는 일반적으로 사용자, 장치 또는 당신의 어플리케이션에서 어떤 기능을 수행하는 다른 시스템들을 의미한다.) 권한 부여(Authorization)은 어플리케이션 내에서 어떠한 액션을 수행할 때 그것을 허락할 것인지의 여부를 결정하는 프로세스다. 권한 부여 프로세스가 필요한 지점까지 가려면, 보안 주체는 먼저 인증 단계를 거쳐야 한다. 이러한 개념은 일반적인 것으로, 스프링 시큐리티에서만 쓰이는 건 아니다. 
 
-At an authentication level, Spring Security supports a wide range of authentication models. Most of these authentication models are either provided by third parties, or are developed by relevant standards bodies such as the Internet Engineering Task Force. In addition, Spring Security provides its own set of authentication features. Specifically, Spring Security currently supports authentication integration with all of these technologies:
-////
-
+인증 단계에서 스프링 시큐리티는 광범위한 인증 모델을 제시한다. 인증 모델 중 대부분은 third party를 통해 지원이 되거나 IETF 와 같은 국제 기구에 의해 개발된 것이다. 게다가 스프링 시큐리티는 자체적인 인증 유형을 제공한다. 특히 스프링 시큐리티는 현재 아래 열거된 기술들의 인증 통합 또한 지원하고 있다.
 
 * HTTP BASIC authentication headers (an IETF RFC-based standard)
 
@@ -42,27 +44,34 @@ At an authentication level, Spring Security supports a wide range of authenticat
 
 * HTTP X.509 client certificate exchange (an IETF RFC-based standard)
 
-* LDAP (a very common approach to cross-platform authentication needs, especially in large environments)
+//* LDAP (a very common approach to cross-platform authentication needs, especially in large environments) 
+* LDAP (cross-platform 인증 환경에 있어 가장 일반적으로 쓰이는 방식이다. 특히 규모가 큰 시스템에 적합하다.)
+//Form-based authentication (for simple user interface needs) 
+* Form 기반 인증 (간단한 UI를 통하여 인증되는 방식)
+// * OpenID authentication
+* OpenID 인증
 
-* Form-based authentication (for simple user interface needs)
+//* Authentication based on pre-established request headers (such as Computer Associates Siteminder)
+* 미리 설정해놓은 request header 값에 기반한 인증 방식 (Computer Associates Siteminder 참고)
 
-* OpenID authentication
-
-* Authentication based on pre-established request headers (such as Computer Associates Siteminder)
-
-* JA-SIG Central Authentication Service (otherwise known as CAS, which is a popular open source single sign-on system)
+//* JA-SIG Central Authentication Service (otherwise known as CAS, which is a popular open source single sign-on system)
+* JA-SIG 중앙 인증 서비스 (CAS로 알려져 있으며 꽤 인기 있는 오픈 소스 SSO 시스템이다)
 
 * Transparent authentication context propagation for Remote Method Invocation (RMI) and HttpInvoker (a Spring remoting protocol)
 
-* Automatic "remember-me" authentication (so you can tick a box to avoid re-authentication for a predetermined period of time)
+//* Automatic "remember-me" authentication (so you can tick a box to avoid re-authentication for a predetermined period of time)
+* 'remember-me' 기능을 이용한 자동 인증(체크박스를 통해 일정 시간 동안 재인증을 방지할 수 있다)
 
-* Anonymous authentication (allowing every unauthenticated call to automatically assume a particular security identity)
+// * Anonymous authentication (allowing every unauthenticated call to automatically assume a particular security identity) 
+* 익명 인증 (특정 보안 주체-역주:익명 유저-를 자동으로 지정하여 권한이 필요없는 모든 기능을 수행하도록 함)
 
-* Run-as authentication (which is useful if one call should proceed with a different security identity)
+//* Run-as authentication (which is useful if one call should proceed with a different security identity)
+* Run-as 인증 (다른 보안 주체와 통신해야 할 때 매우 유용하다)
 
 * Java Authentication and Authorization Service (JAAS)
 
-* JEE container autentication (so you can still use Container Managed Authentication if desired)
+//* JEE container autentication (so you can still use Container Managed Authentication if desired)
+JEE container 인증 (원한다면 Container Managed Authentication 을 계속해서 사용할 수 있다)
 
 * Kerberos
 
@@ -92,23 +101,24 @@ At an authentication level, Spring Security supports a wide range of authenticat
 
 * Atlassian Crowd *
 
-* Your own authentication systems (see below)
+* 사용자가 직접 만든 인증 시스템(아래 내용 참고)
+//* Your own authentication systems (see below)
 
 
 
 (* Denotes provided by a third party
 
-많은 독립적인 소프트웨어 공급자들이 스프링 시큐리티를 사용한 이유는 이 유연한 인증모델때문입니다. 그렇게 함으로써, 그들의 end client 가 필요로 하는 것이 무엇이건간에 많은 엔지니어링이나 클라이언트의 큰 환경 변화없이 그들은 빠르게 그들의 솔루션을 통합할 수가 있었습니다.  만약 당신의 필요에 위의 인증 메커니즘이 해당하지 않는다면, 스프링 시큐리티는 오픈플랫폼이므로, 당신의 인증 메커니즘을 적는 것은 무척 간편합니다. 스프링 시큐리티의 많은 기업사용자들은, 어떤 특정 보안표준을 따르지 않는 레거시 시스템과 통합을 원하고 있고 스프링 시큐리티는 꽤 이러한 시스템과 잘 맞아떨어집니다(play nicely)
-
 ////
 Many independent software vendors (ISVs) adopt Spring Security because of this significant choice of flexible authentication models. Doing so allows them to quickly integrate their solutions with whatever their end clients need, without undertaking a lot of engineering or requiring the client to change their environment. If none of the above authentication mechanisms suit your needs, Spring Security is an open platform and it is quite simple to write your own authentication mechanism. Many corporate users of Spring Security need to integrate with "legacy" systems that don't follow any particular security standards, and Spring Security is happy to "play nicely" with such systems.
 ////
+대다수의 독립 소프트웨어 벤더(ISVs)는 스프링 시큐리티가 가진 인증 모델의 유연성에 중점을 두고 스프링 시큐리티를 적용한다. 이렇게 하면 그들과 그들의 고객이 무엇을 필요로 하든, 솔루션에 맞게 환경을 변경하거나 막대한 개발을 하지 않아도 인증 모델과 솔루션을 쉽게 통합할 수 있기 때문이다. 위에 기술한 인증 메카니즘 중 본인의 필요에 맞는 게 하나도 없더라도, 스프링 시큐리티는 오픈 플랫폼이어서 어떤 인증 플랫폼에도 적용하는 것이 매우 간단하다. 스프링 시큐리티의 사용자들 중 상당수는 그 어떤 보안 표준을 따르지 않고 만들어진 "레거시" 시스템과의 통합을 원한다. 그리고 스프링 시큐리티는 그러한 시스템들과 매우 멋지게 공존한다. 
 
-인증 모델과는 상관없이, 스프링 시큐리티는 인가에 관한 탁월한 기능들을 제공하는데 , 웹요청을 인가하고, 어떤 메소드가 실행가능한지 인가하고, 독립적인 도메인 오브젝트 인스턴스에 접근하는 것에 대해 인가합니다. 이러한 것들의 차이를 이해하기 위해 각각의 파일 시스템 보안이나 EJB 컨테이너관리보안이나 서블릿 규격 웹패턴 보안에 나타나는 기능들을 살펴보시면 스프링 시큐리티가 이러한 모든 영역에서 탁월한 기능들을 제공하는 것을 아실 수 있을 것입니다 . 우리는 이 레퍼런스 가이드 문서에서 더 자세히 살펴볼 것입니다 .
 ////
 Irrespective of the authentication mechanism, Spring Security provides a deep set of authorization capabilities. There are three main areas of interest  - authorizing web requests, authorizing whether methods can be invoked, and authorizing access to individual domain object instances. To help you understand the differences, consider the authorization capabilities found in the Servlet Specification web pattern security, EJB Container Managed Security and file system security respectively. Spring Security provides deep capabilities in all of these important areas, which we'll explore later in this reference guide.
+////
+어떤 인증 메카니즘을 사용하든지 스프링 시큐리티는 언제나 높은 수준의 권한 부여 기능을 제공한다. 권한 관리에 있어 가장 주요한 세 가지 영역은 Web request 권한 관리, 메소드 호출 시의 권한 관리, 그리고 개별 도메인 객체 접근 권한 관리이다. 이들의 차이점은 아마도 서블렛 web pattern security, EJB 컨테이너 기반 Security, 그리고 파일 시스템 Security 각각 떠올려 보면 쉬울 것이다. 스프링 시큐리티는 이 모든 영역에서 높은 수준의 권한 관리 기능을 제공한다. 앞으로 우리는 그리고 이 레퍼런스 가이드를 통해 이 내용들을 탐험할 것이다.
 
-
+////
 [[history]]
 === History
 
@@ -136,8 +146,22 @@ Acegi Security-specific authentication services were subsequently introduced. Ar
 Acegi Security became an official Spring Portfolio project towards the end of 2007 and was rebranded as "Spring Security".
 
 Today Spring Security enjoys a strong and active open source community. There are thousands of messages about Spring Security on the support forums. There is an active core of developers who work on the code itself and an active community which also regularly share patches and support their peers.
+////
+[[history]]
+=== 스프링 시큐리티의 역사 
+스프링 시큐리티는 2003년 말에 "The Acegi Security Systme for Spring" 이라는 이름으로 시작되었다. 시작은 Spring 개발자 메일링 리스트에 누군가 스프링 기반의 보안 모듈을 만들지 않겠느냐는 제안을 던지면서부터였다. 그때 스프링 커뮤니티는 매우 작았고(지금 규모에 비해서) 2003년 초까지 SourceForge(역주:최근의 github 과 같은 소스 코드 레파지토리/커뮤니티이다)에서만 존재하고 있었다. 제안에 대한 답변은 탐구해 볼 시간이 부족하긴하지만 일단 해볼만한 가치가 있는 일이라는 것이었다. 
 
+이 제안을 염두에 두어 아주 간단한 보안 모듈이 개발되었지만 릴리즈되지는 않았다. 몇 주가 지난 후 스프링 커뮤니티에 새로운 멤버들이 보안 영역에 참여하게 되었다. 그때 이 코드들은 모두 그들에게 넘어갔다. 이후 몇 가지 요구사항들이 뒤따랐고 2004년 1월에는 약 20여명의 사람들이 이 코드를 사용하게 되었다. 모두 SourceForge 프로젝트에 제안한 사람들로부터 초대된 사람들이었다. 정식으로 설립된 것은 2004년 5월이었다. 
 
+초기에는 프로젝트 내에 우리들만의 인증 모듈은 하나도 없었다. 인증 프로세스는 Container Managed Security 에 의존하고 있었고 Acegi Security 는 대신 권한 관리 쪽에 역량을 집중했다. 처음에는 이것이 괜찮았으나, 가면 갈수록 사용자들이 추가적인 container 의 도움을 요청하게 되자 container 기반 인증 인터페이스의 근본적인 한계가 뚜렷해졌다. 또한 container의 클래스패스에 새로운 JAR을 추가하는 것 역시 End-User 들의 혼란과 오설정(misconfiguration)을 불러 일으키는 공통된 원인으로 지목되었다. 
+
+Acegi Securiy의 인증 서비스는 나중에 소개할 것이다. 몇 년이 지나 Acegi Security 팀은 공식적으로 Spring Project의 서브 프로젝트가 되었다. 1.0.0 최종 릴리즈 버전은 2006년 5월에 출시되었다. - 그리고 그 뒤로 2년 6개월 정도가 지나 그 동안 여러 소프트웨어 프로젝트의 active 사용자들이 생겨났고 수많은 개선 작업들이 있었으며 마찬가지로 커뮤니티의 많은 지원이 있었다. 
+
+Acegi Security 는 2007년 말에 이르러 공식적인 스프링 프로젝트의 포트폴리오가 되었고 이후 "Spring Security"로 이름을 바꾸었다. 
+
+오늘날 스프링 시큐리티는 규모가 크고 활동이 매우 활발한 오픈소스 커뮤니티에서 다뤄지고 있다. 서포트 포럼에는 스프링 시큐리티에 대한 수천개의 메세지들이 있다. 또한 자발적으로 코드를 더해주는 개발자들과 정기적으로 패치를 공유하고 동료를 지원해주는 활발한 커뮤니티가 스프링 시큐리티를 든든히 뒷받침해주고 있다.
+
+////
 [[release-numbering]]
 === Release Numbering
 It is useful to understand how Spring Security release numbers work, as it will help you identify the effort (or lack thereof) involved in migrating to future releases of the project. Each release uses a standard triplet of integers: MAJOR.MINOR.PATCH. The intent is that MAJOR versions are incompatible, large-scale upgrades of the API. MINOR versions should largely retain source and binary compatibility with older minor versions, thought there may be some design changes and incompatible updates. PATCH level should be perfectly compatible, forwards and backwards, with the possible exception of changes which are to fix bugs and defects.
@@ -145,7 +169,15 @@ It is useful to understand how Spring Security release numbers work, as it will 
 The extent to which you are affected by changes will depend on how tightly integrated your code is. If you are doing a lot of customization you are more likely to be affected than if you are using a simple namespace configuration.
 
 You should always test your application thoroughly before rolling out a new version.
+////
+[[release-numbering]]
+=== Release Numbering
+스프링 시큐리티의 릴리즈 버전 넘버가 어떻게 달라지는 지 이해하는 것은 매우 유용하다. 릴리즈 버전 넘버를 이해하면, 추후 프로젝트를 새로운 버전으로 이관할 때 어느 정도의 에포트가 들 것인지(혹은 들지 않을 것인지) 확인할 수 있다. 각각의 릴리즈는 표준적인 세 개의 숫자 배열을 사용한다. 각각의 숫자는 Major.Minor.Patch를 의미한다. Major 버전을 표기하는 것은 본 API가 이전 버전과 호환되지 않는 대규모 업그레이드가 이루어졌음을 알리는 것이다. Minor 버전은 아마도 몇몇 디자인이 변경되었거나 호환되지 않는 업데이트가 있을 수 있지만, 대부분 이전 minor 버전의 소스를 유지하고 있어 호환 가능하다는 것을 뜻한다. Patch 레벨은 버그나 결함들을 수정하였기 때문에 이에 대한 Exception 이 나타날 수 있지만, 완전히 호환 가능하다는 것을 의미한다. 
 
+
+릴리즈에 의한 변화의 규모가 어느정도인지에 따라 얼마나 세심하게 코드를 통합시켜야 하는 지가 결정된다. 만약 당신이 단순하게 namespace configuration 을 사용했을 때보다 커스터마이징을 많이 했을 때 변화에 대한 영향을 더욱 많이 받을 것이다.
+
+그러므로 새로운 버전으로 올리기 전에 언제나 어플리케이션을 꼼꼼히 테스트해야만 한다.
 
 [[get-spring-security]]
 === Getting Spring Security
