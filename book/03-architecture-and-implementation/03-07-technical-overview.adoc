@@ -3,23 +3,44 @@
 
 
 [[runtime-environment]]
+////
 === Runtime Environment
 Spring Security 3.0 requires a Java 5.0 Runtime Environment or higher. As Spring Security aims to operate in a self-contained manner, there is no need to place any special configuration files into your Java Runtime Environment. In particular, there is no need to configure a special Java Authentication and Authorization Service (JAAS) policy file or place Spring Security into common classpath locations.
 
 Similarly, if you are using an EJB Container or Servlet Container there is no need to put any special configuration files anywhere, nor include Spring Security in a server classloader. All the required files will be contained within your application.
 
 This design offers maximum deployment time flexibility, as you can simply copy your target artifact (be it a JAR, WAR or EAR) from one system to another and it will immediately work.
+////
+=== 런타임 환경
+스프링 시큐리티 3.0 은 자바 5.0 런타임 환경이상을 필요로 합니다. 스프링 시큐리티는 독립적인 방법으로 동작하기 때문에, 당신의 자바 환경에 어떤 특정 설정파일을 추가할 필요가 없습니다. 스프링 클래스패스 위치에 특별한 자바 인증과 인증서비스 방침(JAAS)파일을 설정할 필요도 없습니다. 
+
+비슷하게 만약 당신이 EJB 컨테이너나 서블릿 컨테이너를 사용한다면, 어떤 특정한 설정파일을을 어디에도 놓을 필요가 없고 스프링 시큐리티를 클래스 로더에 놓을 필요도 없습니다. 당신의 어플리케이션 안에 모든 필요로 하는 파일이 포함될 것입니다.
+
+이러한 디자인은 개발기간의 유연성을 최대치로 제공하여서, 어떤 시스템에서 다른 시스템으로 대상 artifact를 복사만해도 그것은 즉시 동작할 것입니다.
 
 
 [[core-components]]
+////
 === Core Components
 In Spring Security 3.0, the contents of the `spring-security-core` jar were stripped down to the bare minimum. It no longer contains any code related to web-application security, LDAP or namespace configuration. We'll take a look here at some of the Java types that you'll find in the core module. They represent the building blocks of the framework, so if you ever need to go beyond a simple namespace configuration then it's important that you understand what they are, even if you don't actually need to interact with them directly.
+////
 
+=== 핵심 컴포넌트
+스프링 시큐리티 3.0 에서 스프링 시큐리티 코어의 컨셉은 불필요한 것들을 제거한 기초적 핵심 코어였습니다. 그것은 웹어플리케이션 보안, LDAP이나 네임스페이스 설정에 관련된 어떠한 코드에도 포함되지 않았었습니다.  우리는 여기서 코어모듈에서 발견할 수 있는 몇가지 자바 타입을 살펴보겠습니다. 이 자바타입들은 프레임워크에 필요한 구성요소들을 나타냅니다. 당신이 단순한 네임스페이스 설정 이상을 하고 싶다면, 이것들을 실제로 사용하지는 않더라도, 알아두는 것이 좋을 것입니다. 
 
+////
 ====  SecurityContextHolder, SecurityContext and Authentication Objects
 The most fundamental object is `SecurityContextHolder`. This is where we store details of the present security context of the application, which includes details of the principal currently using the application. By default the `SecurityContextHolder` uses a `ThreadLocal` to store these details, which means that the security context is always available to methods in the same thread of execution, even if the security context is not explicitly passed around as an argument to those methods. Using a `ThreadLocal` in this way is quite safe if care is taken to clear the thread after the present principal's request is processed. Of course, Spring Security takes care of this for you automatically so there is no need to worry about it.
+////
 
+====  SecurityContextHolder, SecurityContext and Authentication Objects
+가장 기초적인 객체는 `SecurityContextHolder` 입니다. 이것은 우리가 어플리케이션 시큐리티 컨텍스트에 세부적인 사항들을 저장해두는 곳이며 어플리케이션이 현재 사용하는 접근주체(principal)의 세부적인 사항들을 포함해두는 곳입니다. 기본적으로 `SecurityContextHolder`는  `ThreadLocal`을 사용하여서 이러한 세부사항을 저장하는데 이것이 의미하는 바는 스프링 시큐리티 컨텍스트가 같은 스레드의 실행 내의 메서드들안에서 언제나 사용가능하다는 것을 의미합니다. 심지어 시큐리티 컨텍스트가 명시적으로 메서드들의 아규먼트로 전해지지 않았어도 말입니다. 현재 접근주체의 요청이 처리된 이후에 스레드를 clear 한다면 이러한 방법으로 `ThreadLocal`을 사용하는 것은 무척 안전합니다. 당연히 스프링 시큐리티는 이러한 것들을 자동적으로 처리해주기 때문에 이것들에 대해서 걱정할 필요는 없습니다. 
+
+////
 Some applications aren't entirely suitable for using a `ThreadLocal`, because of the specific way they work with threads. For example, a Swing client might want all threads in a Java Virtual Machine to use the same security context. `SecurityContextHolder` can be configured with a strategy on startup to specify how you would like the context to be stored. For a standalone application you would use the `SecurityContextHolder.MODE_GLOBAL` strategy. Other applications might want to have threads spawned by the secure thread also assume the same security identity. This is achieved by using `SecurityContextHolder.MODE_INHERITABLETHREADLOCAL`. You can change the mode from the default `SecurityContextHolder.MODE_THREADLOCAL` in two ways. The first is to set a system property, the second is to call a static method on `SecurityContextHolder`. Most applications won't need to change from the default, but if you do, take a look at the JavaDocs for `SecurityContextHolder` to learn more.
+////
+
+어떠한 어플리케이션들은 전체적으로 `ThreadLocal`을 사용하는데 적합하지는 않습니다. 왜냐하면 그들이 스레드를 사용하는 특정한 방법때문입니다. 예를 들어서 Swing Client 는 같은 시큐리티 컨텍스트를 사용하기 위해서 자바가상머신에서 모든 스레드를 사용하기를 원할지도 모릅니다. `SecurityContextHolder`는 첫 기동되는 동안에 어떻게 컨텍스트가 저장될지에 관한 전략을 설정할 수 있습니다. 독립적인 어플리케이션을 위해서는 `SecurityContextHolder.MODE_GLOBAL` 전략을 사용할 수 있습니다. 다른 어플리케이션들은 보안스레드에 의해 만들어진 스레드를 가지길 원할지 몰고 또한 같은 보안식별자를 추정할지도 모릅니다. 
 
 
 ===== Obtaining information about the current user
