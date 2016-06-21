@@ -74,7 +74,7 @@ At an authentication level, Spring Security supports a wide range of authenticat
 * Java Authentication and Authorization Service (JAAS)
 
 //* JEE container autentication (so you can still use Container Managed Authentication if desired)
-JEE container 인증 (원한다면 Container Managed Authentication 을 계속해서 사용할 수 있다)
+* JEE container 인증 (원한다면 Container Managed Authentication 을 계속해서 사용할 수 있다)
 
 * Kerberos
 
@@ -236,7 +236,7 @@ Maven에 스프링 시큐리티 Dependency 정보를 아래와 같이 입력하�
 만약 LDAP, OpenID 와 같은 부수적인 모듈을 사용하고 싶다면, 적절한 <<modules>> 을 포함시켜야 한다. 
 
 [[maven-repositories]]
-==== Maven 레파지토리 
+==== Maven 저장소 
 
 모든 GA 릴리즈(.RELEASE 로 끝나는 공식 버전들)는 Maven 중앙 저장소에 deploy 된다. 그러니 추가적으로 pom.xml 에 선언해주지 않아도 된다. 만약 스냅샷 버전을 사용하고 있다면, 아래 보이는 것처럼 Spring 스냅샷 레파지토리가 제대로 정의되어 있는 지 확인해야 한다. 
 ////
@@ -259,7 +259,7 @@ If you are using a SNAPSHOT version, you will need to ensure you have the Spring
 </repositories>
 ----
 
-만약 마일스톤 빌드 또는 RC 버전(Release Candidate)을 사용하고 있다면, pom.xml에 아래와 같이 Spring 마일스톤 레파지토리를 작성해주어야 한다. 
+만약 마일스톤 빌드 또는 RC 버전(Release Candidate)을 사용하고 있다면, pom.xml에 아래와 같이 Spring 마일스톤 레파지토리가 정의되어 있는 지 확인해야 한다.
 ////
 If you are using a milestone or release candidate version, you will need to ensure you have the Spring Milestone repository defined as shown below:
 ////
