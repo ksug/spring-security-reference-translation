@@ -275,14 +275,21 @@ If you are using a milestone or release candidate version, you will need to ensu
 </repository>
 </repositories>
 ----
+[[maven-bom]]
+==== Spring Framework Bom
 
+스프링 시큐리티는 스프링 프레임웍 {spring-version}에 따라 빌드되는데 이건 4.0.x 버전에서만 작동된다. 많은 사용자들이 스프링 시큐리티와 스프링 프레임웍 {spring-version}과의 의존 관계 때문에 문제를 겪는다. 스프링 프레임웍과 스프링 시큐리티의 버전이 맞지 않을 경우엔 이상한 classpath 문제가 발생한다.
+
+이 문제를 회피하는 방법 중 하나는 모든 스프링 프레임웍 모듈을 pom.xml의 http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management[<dependencyManagement>] 섹션 안에 include 하는 것이다. 그러나 이건 너무나 지루한 방법이고, 이 방법 대신에 아래와 같이 pom.xml에  `<dependencyManagement>`을 작성하고 그 안에 `spring-framework-bom`을 include 해도 된다. 
+
+////
 [[maven-bom]]
 ===== Spring Framework Bom
 
 Spring Security builds against Spring Framework {spring-version}, but should work with 4.0.x. The problem that many users will have is that Spring Security's transitive dependencies resolve Spring Framework {spring-version} which can cause strange classpath problems.
 
 One (tedious) way to circumvent this issue would be to include all the Spring Framework modules in a http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management[<dependencyManagement>] section of your pom. An alternative approach is to include the `spring-framework-bom` within your `<dependencyManagement>` section of your `pom.xml` as shown below:
-
+////
 .pom.xml
 [source,xml]
 [subs="verbatim,attributes"]
