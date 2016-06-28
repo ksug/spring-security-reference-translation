@@ -306,14 +306,18 @@ One (tedious) way to circumvent this issue would be to include all the Spring Fr
 	</dependencies>
 </dependencyManagement>
 ----
+이렇게 하면 스프링 시큐리티와 관련된 모든 의존성이 동일한 {spring-version} 모듈을 사용하고 있다는 것을 확실히 할 수 있다.
 
+NOTE: Maven의 'bill of meterials'(BOM) 개념을 이용한 위와 같은 접근은 Maven 2.0.9 이상 버전에서만 가능하다. 라이브러리 간 의존성 문제를 해결하는 방법에 대해 더 알고 싶다면 http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html[Maven's Introduction to the Dependency Mechanism documentation]을 참고하라.
+////
 This will ensure that all the transitive dependencies of Spring Security use the Spring {spring-version} modules.
 
 NOTE: This approach uses Maven's "bill of materials" (BOM) concept and is only available in Maven 2.0.9+. For additional details about how dependencies are resolved refer to http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html[Maven's Introduction to the Dependency Mechanism documentation].
-
+////
 [[gradle]]
 ==== Gradle
-A minimal Spring Security Gradle set of dependencies typically looks like the following:
+Gradle에 스프링 시큐리티 Dependency 정보를 아래와 같이 입력하자. 스프링 시큐리티를 시작하기 위한 최소한의 Dependency 이다. 
+//A minimal Spring Security Gradle set of dependencies typically looks like the following:
 
 .build.gradle
 [source,groovy]
@@ -324,13 +328,16 @@ dependencies {
 	compile 'org.springframework.security:spring-security-config:{spring-security-version}'
 }
 ----
-
+만약 LDAP, OpenID 와 같은 부수적인 모듈을 사용하고 싶다면, 적절한 <<modules>> 을 포함시켜야 한다. 
+////
 If you are using additional features like LDAP, OpenID, etc. you will need to also include the appropriate <<modules>>.
-
+////
 [[gradle-repositories]]
 ===== Gradle Repositories
+모든 GA 릴리즈(.RELEASE 로 끝나는 공식 버전들)는 Maven 중앙 저장소에 deploy 된다. GA 릴리즈 버전을 사용하려면 mavenCentrol() respository 만 사용해도 충분하다. 
+////
 All GA releases (i.e. versions ending in .RELEASE) are deployed to Maven Central, so using the mavenCentral() repository is sufficient for GA releases.
-
+////
 .build.gradle
 [source,groovy]
 ----
@@ -338,9 +345,10 @@ repositories {
 	mavenCentral()
 }
 ----
-
+만약 스냅샷 버전을 사용하고 있다면, 아래 보이는 것처럼 Spring 스냅샷 레파지토리가 제대로 정의되어 있는 지 확인해야 한다. 
+////
 If you are using a SNAPSHOT version, you will need to ensure you have the Spring Snapshot repository defined as shown below:
-
+////
 .build.gradle
 [source,groovy]
 ----
@@ -348,9 +356,10 @@ repositories {
 	maven { url 'https://repo.spring.io/snapshot' }
 }
 ----
-
+만약 마일스톤 빌드 또는 RC 버전(Release Candidate)을 사용하고 있다면, 아래와 같이 Spring 마일스톤 레파지토리가 정의되어 있는 지 확인해야 한다.
+////
 If you are using a milestone or release candidate version, you will need to ensure you have the Spring Milestone repository defined as shown below:
-
+////
 .build.gradle
 [source,groovy]
 ----
