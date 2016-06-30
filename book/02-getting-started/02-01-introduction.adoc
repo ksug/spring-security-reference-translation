@@ -306,7 +306,7 @@ One (tedious) way to circumvent this issue would be to include all the Spring Fr
 	</dependencies>
 </dependencyManagement>
 ----
-이렇게 하면 스프링 시큐리티와 관련된 모든 의존성이 동일한 {spring-version} 모듈을 사용하고 있다는 것을 확실히 할 수 있다.
+이렇게 하면 스프링 시큐리티와 관련된 모든 의존성이 동일한 버전의 모듈을 사용하고 있다는 것을 확실히 할 수 있다.
 
 NOTE: Maven의 'bill of meterials'(BOM) 개념을 이용한 위와 같은 접근은 Maven 2.0.9 이상 버전에서만 가능하다. 라이브러리 간 의존성 문제를 해결하는 방법에 대해 더 알고 싶다면 http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html[Maven's Introduction to the Dependency Mechanism documentation]을 참고하라.
 ////
@@ -369,10 +369,15 @@ repositories {
 ----
 
 [[gradle-resolutionStrategy]]
+===== 스프링 4.0.x 과 Gradle 사용하기 
+버전 충돌을 해결할 때, 기본적으로 Gradle은 가장 최신 버전을 사용한다.이것은 스프링 시큐리티 버전을 스프링 프레임웍 버전과 함께 빌드할 때 대체로 추가적인 작업이 필요 없다는 뜻이다. 하지만 여기에도 문제가 생길 수 있다. 이것을 완화시킬 수 있는 가장 좋은 방법은 아래와 같이 http://www.gradle.org/docs/current/dsl/org.gradle.api.artifacts.ResolutionStrategy.html[Gradle's ResolutionStrategy] 을 사용하는 것이다.
+
+////
+[[gradle-resolutionStrategy]]
 ===== Using Spring 4.0.x and Gradle
 
 By default Gradle will use the newest version when resolving transitive versions. This means that often times no additional work is necessary when running Spring Security {spring-security-version} with Spring Framework {spring-version}. However, at times there can be issues that come up so it is best to mitigate this using http://www.gradle.org/docs/current/dsl/org.gradle.api.artifacts.ResolutionStrategy.html[Gradle's ResolutionStrategy] as shown below:
-
+////
 .build.gradle
 [source,groovy]
 [subs="verbatim,attributes"]
@@ -386,9 +391,14 @@ configurations.all {
 }
 ----
 
+이렇게 하면 스프링 시큐리티의 모든 dependency 들이 동일한 버전의 스프링 모듈을 사용하고 있다는 것을 확신할 수 있다. 
+
+NOTE: 이 예제는 Gradle1.9 을 사용한 것이다. 이것은 Gradle 내부 속성이기 때문에 Gradle의 새로운 버전이 나오게 되면 수정이 필요할 수 있다. 
+////
 This will ensure that all the transitive dependencies of Spring Security use the Spring {spring-version} modules.
 
 NOTE: This example uses Gradle 1.9, but may need modifications to work in future versions of Gradle since this is an incubating feature within Gradle.
+////
 
 [[modules]]
 ==== Project Modules
