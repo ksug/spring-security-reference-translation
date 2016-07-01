@@ -401,10 +401,17 @@ NOTE: This example uses Gradle 1.9, but may need modifications to work in future
 ////
 
 [[modules]]
+==== 프로젝트 모듈들 
+
+스프링 시큐리티 3.0에서 codebase는 각각의 기능과 third-party dependency 를 보다 명확히 하기 위하여 각각 별개의 jar 파일로 분리되어 있다. 만약 Maven을 사용하여 프로젝트를 빌드한다면, 필요한 모듈 정보를 'pom.xml'에 추가해야 한다. 만약 Maven을 사용하지 않는다면 한번 pom.xml 을 찾아보라고 권하고 싶다. 'pom.xml'을 통해 third-pary dependency와 버전 관리에 대해 아이디어를 얻을 수 있을 것이다. 아니면 라이브러리에 포함된 sample application 을 확인하는 것도 좋은 방법이다.
+
+////
+[[modules]]
 ==== Project Modules
-In Spring Security 3.0, the codebase has been sub-divided into separate jars which more clearly separate different functionaltiy areas and third-party dependencies. If you are using Maven to build your project, then these are the modules you will add to your `pom.xml`. Even if you're not using Maven, we'd recommend that you consult the `pom.xml` files to get an idea of third-party dependencies and versions. Alternatively, a good idea is to examine the libraries that are included in the sample applications.
+In Spring Security 3.0, the codebase has been sub-divided into separate jars which more clearly separate different functionaltiy areas and third-party dependencies. If you are using Maven to build your project, then these are the modules you will add to your `pom.xml`. Even if you're not using Maven, we'd recommend that you consult the `pom.xml` files to get an idea of third-party dependencies and versions. Alternatively, a good idea is to  the libraries that are included in the sample applications.
+////
 
-
+////
 [[spring-security-core]]
 ===== Core - spring-security-core.jar
 Contains core authentication and access-contol classes and interfaces, remoting support and basic provisioning APIs. Required by any application which uses Spring Security. Supports standalone applications, remote clients, method (service layer) security and JDBC user provisioning. Contains the top-level packages:
@@ -416,49 +423,100 @@ Contains core authentication and access-contol classes and interfaces, remoting 
 * `org.springframework.security.authentication`
 
 * `org.springframework.security.provisioning`
+////
+
+[[spring-security-core]]
+===== Core - spring-security-core.jar
+
+주요한 인증, 접근권한 클래스와 인터페이스, 
+주요한 인증, 접근권한 클래스와 인터페이스 그리고 원격지원과 기본적인 권한 설정 API들을 포함한다. 스프링 시큐리티를 사용하는 어플리케이션이라면 반드시 이 jar를 포함해야 한다. standalone 어플리케이션, 원격 클라이언트, method 보안, 그리고 JDBC 사용자 권한 설정을 지원한다. 아래와 같은 패키지로 이루어져 있다.
 
 
+* `org.springframework.security.core`
 
+* `org.springframework.security.access`
+
+* `org.springframework.security.authentication`
+
+* `org.springframework.security.provisioning`
 
 
 [[spring-security-remoting]]
 ===== Remoting - spring-security-remoting.jar
-Provides intergration with Spring Remoting. You don't need this unless you are writing a remote client which uses Spring Remoting. The main package is `org.springframework.security.remoting`.
 
+스프링 리모팅을 통합 지원한다. 만약 스프링 리모팅을 사용하여 원격 클라이언트를 개발하는 기능이 굳이 필요하지 않다면, 이 jar를 쓰지 않아도 된다. 메인 패키지는 `org.springframework.security.remoting`이다.
+
+////
+[[spring-security-remoting]]
+===== Remoting - spring-security-remoting.jar
+Provides intergration with Spring Remoting. You don't need this unless you are writing a remote client which uses Spring Remoting. The main package is `org.springframework.security.remoting`.
+////
 
 [[spring-security-web]]
 ===== Web - spring-security-web.jar
+
+Filter 와 웹 security 개발과 관련한 코드들이 포함되어 있다. servlet API dependency 에 대한 모든 것들이 지원된다. 스프링 시큐리티로 웹 인증 서비스를 구현하고 싶거나 Url 기반 접근 제어 기능이 필요할 때 이 jar를 사용하면 된다. 메인 패키지는 `org.springframework.security.web`이다.
+
+////
+[[spring-security-web]]
+===== Web - spring-security-web.jar
 Contains filters and related web-security infrastructure code. Anything with a servlet API dependency. You'll need it if you require Spring Security web authentication services and URL-based access-control. The main package is `org.springframework.security.web`.
+////
 
-
+////
 [[spring-security-config]]
 ===== Config - spring-security-config.jar
 Contains the security namespace parsing code & Java configuration code.
 You need it if you are using the Spring Security XML namespace for configuration or Spring Security's Java Configuration support.
 The main package is `org.springframework.security.config`.
 None of the classes are intended for direct use in an application.
+////
 
+[[spring-security-config]]
+===== Config - spring-security-config.jar
+security namespace 설정을 파싱하는 코드나 Java 설정에 관련한 코드들이 포함되어 있다. XML namespace 기반 스프링 시큐리티 설정을 사용하거나 스프링 시큐리티 자바 configuration 을 사용할 때 필요하다. 메인 패키지는  `org.springframework.security.config`이다. 이 jar 안에 어플리케이션에서 직접적으로 사용되도록 개발된 클래스는 없다.
 
+////
 [[spring-security-ldap]]
 ===== LDAP - spring-security-ldap.jar
 LDAP authentication and provisioning code. Required if you need to use LDAP authentication or manage LDAP user entries. The top-level package is `org.springframework.security.ldap`.
+////
+[[spring-security-ldap]]
+===== LDAP - spring-security-ldap.jar
 
+Ldap 인증과 권한 설정에 관련한 코드들이다. 만약 LDAP 인증을 사용하거나 LDAP으로 user entry 를 관리할 경우 이 jar는 필수적이다. 가장 최상위 레벨의 패키지는  `org.springframework.security.ldap`이다.
 
+////
 [[spring-security-acl]]
 ===== ACL - spring-security-acl.jar
 Specialized domain object ACL implementation. Used to apply security to specific domain object instances within your application. The top-level package is `org.springframework.security.acls`.
+////
+[[spring-security-acl]]
+===== ACL - spring-security-acl.jar
 
+도메인 객체 ACL 수행에 특화되어 있다. 어플리케이션 내에서 특정 도메인 객체의 인스턴스에 보안을 적용할 때 사용된다. 최상위 패키지는 `org.springframework.security.acls`이다.
 
+////
 [[spring-security-cas]]
 ===== CAS - spring-security-cas.jar
 Spring Security's CAS client integration. If you want to use Spring Security web authentication with a CAS single sign-on server. The top-level package is `org.springframework.security.cas`.
+////
+[[spring-security-cas]]
+===== CAS - spring-security-cas.jar
 
+스프링 시큐리티의 CAS Client 통합 모듈이다. 만약 CAS Single sign-on server를 통해 웹 인증을 하고 싶다면 이 jar가 필요하다. 최상위 패키지는 `org.springframework.security.cas`이다.
 
+////
 [[spring-security-openid]]
 ===== OpenID - spring-security-openid.jar
 OpenID web authentication support. Used to authenticate users against an external OpenID server. `org.springframework.security.openid`. Requires OpenID4Java.
+////
+[[spring-security-openid]]
+===== OpenID - spring-security-openid.jar
 
+OpenID 웹 인증을 지원한다. 외부의 OpenID 서버로 사용자를 인증하는 데에 사용된다. 메인 패키지는 `org.springframework.security.openid`이며, 이 jar를 사용하기 위해서는 OpenID4Java 가 필요하다. 
 
+////
 [[get-source]]
 ==== Checking out the Source
 Since Spring Security is an Open Source project, we'd strongly encourage you to check out the source code using git. This will give you full access to all the sample applications and you can build the most up to date version of the project easily. Having the source for a project is also a huge help in debugging. Exception stack traces are no longer obscure black-box issues but you can get straight to the line that's causing the problem and work out what's happening. The source is the ultimate documentation for a project and often the simplest place to find out how something actually works.
@@ -471,3 +529,17 @@ git clone https://github.com/spring-projects/spring-security.git
 ----
 
 This will give you access to the entire project history (including all releases and branches) on your local machine.
+////
+
+[[get-source]]
+==== 소스 체크 아웃하기
+스프링 시큐리티는 오픈 소스 프로젝트이기 때문에, 우리는 언제나 git을 통해 소스 코드를 체크 아웃 하라고 권장한다. 이렇게 하면 모든 샘플 어플리케이션에 접근할 수 있고, 가장 최신 버전의 프로젝트를 빨리 빌드할 수 있다. 또한 프로젝트에 소스를 사용한다면 디버깅할 때 큰 도움이 된다. Exception stack trace 를 할 때 더 이상 블랙박스처럼 보이지 않고 문제가 발생한 라인에 직접적으로 접근할 수 있기 때문이다. 소스는 이 프로젝트에 대한 최종적인 문서이며, 무엇이 어떻게 작동하는 지 알 수 있는 가장 효과적인 장소이다.
+
+프로젝트를 위해 소스를 받고 싶다면, 아래의 git command를 실행하자. 
+
+[source,txt]
+----
+git clone https://github.com/spring-projects/spring-security.git
+----
+
+이렇게 하면 로컬 PC에서 모든 릴리즈 버전과 브랜치 버전들을 포함하여 전체적인 프로젝트 history 에 접근할 수 있다.
