@@ -1,8 +1,8 @@
 [[authorization]]
-= Authorization
-The advanced authorization capabilities within Spring Security represent one of the most compelling reasons for its popularity. Irrespective of how you choose to authenticate - whether using a Spring Security-provided mechanism and provider, or integrating with a container or other non-Spring Security authentication authority - you will find the authorization services can be used within your application in a consistent and simple way.
+= 권한부여
+스프링 시큐리티에 있는 고도의 권한부여 기능은 스프링 시큐리티가 인기있는 가장 중요한 이유입니다. 당신은 어떤 인증방법을 선택하든 - 스프링 시큐리티에서 제공하는 메커니즘과 프로바이더를 이용하거나, 컨테이너나 스프링 시큐리티가 아닌 다른 인증기관과 함께 통합하거나 - 권한부여 서비스를 어플리케이션 안에서 일관되고 간단하게 사용할 수 있습니다.
 
-In this part we'll explore the different `AbstractSecurityInterceptor` implementations, which were introduced in Part I. We then move on to explore how to fine-tune authorization through use of domain access control lists.
+이 장에선 1장에서 언급한 'AbstractSecurityInterceptor'의 서로 다른 구현체를 살펴볼 것입니다. 그리고 나서 '도메인 접근 제어 목록'을 통해 권한부여를 어떻게 정교하게 조정하는지 살펴 볼 것입니다.
 
 //====
 
