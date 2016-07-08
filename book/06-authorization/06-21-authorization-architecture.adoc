@@ -4,9 +4,9 @@
 
 [[authz-authorities]]
 === Authorities
-우리가 <<tech-granted-authority,기술개관>> 에서 본 것 처럼, 모든 `Authentication`구현체는 여러 `GrantedAuthority`객체를 갖고 있습니다. 이들은 그 주체에 부여된 권한을 나타냅니다. `AuthenticationManager`는 `GrantedAuthority`를 `Authentication`에 집어넣고, `AccessDecisionManager`는 권한을 결정할 때 이 정보를 읽습니다.
+우리가 <<tech-granted-authority,기술개관>> 에서 본 것 처럼, 모든 `Authentication`구현체는 여러 `GrantedAuthority`객체를 갖고 있다. 이들은 그 주체에 부여된 권한을 나타낸다. `AuthenticationManager`는 `GrantedAuthority`를 `Authentication`에 집어넣고, `AccessDecisionManager`는 권한을 결정할 때 이 정보를 읽는다.
 
-`GrantedAuthority` 인터페이스는 오직 하나의 메서드가 있습니다.
+`GrantedAuthority` 인터페이스는 오직 하나의 메서드가 있다.
 
 [source,java]
 ----
@@ -15,12 +15,12 @@ String getAuthority();
 
 ----
 
-이 메서드는 `AccessDecisionManager`가 `String`으로 명확히 표현된 `GrantedAuthority`를 얻게 합니다. `GrantedAuthority`는 `String` 형태로 반환되어 대부분의 `AccessDecisionManager`가 쉽게 "읽을" 수 있습니다. 만약 `GrantedAuthority`가 `String`으로 명확하게 표현할 수 없다면, `GrantedAuthority`를 "복잡"하다 여기고 `getAuthority()`는 반드시 `null`을 반환해야 합니다.
+이 메서드는 `AccessDecisionManager`가 `String`으로 명확히 표현된 `GrantedAuthority`를 얻게 한다. `GrantedAuthority`는 `String` 형태로 반환되어 대부분의 `AccessDecisionManager`가 쉽게 "읽을" 수 있다. 만약 `GrantedAuthority`가 `String`으로 명확하게 표현할 수 없다면, `GrantedAuthority`를 "복잡"하다 여기고 `getAuthority()`는 반드시 `null`을 반환해야 한다.
 
 An example of a "complex" `GrantedAuthority` would be an implementation that stores a list of operations and authority thresholds that apply to different customer account numbers.
-"복잡한" `GrantedAuthority`는, 예를 들면 여러 고객계정에 적용된 행위와 권한기준치 목록을 저장한 것이 있다. (역주: 예를 들면 'A,B,C 사용자는 T메뉴에 접근 가능.' 'A,C 사용자는 Y메뉴 수정 가능.'과 같이 복잡한 형태. ) 이 복잡한 `GrantedAuthority`는 `String`으로 표현하기 어렵습니다. 결과적으로 `getAuthority()` 메서드는 꼭 `null`을 반환해야합니다. 이것은 `GrantedAuthority` 내용을 알기 위해서 `GrantedAuthority` 구현체에 특별한 지원이 필요 하다고 `AccessDecisionManager`에게 알려 줄 것입니다.
+"복잡한" `GrantedAuthority`는, 예를 들면 여러 고객계정에 적용된 행위와 권한기준치 목록을 저장한 것이 있다. (역주: 예를 들면 'A,B,C 사용자는 T메뉴에 접근 가능.' 'A,C 사용자는 Y메뉴 수정 가능.'과 같이 복잡한 형태. ) 이 복잡한 `GrantedAuthority`는 `String`으로 표현하기 어렵다. 결과적으로 `getAuthority()` 메서드는 꼭 `null`을 반환해야한다. 이것은 `GrantedAuthority` 내용을 알기 위해서 `GrantedAuthority` 구현체에 특별한 지원이 필요 하다고 `AccessDecisionManager`에게 알려 준다.
 
-//아래 부분은 현재 유효하지 않습니다.
+//아래 부분은 현재 유효하지 않다.
 Spring Security includes one concrete `GrantedAuthority` implementation, `GrantedAuthorityImpl`.
 This allows any user-specified `String` to be converted into a `GrantedAuthority`.
 All `AuthenticationProvider` s included with the security architecture use `GrantedAuthorityImpl` to populate the `Authentication` object.
