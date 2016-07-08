@@ -20,16 +20,15 @@ String getAuthority();
 An example of a "complex" `GrantedAuthority` would be an implementation that stores a list of operations and authority thresholds that apply to different customer account numbers.
 "복잡한" `GrantedAuthority`는, 예를 들면 여러 고객계정에 적용된 행위와 권한기준치 목록을 저장한 것이 있다. (역주: 예를 들면 'A,B,C 사용자는 T메뉴에 접근 가능.' 'A,C 사용자는 Y메뉴 수정 가능.'과 같이 복잡한 형태. ) 이 복잡한 `GrantedAuthority`는 `String`으로 표현하기 어렵다. 결과적으로 `getAuthority()` 메서드는 꼭 `null`을 반환해야한다. 이것은 `GrantedAuthority` 내용을 알기 위해서 `GrantedAuthority` 구현체에 특별한 지원이 필요 하다고 `AccessDecisionManager`에게 알려 준다.
 
-//아래 부분은 현재 유효하지 않다.
-Spring Security includes one concrete `GrantedAuthority` implementation, `GrantedAuthorityImpl`.
-This allows any user-specified `String` to be converted into a `GrantedAuthority`.
+스프링 시큐리티는 하나의 `GrantedAuthority` 구현체를 갖는다. `GrantedAuthorityImpl`이다. (역주: @Deprecated되어 현재는 사라졌다. 유사한 구현체로 `SimpleGrantedAuthority`이 있다.) 이 클래스는 사용자가 지정한 `String`을 `GrantedAuthority`로 바꾼다. 
 All `AuthenticationProvider` s included with the security architecture use `GrantedAuthorityImpl` to populate the `Authentication` object.
-
+보안 아키텍처를 포함할 모든 `AuthenticationProvider`는 `Authentication` 객체를 제공하기 위해 `GrantedAuthorityImpl`를 사용한다.
 
 
 [[authz-pre-invocation]]
 === Pre-Invocation Handling
-As we've also seen in the <<secure-objects,Technical Overview>> chapter, Spring Security provides interceptors which control access to secure objects such as method invocations or web requests. A pre-invocation decision on whether the invocation is allowed to proceed is made by the `AccessDecisionManager`.
+=== 호출 전에 다루기
+우리가 <<secure-objects,기술개관>> 장에서 본 것 처럼, 스프링 시큐리티는 메서드 호출이나 웹 요청 같은 보안객체에 대한 접근을 제어하는 인터셉터를 제공한다. 호출 전 판단은 `AccessDecisionManager`가 호출이 진행되도록 허락할 것인지 여부를 결정한다.
 
 
 [[authz-access-decision-manager]]
