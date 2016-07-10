@@ -1,15 +1,36 @@
 [[core-services]]
+
+////
 == Core Services
 Now that we have a high-level overview of the Spring Security architecture and its core classes, let's take a closer look at one or two of the core interfaces and their implementations, in particular the `AuthenticationManager`, `UserDetailsService` and the `AccessDecisionManager`. These crop up regularly throughout the remainder of this document so it's important you know how they are configured and how they operate.
+////
+
+== 코어 서비스
+그러면 이제 스프링 시큐리티의 아키텍쳐와 스프링 시큐리티의 핵심 클래스들을 좀 더 깊이 살펴보도록 하겠습니다. 하나 혹은 두개 이상의 핵심 인터페이스와 그것들의 구현체를 좀 더 알아보도록 하겠습니다. 특별히 `AuthenticationManager`, `UserDetailsService` `AccessDecisionManager` 를 살펴보겠습니다. 이것들은 주기적으로 이 문서의 남은 부분을 통해서 cron up 될 것입니다. 그러니 어떻게 그것들을 설정하고 어떻게 동작하는 지 아는 것이 중요합니다. 
 
 
+////
 [[core-services-authentication-manager]]
 === The AuthenticationManager, ProviderManager and AuthenticationProvider
 The `AuthenticationManager` is just an interface, so the implementation can be anything we choose, but how does it work in practice? What if we need to check multiple authentication databases or a combination of different authentication services such as a database and an LDAP server?
+////
 
+[[core-services-authentication-manager]]
+=== The AuthenticationManager, ProviderManager and AuthenticationProvider
+`AuthenticationManager` 는 단지 인터페이스로 그것들의 구현체는 우리가 선택하는 어떤 것이든 될 수 있습니다. 
+그러나 그것들이 실제로 어떻게 동작할까요? 만약 우리가 여러개의 인증 데이터베이스나 데이터베이스와 LDAP서버 같은 다른 인증서비스간의 조합을 원한다면 어떤 것을 체크해야할까요?
+
+////
 The default implementation in Spring Security is called `ProviderManager` and rather than handling the authentication request itself, it delegates to a list of configured `AuthenticationProvider` s, each of which is queried in turn to see if it can perform the authentication. Each provider will either throw an exception or return a fully populated `Authentication` object. Remember our good friends, `UserDetails` and `UserDetailsService`? If not, head back to the previous chapter and refresh your memory. The most common approach to verifying an authentication request is to load the corresponding `UserDetails` and check the loaded password against the one that has been entered by the user. This is the approach used by the `DaoAuthenticationProvider` (see below). The loaded `UserDetails` object - and particularly the `GrantedAuthority` s it contains - will be used when building the fully populated `Authentication` object which is returned from a successful authentication and stored in the `SecurityContext`.
+////
 
+스프링시큐리티의 기존 구현체는`ProviderManager` 이며, 요청에 대한 인증을 직접 다루기보다는 설정된 `AuthenticationProvider` 리스트에 위임합니다. 각각의 프로바이더는 차례로 인증을 수행할 수 있는지 알아봐지게 됩니다. 각각의 프로바이더는 예외를 던지거나, 생성된 `Authentication` 객체를 반환합니다. `UserDetails` 와 `UserDetailsService`를 기억하시지 못한다면, 이전 챕터로 돌아가서 다시 한번 상기시키고 옵시다. 인증요청을 검사하는 기본적 접근은 그에 상응하는 `UserDetails`를 불러오고, 유저가 입력한 비밀번호와 해당 비밀번호가 맞는지 알아보는 것입니다. 이것은 `DaoAuthenticationProvider` 에 의해 사용되게 됩니다. (밑에 부분을 봅시다). 불러와진 `UserDetails` 객체 - 그리고 부분적으로 그것이 포함한  `GrantedAuthority` - 는 인증이 성공했을 때 `Authentication`객체를 생성하는 데 사용되게 되며 이것은 `SecurityContext`에 포함되게 됩니다 .
+
+////
 If you are using the namespace, an instance of `ProviderManager` is created and maintained internally, and you add providers to it by using the namespace authentication provider elements (see <<ns-auth-manager,the namespace chapter>>). In this case, you should not declare a `ProviderManager` bean in your application context. However, if you are not using the namespace then you would declare it like so:
+////
+
+만약 당신이 네임스페이스를 사용한다면, `ProviderManager` 의 인스턴스는 생성되어서 내부적으로 유지될 것이며, 당신은 그것을 네임스페이스 인증 프로바이더 요소를 사용하여 프로바이더에게 더할 것입니다. 이러한 경우에 당신은 어플리케이션 콘텍스트에 `ProviderManager` 를 선언할 필요가 없습니다. 그러나 당신이 네임스페이스를 사용하지 않는다면 다음과 같이 선언을 해야합니다.
 
 [source,xml]
 ----
@@ -26,9 +47,19 @@ If you are using the namespace, an instance of `ProviderManager` is created and 
 </bean>
 ----
 
+////
 In the above example we have three providers. They are tried in the order shown (which is implied by the use of a `List`), with each provider able to attempt authentication, or skip authentication by simply returning `null`. If all implementations return null, the `ProviderManager` will throw a `ProviderNotFoundException`. If you're interested in learning more about chaining providers, please refer to the `ProviderManager` JavaDocs.
+////
 
+위의 예제에서 우리는 세가지 프로바이더를 가지고 있습니다. 그것들은 순서대로 사용되어지며 각각의 프로바이더는 인증을 수행하거나 null을 리턴함으로써 인증을 건너뛰기도 합니다 .만약 모든 구현체가 null을 리턴하면 `ProviderManager`는 `ProviderNotFoundException` 예외를 던질 것입니다. 만약 당신이 프로바이더 연결에 좀 더 관심이 있다면 `ProviderManager` 자바문서를 읽어보시길 권합니다. 
+
+
+////
 Authentication mechanisms such as a web form-login processing filter are injected with a reference to the `ProviderManager` and will call it to handle their authentication requests. The providers you require will sometimes be interchangeable with the authentication mechanisms, while at other times they will depend on a specific authentication mechanism. For example, `DaoAuthenticationProvider` and `LdapAuthenticationProvider` are compatible with any mechanism which submits a simple username/password authentication request and so will work with form-based logins or HTTP Basic authentication. On the other hand, some authentication mechanisms create an authentication request object which can only be interpreted by a single type of `AuthenticationProvider`. An example of this would be JA-SIG CAS, which uses the notion of a service ticket and so can therefore only be authenticated by a `CasAuthenticationProvider`. You needn't be too concerned about this, because if you forget to register a suitable provider, you'll simply receive a `ProviderNotFoundException` when an attempt to authenticate is made.
+////
+
+필터처리 웹폼로그인같은 인증 메커니즘은 `ProviderManager`의 참조와 함께 주입될 수 있으며 인증 요청을 처리하기 위하여 호출되어질 수 있습니다. 당신이 필요로 하는 프로바이더는 때때로 인증 메커니즘과 함께 교환될 수 있으며 때로는 특정 인증 메커니즘에 의존할 수도 있습니다. 예를 들자면 `DaoAuthenticationProvider`와 `LdapAuthenticationProvider` 는 단순한 username/password 인증요청을 사용하는 어떤 인증 메커니즘과 양립가능하여서 폼기반로그인이나 HTTP Basic 요청과 함께 동작할 수 있습니다. 반면에 어떤 인증 메커니즘은 어떤 하나의 `AuthenticationProvider` 에서 해석될 수 있는 인증 요청객체를 생성합니다. 이것의 예로 JA-SIG CAS를 들 수 있는데, 이것은 서비스 티켓의 개념을 사용하여  `CasAuthenticationProvider`에 의해서만 인증될 수 있습니다.  
+
 
 
 [[core-services-erasing-credentials]]
