@@ -40,11 +40,15 @@ The most fundamental object is `SecurityContextHolder`. This is where we store d
 Some applications aren't entirely suitable for using a `ThreadLocal`, because of the specific way they work with threads. For example, a Swing client might want all threads in a Java Virtual Machine to use the same security context. `SecurityContextHolder` can be configured with a strategy on startup to specify how you would like the context to be stored. For a standalone application you would use the `SecurityContextHolder.MODE_GLOBAL` strategy. Other applications might want to have threads spawned by the secure thread also assume the same security identity. This is achieved by using `SecurityContextHolder.MODE_INHERITABLETHREADLOCAL`. You can change the mode from the default `SecurityContextHolder.MODE_THREADLOCAL` in two ways. The first is to set a system property, the second is to call a static method on `SecurityContextHolder`. Most applications won't need to change from the default, but if you do, take a look at the JavaDocs for `SecurityContextHolder` to learn more.
 ////
 
-어떠한 어플리케이션들은 전체적으로 `ThreadLocal`을 사용하는데 적합하지는 않습니다. 왜냐하면 그들이 스레드를 사용하는 특정한 방법때문입니다. 예를 들어서 Swing Client 는 같은 시큐리티 컨텍스트를 사용하기 위해서 자바가상머신에서 모든 스레드를 사용하기를 원할지도 모릅니다. `SecurityContextHolder`는 첫 기동되는 동안에 어떻게 컨텍스트가 저장될지에 관한 전략을 설정할 수 있습니다. 독립적인 어플리케이션을 위해서는 `SecurityContextHolder.MODE_GLOBAL` 전략을 사용할 수 있습니다. 다른 어플리케이션들은 보안스레드에 의해 만들어진 스레드를 가지길 원할지 몰고 또한 같은 보안식별자를 추정할지도 모릅니다. 
+어떠한 어플리케이션들은 전체적으로 `ThreadLocal`을 사용하는데 적합하지는 않습니다. 왜냐하면 그들이 스레드를 사용하는 특정한 방법때문입니다. 예를 들어서 Swing Client 는 같은 시큐리티 컨텍스트를 사용하기 위해서 자바가상머신에서 모든 스레드를 사용하기를 원할지도 모릅니다. `SecurityContextHolder`는 첫 기동되는 동안에 어떻게 컨텍스트가 저장될지에 관한 전략을 설정할 수 있습니다. 독립적인 어플리케이션을 위해서는 `SecurityContextHolder.MODE_GLOBAL` 전략을 사용할 수 있습니다. 다른 어플리케이션들은 보안스레드에 의해 만들어진 스레드를 가지길 원할지 모르며, 또한 같은 보안식별자를 추정할지도 모릅니다.  이것은 `SecurityContextHolder.MODE_INHERITABLETHREADLOCAL`에 의해 이뤄질 수 있습니다. 당신은 기본값인 `SecurityContextHolder.MODE_THREADLOCAL` 를 두가지 방법으로 바꿀 수 있습니다.  첫번째는 시스템 프로퍼티를 설정하는 것입니다. 두번째는 정적메서드  `SecurityContextHolder`를 호출하는 것입니다. 대부분의 어플리케이션들은 기본값에서 바뀌길 원하진 않지만, 만약 원한다면 `SecurityContextHolder` 에 관련된 자바문서를 더 살펴보세요. 
 
-
+////
 ===== Obtaining information about the current user
 Inside the `SecurityContextHolder` we store details of the principal currently interacting with the application. Spring Security uses an `Authentication` object to represent this information. You won't normally need to create an `Authentication` object yourself, but it is fairly common for users to query the `Authentication` object. You can use the following code block - from anywhere in your application - to obtain the name of the currently authenticated user, for example:
+////
+
+===== 현재 유저에 대한 정보를 얻기
+`SecurityContextHolder` 에서 현재 어플리케이션과 상호작용하는 유저의 세부정보를 알 수가 있습니다. 스프링 시큐리티는 `Authentication` 객체를 사용하여서 이러한 정보를 표현하고 있습니다. 당신은 보통 `Authentication` 객체를 직접 만들고 싶지는 않지만,  `Authentication`객체에 대해서 매우 흔하게 질의를 날릴 것입니다. 당신은 다음의 코드 블록을 통해서 당신의 어플리케이션 어느곳 에서건 현재 인증된 유저의 이름을 얻을 수 있습니다. 예를 들자면 다음과 같습니다. 
 
 
 [source,java]
@@ -59,15 +63,27 @@ String username = principal.toString();
 }
 ----
 
-
+////
 The object returned by the call to `getContext()` is an instance of the `SecurityContext` interface. This is the object that is kept in thread-local storage. As we'll see below, most authentication mechanisms withing Spring Security return an instance of `UserDetails` as the principal.
+////
+
+`getContext()` 를 호출하여서 얻어지는 객체는 `SecurityContext`  인터페이스의 인스턴스 입니다. 이것은 스레드 로컬 저장소에 보관된 객체 입니다. 우리가 보는 것과 마찬가지로 대부분의 인증 메커니즘은 `UserDetails`를 principal 의 인스턴스로 리턴합니다. 
 
 
+////
 [[tech-userdetailsservice]]
 ==== The UserDetailsService
 Another item to note from the above code fragment is that you can obtain a principal from the `Authentication` object. The principal is just an `Object`. Most of the time this can be cast into a `UserDetails` object. `UserDetails` is a core interface in Spring Security. It represents a principal, but in an extensible and application-specific way. Think of `UserDetails` as the adapter between your own user database and what Spring Security needs inside the `SecurityContextHolder`. Being a representation of something from your own user database, quite often you will cast the `UserDetails` to the original object that your application provided, so you can call business-specific methods (like `getEmail()`, `getEmployeeNumber()` and so on).
+////
 
+==== UserDetailsService
+위의 코드조각에서 주목할만한 다른 것은 `Authentication` 객체에서 principal 을 얻을 수 있다는 것입니다. principal 은 단지 객체이며, 대부분 `UserDetails` 객체로 형변환이 가능합니다. `UserDetails` 은 스프링 시큐리티의 핵심 인터페이스 입니다. 이것은 principal 을 표현하지만, 어플리케이션 특정한 방법으로 확장가능합니다. `UserDetails`를 당신의 데이터베이스와 `SecurityContextHolder` 내의 스프링 시큐리티가 필요로 하는 것 사이의 어답터라고 생각해봅시다. 당신의 데이터베이스로부터 얻은 어떤 것으로부터 당신은 `UserDetails`를 어플리케이션이 제공하는 원본객체로 형변환할 것입니다. 그래서 당신은 `getEmail()`, `getEmployeeNumber()` 같은 비즈니스적인 메서드들을 호출할 수가 있게 되는 것입니다. 
+
+
+////
 By now you're probably wondering, so when do I provide a `UserDetails` object? How do I do that? I thought you said this thing was declarative and I didn't need to write any Java code - what gives? The short answer is that there is a special interface called `UserDetailsService`. The only method on this interface accepts a `String`-based username argument and returns a `UserDetails`:
+////
+지금까지 당신은 아마 궁금해할지도 모릅니다. 그럼 언제 내가 `UserDetails`객체를 제공해야 하는 것인가? 어떻게 그럴 수 있지 ? 나는 이것이 선언적이고 (declarative) 나는 어떠한 자바코드도 적길 원하지 않았는데 말이지.. 무엇을 줄까?.. 이것에 대한 짧은 답변은 `UserDetailsService` 라 불리는 특별한 인터페이스가 있다는 것입니다. 유저네임 아규먼트를 받는 이 인터페이스의 유일한 메서드가 있으며, `UserDetails`를 반환한다는 것입니다. 
 
 [source,java]
 ----
@@ -75,25 +91,49 @@ By now you're probably wondering, so when do I provide a `UserDetails` object? H
 UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 ----
 
+////
 This is the most common approach to loading information for a user within Spring
 				Security and you will see it used throughout the framework whenever information on a
 				user is required.
+////
 
+이것은 스프링 시큐리티에서 유저를 위해 정보를 불러오는 것에 접근하는 가장 흔한 방법으로 당신은 유저가 필요할 때마다 프레임워크 전반에서 이것이 사용되는 것을 보실 수가 있을 겁니다.
+
+////
 On successful authentication, `UserDetails` is used to build the `Authentication` object that is stored in the `SecurityContextHolder` (more on this <<tech-intro-authentication,below>>). The good news is that we provide a number of `UserDetailsService` implementations, including one that uses an in-memory map (`InMemoryDaoImpl`) and another that uses JDBC (`JdbcDaoImpl`). Most users tend to write their own, though, with their implementations often simply sitting on top of an existing Data Access Object (DAO) that represents their employees, customers, or other users of the application. Remember the advantage that whatever your `UserDetailsService` returns can always be obtained from the `SecurityContextHolder` using the above code fragment.
+////
 
+인증이 성공적으로 진행되면, `UserDetails`는 `SecurityContextHolder`에 보관되는 `Authentication`객체를 만들어냅니다. (좀 더 많은 내용은 <<tech-intro-authentication,below>>) 를 보세요). 좋은 소식은 우리는 인메모리 맵 기반의 (`InMemoryDaoImpl`) JDBC를 사용하는 `JdbcDaoImpl` 등등 꽤 많은 `UserDetailsService` 구현체들을 제공한다는 것입니다. 그러나 대부분의 사용자들은 그들 자신의 간단한 구현체를 (그들 어플리케이션에서 직원, 고객 다른 사용자들을 나타나내는 ) DAO 계층 위에 올려둡니다.  어떤 `UserDetailsService`이든  위의 코드 조각을 사용하여서  `SecurityContextHolder` 로부터 정보가 얻어진 다는 것을 기억하세요. 
+
+////
 [NOTE]
 ====
 
 There is often some confusion about `UserDetailsService`. It is purely a DAO for user data and performs no other function other than to supply that data to other components within the framework. In particular, it __does not__ authenticate the user, which is done by the `AuthenticationManager`. In many cases it makes more sense to <<core-services-authentication-manager,implement `AuthenticationProvider`>> directly if you require a custom authentication process.
 
 ====
+////
 
+[NOTE]
+====
 
+ `UserDetailsService` 에 대한 약간의 혼동이 있을 수 있습니다. `UserDetailsService`는 순수하게 유저데이터를 위한 DAO 이며 프레임워크내에서 유저데이터를 다른 컴포넌트에게 제공하는 일 외에 다른 기능을 수행하지 않습니다. 특별히 유저 인증을 수행하지는 않으며, 이것은 `AuthenticationManager`에 의해 이뤄집니다. 당신이 커스텀한 인증 프로세스를 원하는 경우에  (<<core-services-authentication-manager,implement `AuthenticationProvider`>>) <<`AuthenticationProvider`를 구현하는 핵심 서비스 인증 매니저>> 가 직접적으로 하는 것이 더 맞다고 볼 수 있습니다. 
+
+////
 [[tech-granted-authority]]
 ==== GrantedAuthority
 Besides the principal, another important method provided by `Authentication` is `getAuthorities()`. This method provides an array of `GrantedAuthority` objects. A `GrantedAuthority` is, not surprisingly, an authority that is granted to the principal. Such authorities are usually "roles", such as `ROLE_ADMINISTRATOR` or `ROLE_HR_SUPERVISOR`. These roles are later on configured for web authorization, method authorization and domain object authorization. Other parts of Spring Security are capable of interpreting these authorities, and expect them to be present. `GrantedAuthority` objects are usually loaded by the `UserDetailsService`.
 
 Usually the `GrantedAuthority` objects are application-wide permissions. They are not specific to a given domain object. Thus, you wouldn't likely have a `GrantedAuthority` to represent a permission to `Employee` object number 54, because if there are thousands of such authorities you would quickly run out of memory (or, at the very least, cause the application to take a long time to authenticate a user). Of course, Spring Security is expressly designed to handle this common requirement, but you'd instead use the project's domain object security capabilities for this purpose.
+
+////
+
+[[tech-granted-authority]]
+==== 인정된 권한
+principal 외에 `Authentication` 에 의해 제공되는 다른 중요한 메소드는 `getAuthorities()` 입니다. 이 메소드는 `GrantedAuthority` 객체 배열을 제공합니다.   `GrantedAuthority`는 놀랍지 않게 printipal 에 부여된 권한입니다. 이러한 권한은 보통 `ROLE_ADMINISTRATOR` or `ROLE_HR_SUPERVISOR` 같은 "roles" 로 말합니다. 이러한 roles 은 나중에 웹 인증이나 메소드 인증이나 도메인 객체 인증을 위하여 설정되게 됩니다. 스프링 시큐리티의 다른 부분들은 이러한 권한 처리를 할 수 있습니다.  `GrantedAuthority`는 보통 `UserDetailsService` 에 의해 불러와지게 됩니다. 
+
+보통 `GrantedAuthority`객체는 어플리케이션의 내에서 권한으로 넓게 사용됩니다. 이것들은 어떤 특정한 도메인 객체에 국한되지 않습니다. 그러므로 당신은 `GrantedAuthority`를  54번째의 `Employee`객체의 권한을 표현하는데 사용할 필요가 없습니다. 왜냐하면 만약 수천개의 권한이 있다면 당신의 메모리는 급속하게 메모리가 부족해질 것이기 때문입니다. (아니라면 적어도 유저 인증을 수행하는데  많은 시간이 걸릴 것입니다.)
+스프링 시큐리티는 명확하게 이러한 공통 요구사항을 처리하기 위해 디자인 되었습니다만, 프로젝트의 도메인 객체 시큐리티기능을 사용할 수 있습니다. 
 
 
 ==== Summary

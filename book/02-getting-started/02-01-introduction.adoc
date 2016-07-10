@@ -31,25 +31,15 @@ At an authentication level, Spring Security supports a wide range of authenticat
 
 [[what-is-acegi-security]]
 === acegi 시큐리티란 무엇인가
-여러분이 아마 아시다시피, 어플리케이션보안의  두 주요 부분은 인증(authentication)과 인가(authorization 혹은 접근제어access-control) 입니다. 인증과 인가는 스프링 시큐리티가 목표로하는 두 주요 부분입니다. 인증(Authentication) 은 접근주체(principal)을 만드는 과정입니다. 여기서 접근주체란 일반적으로 당신의 어플리케이션에서 어떠한 행동을 하려하는 사용자나 디바이스 혹은 어떤 다른 시스템을 말합니다. 
-
-<<<<<<< HEAD
+////
 As you probably know two major areas of application security are "authentication" and "authorization" (or "access-control"). These are the two main areas that Spring Security targets. "Authentication" is the process of establishing a principal is who they claim to be (a "principal" generally means a user, device or some other system which can perform an action in your application)."Authorization" refers to the process of deciding whether a principal is allowed to perform an action within your application. To arrive at the point where an authorization decision is needed, the identity of the principal has already been established by the authentication process. These concepts are common, and not at all specific to Spring Security.
 
 At an authentication level, Spring Security supports a wide range of authentication models. Most of these authentication models are either provided by third parties, or are developed by relevant standards bodies such as the Internet Engineering Task Force. In addition, Spring Security provides its own set of authentication features. Specifically, Spring Security currently supports authentication integration with all of these technologies:
 ////
-=======
 어플리케이션 보안에서 가장 중요한 두 가지 키워드는 바로 인증(authentication)와 권한 부여(authorization)다. 이것들은 스프링 시큐리티가 목표로 삼는 주요 영역이기도 하다. 인증(authentication)은 요청에 따라 보안 주체(principal)를 생성하는 프로세스에 대한 것이다.(보안 주체는 일반적으로 사용자, 장치 또는 당신의 어플리케이션에서 어떤 기능을 수행하는 다른 시스템들을 의미한다.) 권한 부여(Authorization)은 어플리케이션 내에서 어떠한 액션을 수행할 때 그것을 허락할 것인지의 여부를 결정하는 프로세스다. 권한 부여 프로세스가 필요한 지점까지 가려면, 보안 주체는 먼저 인증 단계를 거쳐야 한다. 이러한 개념은 일반적인 것으로, 스프링 시큐리티에서만 쓰이는 건 아니다. 
 
 인증 단계에서 스프링 시큐리티는 광범위한 인증 모델을 제시한다. 인증 모델 중 대부분은 third party를 통해 지원이 되거나 IETF 와 같은 국제 기구에 의해 개발된 것이다. 게다가 스프링 시큐리티는 자체적인 인증 유형을 제공한다. 특히 스프링 시큐리티는 현재 아래 열거된 기술들의 인증 통합 또한 지원하고 있다.
 
-
-=======
-
-어플리케이션 보안에서 가장 중요한 두 가지 키워드는 바로 인증(authentication)와 권한 부여(authorization)다. 이것들은 스프링 시큐리티가 목표로 삼는 주요 영역이기도 하다. 인증(authentication)은 요청에 따라 보안 주체(principal)를 생성하는 프로세스에 대한 것이다.(보안 주체는 일반적으로 사용자, 장치 또는 당신의 어플리케이션에서 어떤 기능을 수행하는 다른 시스템들을 의미한다.) 권한 부여(Authorization)은 어플리케이션 내에서 어떠한 액션을 수행할 때 그것을 허락할 것인지의 여부를 결정하는 프로세스다. 권한 부여 프로세스가 필요한 지점까지 가려면, 보안 주체는 먼저 인증 단계를 거쳐야 한다. 이러한 개념은 일반적인 것으로, 스프링 시큐리티에서만 쓰이는 건 아니다. 
-
-인증 단계에서 스프링 시큐리티는 광범위한 인증 모델을 제시한다. 인증 모델 중 대부분은 third party를 통해 지원이 되거나 IETF 와 같은 국제 기구에 의해 개발된 것이다. 게다가 스프링 시큐리티는 자체적인 인증 유형을 제공한다. 특히 스프링 시큐리티는 현재 아래 열거된 기술들의 인증 통합 또한 지원하고 있다.
->>>>>>> 0ff7495d1bfbc1a304df20ac8d9a4b6815cfcbc1
 
 * HTTP BASIC authentication headers (an IETF RFC-based standard)
 
@@ -84,7 +74,7 @@ At an authentication level, Spring Security supports a wide range of authenticat
 * Java Authentication and Authorization Service (JAAS)
 
 //* JEE container autentication (so you can still use Container Managed Authentication if desired)
-JEE container 인증 (원한다면 Container Managed Authentication 을 계속해서 사용할 수 있다)
+* JEE container 인증 (원한다면 Container Managed Authentication 을 계속해서 사용할 수 있다)
 
 * Kerberos
 
@@ -123,12 +113,11 @@ JEE container 인증 (원한다면 Container Managed Authentication 을 계속�
 
 ////
 Many independent software vendors (ISVs) adopt Spring Security because of this significant choice of flexible authentication models. Doing so allows them to quickly integrate their solutions with whatever their end clients need, without undertaking a lot of engineering or requiring the client to change their environment. If none of the above authentication mechanisms suit your needs, Spring Security is an open platform and it is quite simple to write your own authentication mechanism. Many corporate users of Spring Security need to integrate with "legacy" systems that don't follow any particular security standards, and Spring Security is happy to "play nicely" with such systems.
+
+Irrespective of the authentication mechanism, Spring Security provides a deep set of authorization capabilities. There are three main areas of interest  - authorizing web requests, authorizing whether methods can be invoked, and authorizing access to individual domain object instances. To help you understand the differences, consider the authorization capabilities found in the Servlet Specification web pattern security, EJB Container Managed Security and file system security respectively. Spring Security provides deep capabilities in all of these important areas, which we'll explore later in this reference guide.
 ////
 대다수의 독립 소프트웨어 벤더(ISVs)는 스프링 시큐리티가 가진 인증 모델의 유연성에 중점을 두고 스프링 시큐리티를 적용한다. 이렇게 하면 그들과 그들의 고객이 무엇을 필요로 하든, 솔루션에 맞게 환경을 변경하거나 막대한 개발을 하지 않아도 인증 모델과 솔루션을 쉽게 통합할 수 있기 때문이다. 위에 기술한 인증 메카니즘 중 본인의 필요에 맞는 게 하나도 없더라도, 스프링 시큐리티는 오픈 플랫폼이어서 어떤 인증 플랫폼에도 적용하는 것이 매우 간단하다. 스프링 시큐리티의 사용자들 중 상당수는 그 어떤 보안 표준을 따르지 않고 만들어진 "레거시" 시스템과의 통합을 원한다. 그리고 스프링 시큐리티는 그러한 시스템들과 매우 멋지게 공존한다. 
 
-////
-Irrespective of the authentication mechanism, Spring Security provides a deep set of authorization capabilities. There are three main areas of interest  - authorizing web requests, authorizing whether methods can be invoked, and authorizing access to individual domain object instances. To help you understand the differences, consider the authorization capabilities found in the Servlet Specification web pattern security, EJB Container Managed Security and file system security respectively. Spring Security provides deep capabilities in all of these important areas, which we'll explore later in this reference guide.
-////
 어떤 인증 메카니즘을 사용하든지 스프링 시큐리티는 언제나 높은 수준의 권한 부여 기능을 제공한다. 권한 관리에 있어 가장 주요한 세 가지 영역은 Web request 권한 관리, 메소드 호출 시의 권한 관리, 그리고 개별 도메인 객체 접근 권한 관리이다. 이들의 차이점은 아마도 서블렛 web pattern security, EJB 컨테이너 기반 Security, 그리고 파일 시스템 Security 각각 떠올려 보면 쉬울 것이다. 스프링 시큐리티는 이 모든 영역에서 높은 수준의 권한 관리 기능을 제공한다. 앞으로 우리는 그리고 이 레퍼런스 가이드를 통해 이 내용들을 탐험할 것이다.
 
 ////
@@ -137,29 +126,19 @@ Irrespective of the authentication mechanism, Spring Security provides a deep se
 
 
 Spring Security began in late 2003 as "The Acegi Security System for Spring". A question was posed on the Spring Developers' mailing list asking whether there had been any consideration given to a Spring-based security implementation. At the time the Spring community was relatively small (especially compared with the size today!), and indeed Spring itself had only existed as a SourceForge project from early 2003. The response to the question was that it was a worthwhile area, although a lack of time currently prevented its exploration.
-////
 
-=== 역사
-스프링 시큐리티는 2003년 말에 "The Acegi Security System for Spring" 로써 시작되었습니다. 스프링개발자들의 메일리스트에서 스프링 기반의 시큐리티 구현체를 고려중이라는 질문이 나타났습니다. 스프링 커뮤니티에서는 당시 상대적으로 작았습니다. (오늘에 비교해서 말입니다) . 그리고 실제로 스프링 자신은 2003년초에 소스포지 프로젝트로써 존재할 뿐이었습니다. 이 질문에 대한 응답은 비록 시간이 좀 부족해도, 해볼만한 영역이라는 응답이었습니다. 
-
-그러한 점을 염두에 두고, 간소한 시큐리티 구현체가 만들어졌지만 릴리즈되지는 않았습니다. 스프링 커뮤니티의 다른 멤버가 몇 주후에 시큐리티에 관해 문의를 하였고, 당시 코드가 그들에게 제공되었습니다. 몇몇 다른 요청들이 뒤따라왔고, 2004년 1월 거의 20명의 사람들이 코드를 사용하고 있었습니다. 소스포즈 프로젝트에 제안한 개척자들이 순서대로 합류하였으며, 예상대로 2004년 3월 자리를 잡기 시작합니다(established) 
-
-////
 With that in mind, a simple security implementation was built and not released. A few weeks later another member of the Spring community inquired about security, and at the time this code was offered to them. Several other requests followed, and by January 2004 around twenty people were using the code. These pioneering users were joined by others who suggested a SourceForge project was in order, which was duly established in March 2004.
-////
 
-초기에는 프로젝트는 자체적인 인증 모듈이 없었습니다. 시큐리티에 관리되는 콘테이너는 인증에 집중하기보다는 Acegi 시큐리티한 인증 처리 프로세스에 의존하였습니다. 이것은 처음에 적합했지만 점점 더 많은 사용자들의 추가적인 콘테이너 지원을 요청하였습니다. 콘테이너특징적인 인증 인터페이스 영역의 근본적인 한계는 뚜렷했습니다. 또, 콘테이너의 클래스패스에 새로운 JAR를 추가해야되는 것과 관련된 이슈또한 있었고, 이는 최종 사용자의 혼란과 잘못된 설정의 주된 요인이었습니다. 
-
-////
 In those early days, the project didn't have any of its own authentication modules. Container Managed Security was relied upon for the authentication process, with Acegi Security instead focusing on authorization. This was suitable at first, but as more and more users requested additional container support, the fundamental limitation of container-specific authentication realm interfaces became clear. There was also a related issue of adding new JARs to the container's classpath, which was a common source of end user confusion and misconfiguration.
-////
 
 Acegi Security-specific authentication services were subsequently introduced. Around a year later, Acegi Security became an official Spring Framework subproject. The 1.0.0 final release was published in May 2006 - after more than two and a half years of active use in numerous production software projects and many hundreds of improvements and community contributions.
 
 Acegi Security became an official Spring Portfolio project towards the end of 2007 and was rebranded as "Spring Security".
 
 Today Spring Security enjoys a strong and active open source community. There are thousands of messages about Spring Security on the support forums. There is an active core of developers who work on the code itself and an active community which also regularly share patches and support their peers.
+
 ////
+
 [[history]]
 === 스프링 시큐리티의 역사 
 스프링 시큐리티는 2003년 말에 "The Acegi Security Systme for Spring" 이라는 이름으로 시작되었다. 시작은 Spring 개발자 메일링 리스트에 누군가 스프링 기반의 보안 모듈을 만들지 않겠느냐는 제안을 던지면서부터였다. 그때 스프링 커뮤니티는 매우 작았고(지금 규모에 비해서) 2003년 초까지 SourceForge(역주:최근의 github 과 같은 소스 코드 레파지토리/커뮤니티이다)에서만 존재하고 있었다. 제안에 대한 답변은 탐구해 볼 시간이 부족하긴하지만 일단 해볼만한 가치가 있는 일이라는 것이었다. 
@@ -192,10 +171,17 @@ You should always test your application thoroughly before rolling out a new vers
 
 그러므로 새로운 버전으로 올리기 전에 언제나 어플리케이션을 꼼꼼히 테스트해야만 한다.
 
+////
 [[get-spring-security]]
 === Getting Spring Security
 You can get hold of Spring Security in several ways. You can download a packaged distribution from the main http://spring.io/spring-security[Spring Security] page, download individual jars from the Maven Central repository (or a Spring Maven repository for snapshot and milestone releases) or, alternatively, you can build the project from source yourself.
+////
 
+[[get-spring-security]]
+== 스프링 시큐리티 시작하기 
+스프링 시큐리티를 시작하는 데에는 여러 방법이 있다. 일단 http://spring.io/spring-security[Spring Security] 페이지에서 패키징된 배포본을 다운로드 받을 수 있다. 혹은 Maven 중앙 레파지토리에서 jars 파일 형태로 다운로드 받을 수도 있는데, (스냅샷과 릴리즈 버전을 제공하는)Spring Maven 레파지토리에서도 가능하다. 아니면 직접 소스를 다운 받아 프로젝트를 빌드할 수도 있다. 
+
+////
 [[maven]]
 ==== Usage with Maven
 
@@ -221,13 +207,45 @@ A minimal Spring Security Maven set of dependencies typically looks like the fol
 ----
 
 If you are using additional features like LDAP, OpenID, etc. you will need to also include the appropriate <<modules>>.
+////
 
+[[maven]]
+== Maven 으로 시작하기 
+
+Maven에 스프링 시큐리티 Dependency 정보를 아래와 같이 입력하자. 스프링 시큐리티를 시작하기 위한 최소한의 Dependency 이다. 
+
+.pom.xml
+[source,xml]
+[subs="verbatim,attributes"]
+----
+<dependencies>
+<!-- ... other dependency elements ... -->
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-web</artifactId>
+	<version>{spring-security-version}</version>
+</dependency>
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-config</artifactId>
+	<version>{spring-security-version}</version>
+</dependency>
+</dependencies>
+----
+
+만약 LDAP, OpenID 와 같은 부수적인 모듈을 사용하고 싶다면, 적절한 <<modules>> 을 포함시켜야 한다. 
+
+[[maven-repositories]]
+==== Maven 저장소 
+
+모든 GA 릴리즈(.RELEASE 로 끝나는 공식 버전들)는 Maven 중앙 저장소에 deploy 된다. 그러니 추가적으로 pom.xml 에 선언해주지 않아도 된다. 만약 스냅샷 버전을 사용하고 있다면, 아래 보이는 것처럼 Spring 스냅샷 레파지토리가 제대로 정의되어 있는 지 확인해야 한다. 
+////
 [[maven-repositories]]
 ===== Maven Repositories
 All GA releases (i.e. versions ending in .RELEASE) are deployed to Maven Central, so no additional Maven repositories need to be declared in your pom.
 
 If you are using a SNAPSHOT version, you will need to ensure you have the Spring Snapshot repository defined as shown below:
-
+////
 .pom.xml
 [source,xml]
 ----
@@ -241,8 +259,10 @@ If you are using a SNAPSHOT version, you will need to ensure you have the Spring
 </repositories>
 ----
 
+만약 마일스톤 빌드 또는 RC 버전(Release Candidate)을 사용하고 있다면, pom.xml에 아래와 같이 Spring 마일스톤 레파지토리가 정의되어 있는 지 확인해야 한다.
+////
 If you are using a milestone or release candidate version, you will need to ensure you have the Spring Milestone repository defined as shown below:
-
+////
 .pom.xml
 [source,xml]
 ----
@@ -255,14 +275,21 @@ If you are using a milestone or release candidate version, you will need to ensu
 </repository>
 </repositories>
 ----
+[[maven-bom]]
+==== Spring Framework Bom
 
+스프링 시큐리티는 스프링 프레임웍 {spring-version}에 따라 빌드되는데 이건 4.0.x 버전에서만 작동된다. 많은 사용자들이 스프링 시큐리티와 스프링 프레임웍 {spring-version}과의 의존 관계 때문에 문제를 겪는다. 스프링 프레임웍과 스프링 시큐리티의 버전이 맞지 않을 경우엔 이상한 classpath 문제가 발생한다.
+
+이 문제를 회피하는 방법 중 하나는 모든 스프링 프레임웍 모듈을 pom.xml의 http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management[<dependencyManagement>] 섹션 안에 include 하는 것이다. 그러나 이건 너무나 지루한 방법이고, 이 방법 대신에 아래와 같이 pom.xml에  `<dependencyManagement>`을 작성하고 그 안에 `spring-framework-bom`을 include 해도 된다. 
+
+////
 [[maven-bom]]
 ===== Spring Framework Bom
 
 Spring Security builds against Spring Framework {spring-version}, but should work with 4.0.x. The problem that many users will have is that Spring Security's transitive dependencies resolve Spring Framework {spring-version} which can cause strange classpath problems.
 
 One (tedious) way to circumvent this issue would be to include all the Spring Framework modules in a http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html#Dependency_Management[<dependencyManagement>] section of your pom. An alternative approach is to include the `spring-framework-bom` within your `<dependencyManagement>` section of your `pom.xml` as shown below:
-
+////
 .pom.xml
 [source,xml]
 [subs="verbatim,attributes"]
@@ -279,14 +306,18 @@ One (tedious) way to circumvent this issue would be to include all the Spring Fr
 	</dependencies>
 </dependencyManagement>
 ----
+이렇게 하면 스프링 시큐리티와 관련된 모든 의존성이 동일한 버전의 모듈을 사용하고 있다는 것을 확실히 할 수 있다.
 
+NOTE: Maven의 'bill of meterials'(BOM) 개념을 이용한 위와 같은 접근은 Maven 2.0.9 이상 버전에서만 가능하다. 라이브러리 간 의존성 문제를 해결하는 방법에 대해 더 알고 싶다면 http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html[Maven's Introduction to the Dependency Mechanism documentation]을 참고하라.
+////
 This will ensure that all the transitive dependencies of Spring Security use the Spring {spring-version} modules.
 
 NOTE: This approach uses Maven's "bill of materials" (BOM) concept and is only available in Maven 2.0.9+. For additional details about how dependencies are resolved refer to http://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html[Maven's Introduction to the Dependency Mechanism documentation].
-
+////
 [[gradle]]
 ==== Gradle
-A minimal Spring Security Gradle set of dependencies typically looks like the following:
+Gradle에 스프링 시큐리티 Dependency 정보를 아래와 같이 입력하자. 스프링 시큐리티를 시작하기 위한 최소한의 Dependency 이다. 
+//A minimal Spring Security Gradle set of dependencies typically looks like the following:
 
 .build.gradle
 [source,groovy]
@@ -297,13 +328,16 @@ dependencies {
 	compile 'org.springframework.security:spring-security-config:{spring-security-version}'
 }
 ----
-
+만약 LDAP, OpenID 와 같은 부수적인 모듈을 사용하고 싶다면, 적절한 <<modules>> 을 포함시켜야 한다. 
+////
 If you are using additional features like LDAP, OpenID, etc. you will need to also include the appropriate <<modules>>.
-
+////
 [[gradle-repositories]]
 ===== Gradle Repositories
+모든 GA 릴리즈(.RELEASE 로 끝나는 공식 버전들)는 Maven 중앙 저장소에 deploy 된다. GA 릴리즈 버전을 사용하려면 mavenCentrol() respository 만 사용해도 충분하다. 
+////
 All GA releases (i.e. versions ending in .RELEASE) are deployed to Maven Central, so using the mavenCentral() repository is sufficient for GA releases.
-
+////
 .build.gradle
 [source,groovy]
 ----
@@ -311,9 +345,10 @@ repositories {
 	mavenCentral()
 }
 ----
-
+만약 스냅샷 버전을 사용하고 있다면, 아래 보이는 것처럼 Spring 스냅샷 레파지토리가 제대로 정의되어 있는 지 확인해야 한다. 
+////
 If you are using a SNAPSHOT version, you will need to ensure you have the Spring Snapshot repository defined as shown below:
-
+////
 .build.gradle
 [source,groovy]
 ----
@@ -321,9 +356,10 @@ repositories {
 	maven { url 'https://repo.spring.io/snapshot' }
 }
 ----
-
+만약 마일스톤 빌드 또는 RC 버전(Release Candidate)을 사용하고 있다면, 아래와 같이 Spring 마일스톤 레파지토리가 정의되어 있는 지 확인해야 한다.
+////
 If you are using a milestone or release candidate version, you will need to ensure you have the Spring Milestone repository defined as shown below:
-
+////
 .build.gradle
 [source,groovy]
 ----
@@ -333,10 +369,15 @@ repositories {
 ----
 
 [[gradle-resolutionStrategy]]
+===== 스프링 4.0.x 과 Gradle 사용하기 
+버전 충돌을 해결할 때, 기본적으로 Gradle은 가장 최신 버전을 사용한다.이것은 스프링 시큐리티 버전을 스프링 프레임웍 버전과 함께 빌드할 때 대체로 추가적인 작업이 필요 없다는 뜻이다. 하지만 여기에도 문제가 생길 수 있다. 이것을 완화시킬 수 있는 가장 좋은 방법은 아래와 같이 http://www.gradle.org/docs/current/dsl/org.gradle.api.artifacts.ResolutionStrategy.html[Gradle's ResolutionStrategy] 을 사용하는 것이다.
+
+////
+[[gradle-resolutionStrategy]]
 ===== Using Spring 4.0.x and Gradle
 
 By default Gradle will use the newest version when resolving transitive versions. This means that often times no additional work is necessary when running Spring Security {spring-security-version} with Spring Framework {spring-version}. However, at times there can be issues that come up so it is best to mitigate this using http://www.gradle.org/docs/current/dsl/org.gradle.api.artifacts.ResolutionStrategy.html[Gradle's ResolutionStrategy] as shown below:
-
+////
 .build.gradle
 [source,groovy]
 [subs="verbatim,attributes"]
@@ -350,15 +391,27 @@ configurations.all {
 }
 ----
 
+이렇게 하면 스프링 시큐리티의 모든 dependency 들이 동일한 버전의 스프링 모듈을 사용하고 있다는 것을 확신할 수 있다. 
+
+NOTE: 이 예제는 Gradle1.9 을 사용한 것이다. 이것은 Gradle 내부 속성이기 때문에 Gradle의 새로운 버전이 나오게 되면 수정이 필요할 수 있다. 
+////
 This will ensure that all the transitive dependencies of Spring Security use the Spring {spring-version} modules.
 
 NOTE: This example uses Gradle 1.9, but may need modifications to work in future versions of Gradle since this is an incubating feature within Gradle.
+////
 
 [[modules]]
+==== 프로젝트 모듈들 
+
+스프링 시큐리티 3.0에서 codebase는 각각의 기능과 third-party dependency 를 보다 명확히 하기 위하여 각각 별개의 jar 파일로 분리되어 있다. 만약 Maven을 사용하여 프로젝트를 빌드한다면, 필요한 모듈 정보를 'pom.xml'에 추가해야 한다. 만약 Maven을 사용하지 않는다면 한번 pom.xml 을 찾아보라고 권하고 싶다. 'pom.xml'을 통해 third-pary dependency와 버전 관리에 대해 아이디어를 얻을 수 있을 것이다. 아니면 라이브러리에 포함된 sample application 을 확인하는 것도 좋은 방법이다.
+
+////
+[[modules]]
 ==== Project Modules
-In Spring Security 3.0, the codebase has been sub-divided into separate jars which more clearly separate different functionaltiy areas and third-party dependencies. If you are using Maven to build your project, then these are the modules you will add to your `pom.xml`. Even if you're not using Maven, we'd recommend that you consult the `pom.xml` files to get an idea of third-party dependencies and versions. Alternatively, a good idea is to examine the libraries that are included in the sample applications.
+In Spring Security 3.0, the codebase has been sub-divided into separate jars which more clearly separate different functionaltiy areas and third-party dependencies. If you are using Maven to build your project, then these are the modules you will add to your `pom.xml`. Even if you're not using Maven, we'd recommend that you consult the `pom.xml` files to get an idea of third-party dependencies and versions. Alternatively, a good idea is to  the libraries that are included in the sample applications.
+////
 
-
+////
 [[spring-security-core]]
 ===== Core - spring-security-core.jar
 Contains core authentication and access-contol classes and interfaces, remoting support and basic provisioning APIs. Required by any application which uses Spring Security. Supports standalone applications, remote clients, method (service layer) security and JDBC user provisioning. Contains the top-level packages:
@@ -370,49 +423,100 @@ Contains core authentication and access-contol classes and interfaces, remoting 
 * `org.springframework.security.authentication`
 
 * `org.springframework.security.provisioning`
+////
+
+[[spring-security-core]]
+===== Core - spring-security-core.jar
+
+주요한 인증, 접근권한 클래스와 인터페이스, 
+주요한 인증, 접근권한 클래스와 인터페이스 그리고 원격지원과 기본적인 권한 설정 API들을 포함한다. 스프링 시큐리티를 사용하는 어플리케이션이라면 반드시 이 jar를 포함해야 한다. standalone 어플리케이션, 원격 클라이언트, method 보안, 그리고 JDBC 사용자 권한 설정을 지원한다. 아래와 같은 패키지로 이루어져 있다.
 
 
+* `org.springframework.security.core`
 
+* `org.springframework.security.access`
+
+* `org.springframework.security.authentication`
+
+* `org.springframework.security.provisioning`
 
 
 [[spring-security-remoting]]
 ===== Remoting - spring-security-remoting.jar
-Provides intergration with Spring Remoting. You don't need this unless you are writing a remote client which uses Spring Remoting. The main package is `org.springframework.security.remoting`.
 
+스프링 리모팅을 통합 지원한다. 만약 스프링 리모팅을 사용하여 원격 클라이언트를 개발하는 기능이 굳이 필요하지 않다면, 이 jar를 쓰지 않아도 된다. 메인 패키지는 `org.springframework.security.remoting`이다.
+
+////
+[[spring-security-remoting]]
+===== Remoting - spring-security-remoting.jar
+Provides intergration with Spring Remoting. You don't need this unless you are writing a remote client which uses Spring Remoting. The main package is `org.springframework.security.remoting`.
+////
 
 [[spring-security-web]]
 ===== Web - spring-security-web.jar
+
+Filter 와 웹 security 개발과 관련한 코드들이 포함되어 있다. servlet API dependency 에 대한 모든 것들이 지원된다. 스프링 시큐리티로 웹 인증 서비스를 구현하고 싶거나 Url 기반 접근 제어 기능이 필요할 때 이 jar를 사용하면 된다. 메인 패키지는 `org.springframework.security.web`이다.
+
+////
+[[spring-security-web]]
+===== Web - spring-security-web.jar
 Contains filters and related web-security infrastructure code. Anything with a servlet API dependency. You'll need it if you require Spring Security web authentication services and URL-based access-control. The main package is `org.springframework.security.web`.
+////
 
-
+////
 [[spring-security-config]]
 ===== Config - spring-security-config.jar
 Contains the security namespace parsing code & Java configuration code.
 You need it if you are using the Spring Security XML namespace for configuration or Spring Security's Java Configuration support.
 The main package is `org.springframework.security.config`.
 None of the classes are intended for direct use in an application.
+////
 
+[[spring-security-config]]
+===== Config - spring-security-config.jar
+security namespace 설정을 파싱하는 코드나 Java 설정에 관련한 코드들이 포함되어 있다. XML namespace 기반 스프링 시큐리티 설정을 사용하거나 스프링 시큐리티 자바 configuration 을 사용할 때 필요하다. 메인 패키지는  `org.springframework.security.config`이다. 이 jar 안에 어플리케이션에서 직접적으로 사용되도록 개발된 클래스는 없다.
 
+////
 [[spring-security-ldap]]
 ===== LDAP - spring-security-ldap.jar
 LDAP authentication and provisioning code. Required if you need to use LDAP authentication or manage LDAP user entries. The top-level package is `org.springframework.security.ldap`.
+////
+[[spring-security-ldap]]
+===== LDAP - spring-security-ldap.jar
 
+Ldap 인증과 권한 설정에 관련한 코드들이다. 만약 LDAP 인증을 사용하거나 LDAP으로 user entry 를 관리할 경우 이 jar는 필수적이다. 가장 최상위 레벨의 패키지는  `org.springframework.security.ldap`이다.
 
+////
 [[spring-security-acl]]
 ===== ACL - spring-security-acl.jar
 Specialized domain object ACL implementation. Used to apply security to specific domain object instances within your application. The top-level package is `org.springframework.security.acls`.
+////
+[[spring-security-acl]]
+===== ACL - spring-security-acl.jar
 
+도메인 객체 ACL 수행에 특화되어 있다. 어플리케이션 내에서 특정 도메인 객체의 인스턴스에 보안을 적용할 때 사용된다. 최상위 패키지는 `org.springframework.security.acls`이다.
 
+////
 [[spring-security-cas]]
 ===== CAS - spring-security-cas.jar
 Spring Security's CAS client integration. If you want to use Spring Security web authentication with a CAS single sign-on server. The top-level package is `org.springframework.security.cas`.
+////
+[[spring-security-cas]]
+===== CAS - spring-security-cas.jar
 
+스프링 시큐리티의 CAS Client 통합 모듈이다. 만약 CAS Single sign-on server를 통해 웹 인증을 하고 싶다면 이 jar가 필요하다. 최상위 패키지는 `org.springframework.security.cas`이다.
 
+////
 [[spring-security-openid]]
 ===== OpenID - spring-security-openid.jar
 OpenID web authentication support. Used to authenticate users against an external OpenID server. `org.springframework.security.openid`. Requires OpenID4Java.
+////
+[[spring-security-openid]]
+===== OpenID - spring-security-openid.jar
 
+OpenID 웹 인증을 지원한다. 외부의 OpenID 서버로 사용자를 인증하는 데에 사용된다. 메인 패키지는 `org.springframework.security.openid`이며, 이 jar를 사용하기 위해서는 OpenID4Java 가 필요하다. 
 
+////
 [[get-source]]
 ==== Checking out the Source
 Since Spring Security is an Open Source project, we'd strongly encourage you to check out the source code using git. This will give you full access to all the sample applications and you can build the most up to date version of the project easily. Having the source for a project is also a huge help in debugging. Exception stack traces are no longer obscure black-box issues but you can get straight to the line that's causing the problem and work out what's happening. The source is the ultimate documentation for a project and often the simplest place to find out how something actually works.
@@ -425,3 +529,17 @@ git clone https://github.com/spring-projects/spring-security.git
 ----
 
 This will give you access to the entire project history (including all releases and branches) on your local machine.
+////
+
+[[get-source]]
+==== 소스 체크 아웃하기
+스프링 시큐리티는 오픈 소스 프로젝트이기 때문에, 우리는 언제나 git을 통해 소스 코드를 체크 아웃 하라고 권장한다. 이렇게 하면 모든 샘플 어플리케이션에 접근할 수 있고, 가장 최신 버전의 프로젝트를 빨리 빌드할 수 있다. 또한 프로젝트에 소스를 사용한다면 디버깅할 때 큰 도움이 된다. Exception stack trace 를 할 때 더 이상 블랙박스처럼 보이지 않고 문제가 발생한 라인에 직접적으로 접근할 수 있기 때문이다. 소스는 이 프로젝트에 대한 최종적인 문서이며, 무엇이 어떻게 작동하는 지 알 수 있는 가장 효과적인 장소이다.
+
+프로젝트를 위해 소스를 받고 싶다면, 아래의 git command를 실행하자. 
+
+[source,txt]
+----
+git clone https://github.com/spring-projects/spring-security.git
+----
+
+이렇게 하면 로컬 PC에서 모든 릴리즈 버전과 브랜치 버전들을 포함하여 전체적인 프로젝트 history 에 접근할 수 있다.
