@@ -33,7 +33,8 @@ All `AuthenticationProvider` s included with the security architecture use `Gran
 
 [[authz-access-decision-manager]]
 ==== The AccessDecisionManager
-The `AccessDecisionManager` is called by the `AbstractSecurityInterceptor` and is responsible for making final access control decisions. the `AccessDecisionManager` interface contains three methods:
+==== 접근결정관리자
+`AbstractSecurityInterceptor`가 호출하는 `AccessDecisionManager`는 최종 접근 제어 결정을 책임진다. `AccessDecisionManager` 인터페이스는 메서드 세개를 갖는다.
 
 [source,java]
 ----
@@ -45,9 +46,9 @@ boolean supports(ConfigAttribute attribute);
 boolean supports(Class clazz);
 ----
 
-The ``AccessDecisionManager``'s `decide` method is passed all the relevant information it needs in order to make an authorization decision. In particular, passing the secure `Object` enables those arguments contained in the actual secure object invocation to be inspected. For example, let's assume the secure object was a `MethodInvocation`. It would be easy to query the `MethodInvocation` for any `Customer` argument, and then implement some sort of security logic in the `AccessDecisionManager` to ensure the principal is permitted to operate on that customer. Implementations are expected to throw an `AccessDeniedException` if access is denied.
+`AccessDecisionManager`의 `decide` 메서드는 권한부여를 결정하는데 필요한 모든 관련정보를 건네받는다. 특히 안전한 `Object`를 넘겨서 실제 안전한 객체가 호출될 때 포함된 여러 arguments를 검사할 수 있다. 예를 들어 secure object로 `MethodInvocation`를 가정해보자. `MethodInvocation`에 어느 `Customer` argument를 물어보고, principal이 그 고객을 다룰 권한이 있는지 보증하기 위해 `AccessDecisionManager`에 약간의 보안로직을 구현하는건 쉽다. 만약 권한이 없다면 구현체는 `AccessDeniedException`를 던질 것이다.
 
-The `supports(ConfigAttribute)` method is called by the `AbstractSecurityInterceptor` at startup time to determine if the `AccessDecisionManager` can process the passed `ConfigAttribute`. The `supports(Class)` method is called by a security interceptor implementation to ensure the configured `AccessDecisionManager` supports the type of secure object that the security interceptor will present.
+`supports(ConfigAttribute)` 메서드는 시작시점에 `AccessDecisionManager`가 넘겨진 `ConfigAttribute`를 처리할 수 있는지 판단하기 위해 `AbstractSecurityInterceptor`가 호출한다. `supports(Class)` 메서드는 설정된 `AccessDecisionManager`가 security interceptor가 제공(present)할 secure object의 type을 지원하는지 보증하기 위해 security interceptor 구현체가 호출한다.
 
 [[authz-voting-based]]
 ==== Voting-Based AccessDecisionManager Implementations
