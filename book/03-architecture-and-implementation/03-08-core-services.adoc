@@ -58,20 +58,34 @@ In the above example we have three providers. They are tried in the order shown 
 Authentication mechanisms such as a web form-login processing filter are injected with a reference to the `ProviderManager` and will call it to handle their authentication requests. The providers you require will sometimes be interchangeable with the authentication mechanisms, while at other times they will depend on a specific authentication mechanism. For example, `DaoAuthenticationProvider` and `LdapAuthenticationProvider` are compatible with any mechanism which submits a simple username/password authentication request and so will work with form-based logins or HTTP Basic authentication. On the other hand, some authentication mechanisms create an authentication request object which can only be interpreted by a single type of `AuthenticationProvider`. An example of this would be JA-SIG CAS, which uses the notion of a service ticket and so can therefore only be authenticated by a `CasAuthenticationProvider`. You needn't be too concerned about this, because if you forget to register a suitable provider, you'll simply receive a `ProviderNotFoundException` when an attempt to authenticate is made.
 ////
 
-필터처리 웹폼로그인같은 인증 메커니즘은 `ProviderManager`의 참조와 함께 주입될 수 있으며 인증 요청을 처리하기 위하여 호출되어질 수 있습니다. 당신이 필요로 하는 프로바이더는 때때로 인증 메커니즘과 함께 교환될 수 있으며 때로는 특정 인증 메커니즘에 의존할 수도 있습니다. 예를 들자면 `DaoAuthenticationProvider`와 `LdapAuthenticationProvider` 는 단순한 username/password 인증요청을 사용하는 어떤 인증 메커니즘과 양립가능하여서 폼기반로그인이나 HTTP Basic 요청과 함께 동작할 수 있습니다. 반면에 어떤 인증 메커니즘은 어떤 하나의 `AuthenticationProvider` 에서 해석될 수 있는 인증 요청객체를 생성합니다. 이것의 예로 JA-SIG CAS를 들 수 있는데, 이것은 서비스 티켓의 개념을 사용하여  `CasAuthenticationProvider`에 의해서만 인증될 수 있습니다.  
+필터처리 웹폼로그인같은 인증 메커니즘은 `ProviderManager`의 참조와 함께 주입될 수 있으며 인증 요청을 처리하기 위하여 호출되어질 수 있습니다. 당신이 필요로 하는 프로바이더는 때때로 인증 메커니즘과 함께 교환될 수 있으며 때로는 특정 인증 메커니즘에 의존할 수도 있습니다. 예를 들자면 `DaoAuthenticationProvider`와 `LdapAuthenticationProvider` 는 단순한 username/password 인증요청을 사용하는 어떤 인증 메커니즘과 양립가능하여서 폼기반로그인이나 HTTP Basic 요청과 함께 동작할 수 있습니다. 반면에 어떤 인증 메커니즘은 어떤 하나의 `AuthenticationProvider` 에서 해석될 수 있는 인증 요청객체를 생성합니다. 이것의 예로 JA-SIG CAS를 들 수 있는데, 이것은 서비스 티켓의 개념을 사용하여  `CasAuthenticationProvider`에 의해서만 인증될 수 있습니다.  당신은 이것에 대하여 걱정할 필요가 없습니다. 왜냐하면 만약 당신이 적합한 프로바이더를 등록하는 것을 잊는다면, 인증에 대한 시도를 할 때 당신은 `ProviderNotFoundException` 예외를 받을 것이기때문입니다. 
 
 
 
 [[core-services-erasing-credentials]]
+////
 ==== Erasing Credentials on Successful Authentication
 By default (from Spring Security 3.1 onwards) the `ProviderManager` will attempt to clear any sensitive credentials information from the `Authentication` object which is returned by a successful authentication request. This prevents information like passwords being retained longer than necessary.
+////
 
+==== 성공적인 인증 후에 Credentials를 지우기
+기본적으로 스프링 3.1 부터 `ProviderManager` 는 성공적인 인증 요청 후에 `Authentication`객체로부터 민감정보를 지우기를 시도합니다. 이것은 불필요하게 비밀번호같은 정보들을 오래 갖고 있는 것을 예방합니다. 
+
+////
 This may cause issues when you are using a cache of user objects, for example, to improve performance in a stateless application. If the `Authentication` contains a reference to an object in the cache (such as a `UserDetails` instance) and this has its credentials removed, then it will no longer be possible to authenticate against the cached value. You need to take this into account if you are using a cache. An obvious solution is to make a copy of the object first, either in the cache implementation or in the `AuthenticationProvider` which creates the returned `Authentication` object. Alternatively, you can disable the `eraseCredentialsAfterAuthentication` property on `ProviderManager`. See the Javadoc for more information.
+////
+
+이러한 점은 무상태 어플리케이션에서 성능을 향상시키기 위해 예를 들자면 당신이 유저객체의 캐시를 사용하려고 할 때 이슈를 발생시킬 수 있습니다. 만약 `Authentication` 이 `UserDetails` 같은 인스턴스에 대한 참조를 캐시로 유지하고 있고 그것의 민감정보(Credentials)가 지워졌다면, 이것은 더 이상 캐시한 값에 대하여 인증을 하지 못할 것입니다. 만약 당신이 캐시를 사용한다면 이러한 점을 계정에 적용할 필요가 있습니다. 명백한 해결책은 캐시 구현체나 반환되는 `Authentication`객체를 생성하는 `AuthenticationProvider` 안에 객체에 대한 복사본을 만드는 것입니다. 대안으로는 당신은 `ProviderManager`에서 `eraseCredentialsAfterAuthentication`속성을 해제할 수 있습니다 . 자세한 내용은 자바 문서를 보세요. 
 
 
 [[core-services-dao-provider]]
 ==== DaoAuthenticationProvider
+////
 The simplest `AuthenticationProvider` implemented by Spring Security is `DaoAuthenticationProvider`, which is also one of the earliest supported by the framework. It leverages a `UserDetailsService` (as a DAO) in order to lookup the username, password and `GrantedAuthority` s. It authenticates the user simply by comparing the password submitted in a `UsernamePasswordAuthenticationToken` against the one loaded by the `UserDetailsService`. Configuring the provider is quite simple:
+////
+
+스프링 시큐리티에 의해 구현된 가장 간단한 `AuthenticationProvider` 는 `DaoAuthenticationProvider`로 프레임워크의 초창기부터 지원된 것중의 하나입니다. 이것은 `UserDetailsService` 대신에 유저네임, 비밀번호, 권한같은 것들을 찾는 것에 대한 일을 해줍니다. 이것은 단순히 `UsernamePasswordAuthenticationToken` 안에 전송받은 비밀번호와 `UserDetailsService`에 의해 불러와진 비밀번호를 비교함으로써 인증을 수행합니다. 프로바이더를 설정하는 것은 다음과 같습니다 
+
 
 [source,xml]
 ----
@@ -83,25 +97,47 @@ The simplest `AuthenticationProvider` implemented by Spring Security is `DaoAuth
 </bean>
 ----
 
+////
 The `PasswordEncoder` is optional. A `PasswordEncoder` provides encoding and decoding of passwords presented in the `UserDetails` object that is returned from the configured `UserDetailsService`. This will be discussed in more detail <<core-services-password-encoding,below>>.
+////
+
+`PasswordEncoder` 은 선택적입니다. `PasswordEncoder`는  `UserDetails` 에서 나타나는 비밀번호에 대한 인코딩과 디코딩을 수행하며 이 `UserDetails`는 설정된 `UserDetailsService`에 의해 반환됩니다. 더 자세한 내용은 <<core-services-password-encoding,below>>에서 다룹니다 .
+
 
 
 === UserDetailsService Implementations
+////
 As mentioned in the earlier in this reference guide, most authentication providers take advantage of the `UserDetails` and `UserDetailsService` interfaces. Recall that the contract for `UserDetailsService` is a single method:
+////
+
+이 레퍼런스 가이드의 앞부분에서 말했듯이, 대부분의 인증 프로바이더는 `UserDetails` 와 `UserDetailsService` 인터페이스의 장점을 취합니다. `UserDetailsService` 의 하나의 메서드를 기억해봅시다. 
 
 [source,java]
 ----
 UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 ----
 
+////
 The returned `UserDetails` is an interface that provides getters that guarantee non-null provision of authentication information such as the username, password, granted authorities and whether the user account is enabled or disabled. Most authentication providers will use a `UserDetailsService`, even if the username and password are not actually used as part of the authentication decision. They may use the returned `UserDetails` object just for its `GrantedAuthority` information, because some other system (like LDAP or X.509 or CAS etc) has undertaken the responsibility of actually validating the credentials.
+////
 
+반환된 `UserDetails` 는 유저네임, 비밀번호, 허용된 권한과 해당 계정의 활성화여부같은 인증정보를 제공하는 getter들을 제공하는 인터페이스입니다. 대부분의 인증 프로바이더는 유저네임과 비밀번호가 실제로 인증결정에 사용되지 않더라도 `UserDetailsService` 를 사용합니다. 이것들은 단지 `GrantedAuthority`  정보를 위하여 `UserDetails` 객체를 사용할 것입니다. 왜냐하면 (LDAP나 X.509 혹은 CAS같은) 다른 시스템이 실제적으로 정보를 검증하는 책임을 수행할 것이기 때문입니다. 
+
+////
 Given `UserDetailsService` is so simple to implement, it should be easy for users to retrieve authentication information using a persistence strategy of their choice. Having said that, Spring Security does include a couple of useful base implementations, which we'll look at below.
+////
+ `UserDetailsService` 는 구현하기에 매우 간단합니다. 이것은 그들의 선택으로 결정된 영속화전략을 사용하여 사용자를 위한 인증정보를 받아오는 것이 편하게 되어있습니다. 그럼에도 불구하고 스프링 시큐리티는 몇가지 유용한 기본적 구현체들을 넣어뒀는데, 보시는 바와 같습니다. 
 
 
 [[core-services-in-memory-service]]
+////
 ==== In-Memory Authentication
 Is easy to use create a custom `UserDetailsService` implementation that extracts information from a persistence engine of choice, but many applications do not require such complexity. This is particularly true if you're building a prototype application or just starting integrating Spring Security, when you don't really want to spend time configuring databases or writing `UserDetailsService` implementations. For this sort of situation, a simple option is to use the `user-service` element from the security <<ns-minimal,namespace>>:
+////
+
+==== 인메모리 인증 In-Memory Authentication
+선택된 영속화로부터 정보를 추출하는 커스텀 `UserDetailsService` 구현체를 만드는 것은 쉽습니다. 그러나 많은 어플리케이션에서 이러한 복잡성은 필요로 하지 않습니다. 이것은 프로토타입어플리케이션이나  스프링 시큐리티를 통합하면서데이터베이스를 설정하는데 많은 시간을 사용하고 싶지 않을 때 더더욱 그러합니다. 이러한 상황을 위한 간단한 옵션은 <<ns-minimal,namespace>> 시큐리티로부터   `user-service`요소를 사용하는 것입니다. 
+
 
 [source,xml]
 ----
@@ -111,14 +147,19 @@ Is easy to use create a custom `UserDetailsService` implementation that extracts
 </user-service>
 ----
 
+////
 This also supports the use of an external properties file:
+////
+이것은 또한 외부 프로퍼티 파일의 사용을 지원합니다. 
 
 [source,xml]
 ----
 <user-service id="userDetailsService" properties="users.properties"/>
 ----
-
+////
 The properties file should contain entries in the form
+////
+이 프로퍼티 파일은 다음 형태로 정보를 가지게 됩니다. 
 
 [source,txt]
 ----
@@ -135,7 +176,11 @@ bob=bobspassword,ROLE_USER,enabled
 
 [[core-services-jdbc-user-service]]
 ==== JdbcDaoImpl
+////
 Spring Security also includes a `UserDetailsService` that can obtain authentication information from a JDBC data source. Internally Spring JDBC is used, so it avoids the complexity of a fully-featured object relational mapper (ORM) just to store user details. If your application does use an ORM tool, you might prefer to write a custom `UserDetailsService` to reuse the mapping files you've probably already created. Returning to `JdbcDaoImpl`, an example configuration is shown below:
+////
+
+스프링 시큐리티는 또한 `UserDetailsService` 를 포함하고 있습니다. 이것은 JDBC 데이터 소스로부터 인증정보를 얻어옵니다. 내부적으로 스프링 JDBC가 사용되어서 단순히 유저 세부사항을 저장하는데 있어서 ORM의 사용을 피합니다. 만약 당신의 어플리케이션이 ORM을 사용한다면 `UserDetailsService` 을 사용하여 당신이 이미 생성한 매핑정보를 재사용하기를 원할 것입니다. `JdbcDaoImpl`를 반환하는 예제설정은 다음과 같습니다.
 
 [source,xml]
 ----
@@ -152,21 +197,42 @@ Spring Security also includes a `UserDetailsService` that can obtain authenticat
 </bean>
 ----
 
+
+////
 You can use different relational database management systems by modifying the `DriverManagerDataSource` shown above. You can also use a global data source obtained from JNDI, as with any other Spring configuration.
+////
+
+당신은 `DriverManagerDataSource` 를 다음과 같이 수정함으로써 다른 종류의 관계형 데이터베이스관리 시스템을 사용할 수 있습니다. 당신은 또한 다른 스프링 설정처럼 JNDI로 부터 전역데이터소스를 사용할 수도 있습니다.
 
 ===== Authority Groups
+////
 By default, `JdbcDaoImpl` loads the authorities for a single user with the assumption that the authorities are mapped directly to users (see the <<appendix-schema,database schema appendix>>). An alternative approach is to partition the authorities into groups and assign groups to the user. Some people prefer this approach as a means of administering user rights. See the `JdbcDaoImpl` Javadoc for more information on how to enable the use of group authorities. The group schema is also included in the appendix.
+////
+기본적으로, `JdbcDaoImpl`는 권한이 직접적으로 유저에 매핑되었다는 가정하에 단일유저를 위한 권한들을 불러옵니다. (<<appendix-schema,database schema appendix>>를 보세요). 대안으로는 권한을 그룹으로 분할하여 유저를 그 그룹에 할당하는 것입니다. 몇몇 사람들은 이러한 접근을 유저권한을 관리하는 수단으로 선호하기도 합니다. 그룹권한을 활성화하는 것을 위해서라면 `JdbcDaoImpl` 문서를 보세요. 그룹스키마는 또한 appendix 안에서 포함됩니다. 
 
 
 [[core-services-password-encoding]]
 === Password Encoding
-Spring Security's `PasswordEncoder` interface is used to support the use of passwords which are encoded in some way in persistent storage. You should never store passwords in plain text. Always use a one-way password hashing algorithm such as bcrypt which uses a built-in salt value which is different for each stored password. Do not use a plain hash function such as MD5 or SHA, or even a salted version. Bcrypt is deliberately designed to be slow and to hinder offline password cracking, whereas standard hash algorithms are fast and can easily be used to test thousands of passwords in parallel on custom hardware. You might think this doesn't apply to you since your password database is secure and offline attacks aren't a risk. If so, do some research and read up on all the high-profile sites which have been compromised in this way and have been pilloried for storing their passwords insecurely. It's best to be on the safe side. Using `org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"` is a good choice for security. There are also compatible implementations in other common programming languages so it a good choice for interoperability too.
+////
+Spring Security's `PasswordEncoder` interface is used to support the use of passwords which are encoded in some way in persistent storage. You should never store passwords in plain text. Always use a one-way password hashing algorithm such as bcrypt which uses a built-in salt value which is different for each stored password. Do not use a plain hash function such as MD5 or SHA, or even a salted version. Bcrypt is designed to be slow and to hinder offline password cracking, whereas standard hash algorithms are fast and can easily be used to test thousands of passwords in parallel on custom hardware. You might think this doesn't apply to you since your password database is secure and offline attacks aren't a risk. If so, do some research and read up on all the high-profile sites which have been compromised in this way and have been pilloried for storing their passwords insecurely. It's best to be on the safe side. Using `org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"` is a good choice for security. There are also compatible implementations in other common programming languages so it a good choice for interoperability too.
+////
 
+스프링 시큐리티의 `PasswordEncoder` 인터페이스는 영속화 저장소에 어떠한 방식으로 인코딩되어 저장된 비밀번호의 사용을 지원하는데 사용됩니다. 절대 평문으로 비밀번호를 저장해서는 안됩니다. 언제나 각각의 저장된 비밀번호에 다르게 되있는 내장 salt 값을 사용하는 bcypt 같은 단방향 해싱 알고리즘을 사용하여야 합니다. salt 가 되더라도 MD5 나 SHA 같은 평범한 해쉬기능을 사용하지 말아야합니다. 표준 해쉬 알고리즘이 빠르고 수천개의 비밀번호를 커스텀 하드웨어에서 병렬적으로 테스트 할 수 있게 테스트할 수 있게 사용되어지는 반면에 Bcrypt는 비밀번호 크래킹을 하는데 지연될 수 있도록 신중하게 디자인되었습니다. 당신은 아마 당신에게 적용을 안해도 될거라고 생각하지도 모릅니다. 왜냐하면 당신의 데이터베이스는 안전하고 오프라인 공격에 위험이 없기 때문입니다. 만약 그렇다면 이러한 점에서 타협한 사이트들에 대해 몇가지 조사를 해보고 그들의 비밀번호를 안전하지 않게 보관한 것에 대하여 오명을 받은 거슬 읽어보십시오. 안전한쪽에 있는 것이 최고입니다. `org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"`를 사용하는 것은 보안을 위한 좋은 선택입니다. 또한 다른 보통의 프로그래밍 언어와 양립할 수 있어서 상호운영에 있어서도 좋은 선택일 겁니다. 
+
+
+////
 If you are using a legacy system which already has hashed passwords, then you will need to use an encoder which matches your current algorithm, at least until you can migrate your users to a more secure scheme (usually this will involve asking the user to set a new password, since hashes are irreversible). Spring Security has a package containing legacy password encoding implementation, namely, `org.springframework.security.authentication.encoding`. The `DaoAuthenticationProvider` can be injected with either the new or legacy `PasswordEncoder` types.
+////
 
+만약 당신이 이미 해시된 패스워드를 가지고 있는 레거시 시스템을 사용한다면, 당신의 현재 알고리즘에 맞는 인코더를 사용할 필요가 있을 것입니다. 적어도 당신의 사용자들을 좀 더 안전한 scheme으로 마이그레이션 시킬 때까지 말입니다.(보통 해쉬가 양립할 수 없기 때문에 사용자에게 새로운 비밀번호를 묻습니다. ) 스프링 시큐리티는 레거시 비밀번호 인코딩 구현체를 포함하는 패키지(`org.springframework.security.authentication.encoding`)를 가지고 있습니다. `DaoAuthenticationProvider`는 레거시 `PasswordEncoder`나 새로운 타입을 가지고서 주입될 수 있습니다 .
 
+////
 ==== What is a hash?
 Password hashing is not unique to Spring Security but is a common source of confusion for users who are not familiar with the concept. A hash (or digest) algorithm is a one-way function which produces a piece of fixed-length output data (the hash) from some input data, such as a password. As an example, the MD5 hash of the string "password" (in hexadecimal) is
+////
+
+==== hash란 무엇인가요?
+비밀번호 해싱은 스프링 시큐리티에만 가지고 있는 것이 아니지만, 이 개념에 익숙치 않는 사용자들에게 흔한 혼동거리가 됩니다. 해쉬(혹은 digest) 알고리즘은 단방향 함수로 
 
 [source,txt]
 ----
