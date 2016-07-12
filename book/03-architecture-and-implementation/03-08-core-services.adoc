@@ -232,26 +232,44 @@ Password hashing is not unique to Spring Security but is a common source of conf
 ////
 
 ==== hash란 무엇인가요?
-비밀번호 해싱은 스프링 시큐리티에만 가지고 있는 것이 아니지만, 이 개념에 익숙치 않는 사용자들에게 흔한 혼동거리가 됩니다. 해쉬(혹은 digest) 알고리즘은 단방향 함수로 
+비밀번호 해싱은 스프링 시큐리티에만 가지고 있는 것이 아니지만, 이 개념에 익숙치 않는 사용자들에게 흔한 혼동거리가 됩니다. 해쉬(혹은 digest) 알고리즘은 단방향 함수로 입력된 데이터로부터 비밀번호 같은 고정된길이의 출력 데이터를 생성합니다. 예를 들자면 password의 MD5 해쉬는 다음과 같습니다. 
 
 [source,txt]
 ----
 5f4dcc3b5aa765d61d8327deb882cf99
 ----
-
+////
 A hash is "one-way" in the sense that it is very difficult (effectively impossible) to obtain the original input given the hash value, or indeed any possible input which would produce that hash value. This property makes hash values very useful for authentication purposes. They can be stored in your user database as an alternative to plaintext passwords and even if the values are compromised they do not immediately reveal a password which can be used to login. Note that this also means you have no way of recovering the password once it is encoded.
+////
+
+해쉬가 단방향이라는 말은 주어진 해시밸류로 원래 값을 얻기가 어렵다는 (거의 불가능하다는) 말입니다. 실제로 해시값을 생산하는 원래 값을 얻기가 어렵습니다. 이러한 속성은 해쉬밸류를 인증에 사용하기 무척 유용하게 만들었습니다. 이것들은 평문 대신에 데이터베이스에 저장되며 심지어 로그인 시에도 즉각적으로 나타나지 않습니다. 이러한 특징은 또한 한번 인코딩되면 다시 복호화시키는 방법이 없다는 것을 의미합니다. 
+
 
 ==== Adding Salt to a Hash
+////
 One potential problem with the use of password hashes that it is relatively easy to get round the one-way property of the hash if a common word is used for the input. People tend to choose similar passwords and huge dictionaries of these from previously hacked sites are available online. For example, if you search for the hash value `5f4dcc3b5aa765d61d8327deb882cf99` using google, you will quickly find the original word "password". In a similar way, an attacker can build a dictionary of hashes from a standard word list and use this to lookup the original password. One way to help prevent this is to have a suitably strong password policy to try to prevent common words from being used. Another is to use a"salt" when calculating the hashes. This is an additional string of known data for each user which is combined with the password before calculating the hash. Ideally the data should be as random as possible, but in practice any salt value is usually preferable to none. Using a salt means that an attacker has to build a separate dictionary of hashes for each salt value, making the attack more complicated (but not impossible).
+////
+
+비밀번호 해쉬의 한가지 잠재적인 문제점은 평범한 단어가 입력값으로 사용된 경우 해시의 단방향특성을 이용해 값을 얻기가 상대적으로 쉽다는 것입니다. 사람들은 전에 해킹된 사이트로부터 비슷한 비밀번호나 거대한 사전에서 비슷한 단어를 선택하고는 합니다. 예를 들자면 만약 구글을 사용하여 `5f4dcc3b5aa765d61d8327deb882cf99` 를 검색하면 당신은 손쉽게 원래의 단어 "password"를 알아낼 수 있을 것입니다. 비슷한 의미로 공격자는 표준 단어 목록으로부터 해쉬값들의 사전을 만들어내어 원래 비밀번호 값을 알아내는 데 사용할 수 있습니다. 이러한 점을 막는 방법은 적합한 비밀번호 정책을 가져서 평범한 단어가 사용되는 것을 방지하는 방법이 있고 또 하나의 방법은 비밀번호가 생성될 때 "salt" 를 사용하는 것입니다. 이것은 비밀번호가 생성되기 전에 유저의 비밀번호와와 합쳐져서 암호화되는 추가적인 문자열입니다. 이상적으로는 가능하다면 이 데이터는 랜덤이면 좋겠지만, 실제적으로 어떠한 salt값은 그렇지 않는 것으로 선호됩니다. salt를 사용한다는 것의 의미는 각각의 salt 값에 대하여 공격자가 다른 사전을 가져야 한다는 것을 의미하며 공격이 좀더 복잡하거나 불가능하게 만든다는 것을 의미합니다. 
 
 Bcrypt automatically generates a random salt value for each password when it is encoded, and stores it in the bcrypt string in a standard format.
 
+Bcrypt는 인코딩될때 자동적으로 각각의 비밀번호에 대하여 랜덤salt 를 만들어내고 표준 형식으로 bcrypt문자열을 저장합니다.
+
 [NOTE]
+////
 ====
 The legacy approach to handling salt was to inject a `SaltSource` into the `DaoAuthenticationProvider`, which would obtain a salt value for a particular user and pass it to the `PasswordEncoder`. Using bcrypt means you don't have worry about the details of salt handling (such as where the value is stored), as it is all done internally. So we'd strongly recommend you use bcrypt unless you already have a system in place which stores the salt separately.
 ====
+////
+
+salt를 주입하는 레거시접근은 `SaltSource`를 `DaoAuthenticationProvider`에 주입하는 것인데 이 `DaoAuthenticationProvider`는 특정한 사용자로부터 salt값을 얻어서 `PasswordEncoder`에 전달합니다. bcrypt를 사용하는 것은 당신은 이러한 salt다루기에대해서 걱정할 필요가 없다는 것을 의미하며 이러한 것들이 모두 내부적으로 이뤄짐을 의미합니다. 그러니 우리는 당신이 bcrypt를 사용하기를 강력히 추천합니다. 당신이 salt를 분리적으로 저장하는 시스템을 이미 갖고 있지 않다면 말이죠.. 
 
 ====  Hashing and Authentication
+////
 When an authentication provider (such as Spring Security's `DaoAuthenticationProvider`) needs to check the password in a submitted authentication request against the known value for a user, and the stored password is encoded in some way, then the submitted value must be encoded using exactly the same algorithm. It's up to you to check that these are compatible as Spring Security has no control over the persistent values. If you add password hashing to your authentication configuration in Spring Security, and your database contains plaintext passwords, then there is no way authentication can succeed. Even if you are aware that your database is using MD5 to encode the passwords, for example, and your application is configured to use Spring Security's `Md5PasswordEncoder`, there are still things that can go wrong. The database may have the passwords encoded in Base 64, for example while the encoder is using hexadecimal strings (the default). Alternatively your database may be using upper-case while the output from the encoder is lower-case. Make sure you write a test to check the output from your configured password encoder with a known password and salt combination and check that it matches the database value before going further and attempting to authenticate through your application. Using a standard like bcrypt will avoid these issues.
+////
+
+인증 프로바이더가 제출된 인증 요청을 검사할 때   
 
 If you want to generate encoded passwords directly in Java for storage in your user database, then you can use the `encode` method on the `PasswordEncoder`.
