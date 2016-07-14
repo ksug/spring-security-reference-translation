@@ -136,6 +136,7 @@ principal 외에 `Authentication` 에 의해 제공되는 다른 중요한 메�
 스프링 시큐리티는 명확하게 이러한 공통 요구사항을 처리하기 위해 디자인 되었습니다만, 프로젝트의 도메인 객체 시큐리티기능을 사용할 수 있습니다. 
 
 
+////
 ==== Summary
 Just to recap, the major building blocks of Spring Security that we've seen so far are:
 
@@ -151,17 +152,40 @@ Just to recap, the major building blocks of Spring Security that we've seen so f
 * `UserDetails`, to provide the necessary information to build an Authentication object from your application's DAOs or other source of security data.
 
 * `UserDetailsService`, to create a `UserDetails` when passed in a `String`-based username (or certificate ID or the like).
+////
+
+==== 요약
+요약을 위해서, 스프링 시큐리티의 주요 부분은 다음과 같습니다. 
+* `SecurityContextHolder`, 는 `SecurityContext` 에 대한 접근을 제공합니다.
+
+* `SecurityContext`는  `Authentication` 을 가지고 있고, 특정요청 보안정보를 가지고 있을 수 있습니다. 
+
+* `Authentication` 는 스프링 시큐리티의 방법으로 principal 을 표현합니다. 
+
+* `GrantedAuthority`는 principal 에 허용된 어플리케이션 전체적인 권한을 나타냅니다. 
+
+* `UserDetails` 는 당신의 어플리케이션의 DAO나 다른 시큐리티데이터의 소스로부터 Authentication 객체를 만들어내는데 필요한 정보를 제공합니다. 
+
+* `UserDetailsService`는  `String`기반의 유저네임(혹은 인증 ID같은 것들) 이 전달되면 `UserDetails`  를 생성합니다. 
 
 
-
+////
 Now that you've gained an understanding of these repeatedly-used components, let's take a closer look at the process of authentication.
+////
+
+반복적으로 사용되는 컴포넌트에 관해서 이해를 하였기 때문에 좀 더 인증 프로세스를 알아보도록 하겠습니다. 
 
 
 [[tech-intro-authentication]]
+////
 === Authentication
 Spring Security can participate in many different authentication environments. While we recommend people use Spring Security for authentication and not integrate with existing Container Managed Authentication, it is nevertheless supported - as is integrating with your own proprietary authentication system.
+////
 
+=== 인증
+스프링 시큐리티는 많은 인증환경을 처리할 수 있습니다. 우리는 인증에 스프링 시큐리티를 사용하기를 추천하지만, 존재하는 인증관리 콘테이너와 통합하기를 추천하지는 않지만 이것은 지원됩니다. 
 
+////
 ==== What is authentication in Spring Security?
 Let's consider a standard authentication scenario that everyone is familiar with.
 
@@ -170,8 +194,17 @@ Let's consider a standard authentication scenario that everyone is familiar with
 . The context information for that user is obtained (their list of roles and so on).
 . A security context is established for the user
 . The user proceeds, potentially to perform some operation which is potentially protected by an access control mechanism which checks the required permissions for the operation against the current security context information.
+////
 
+==== 스프링 시큐리티에서 인증이란 무엇일까요?
+모두가 친숙한 표준 인증 시나리오를 알아보도록 하겠습니다.
+. 사용자가 유저이름과 비밀번호를 치고 로그인을 하려합니다.
+. 시스템은 성공적으로 해당 유저이름에 비밀번호가 맞는지 검사합니다.
+. 해당 유저를 위한 콘텍스트 정보가 얻어집니다. (권한 리스트 같은 것)
+. 시큐리티 콘텍스트가 유저를 위해서 설정됩니다.
+. 유저는 잠재적으로 어떤 접근제어메커니즘을 가지고 있는 작업들을 할 수 있게 됩니다. 
 
+////
 The first three items constitute the authentication process so we'll take a look at how these take place within Spring Security.
 
 . The username and password are obtained and combined into an instance of `UsernamePasswordAuthenticationToken` (an instance of the `Authentication` interface, which we saw earlier).
@@ -180,6 +213,14 @@ The first three items constitute the authentication process so we'll take a look
 . The security context is established by calling `SecurityContextHolder.getContext().setAuthentication(...)`, passing in the returned authentication object.
 
 From that point on, the user is considered to be authenticated. Let's look at some code as an example.
+////
+
+첫번째 세가지 아이템은 인증 프로세스를 구성합니다. 그래서 우리는 어떻게 이것들이 스프링 시큐리티에서 이뤄지는지 보도록 하겠습니다.
+. 유저네임과 비밀번호가 `UsernamePasswordAuthenticationToken` 의 인스턴스로 조합이 되어서 만들어집니다. (이전에 본 `Authentication`인터페이스의 인스턴스입니다)
+. 토큰이 인증을 위해 `AuthenticationManager` 로 전달되어집니다. 
+.  `AuthenticationManager` 는 성공적인 인증 후에  `Authentication` 인스턴스를 생성해 반환합니다. 
+. 시큐리티 콘텍스트가 `SecurityContextHolder.getContext().setAuthentication(...)`를 호출함으로써 설정되며 반환된 인증 객체를 전달합니다. 
+
 
 [source,java]
 ----
@@ -229,11 +270,16 @@ public Authentication authenticate(Authentication auth) throws AuthenticationExc
 }
 }
 ----
-
+////
 Here
 				we have written a little program that asks the user to enter a username and password
 				and performs the above sequence. The
 				`AuthenticationManager` which we've implemented here will authenticate any user whose username and password are the same. It assigns a single role to every user. The output from the above will be something like:
+
+////
+
+우리는 유저에게 유저네임과 비밀번호를 묻고 위의 순서를 실행하는 작은 프로그램을 작성하였습니다. 우리가 여기서 구현한 `AuthenticationManager` 는 유저네임과 비밀번호가 같은 어떤 유저든 인증처리를 합니다. 이것은 모든 유저에게 하나의 권한을 부여하며 이것으로부터의 결과는 다음과 같은 것입니다. 
+
 
 [source,txt]
 ----
@@ -256,14 +302,26 @@ Granted Authorities: ROLE_USER
 ----
 
 
-
+////
 Note that you don't normally need to write any code like this. The process will normally occur internally, in a web authentication filter for example. We've just included the code here to show that the question of what actually constitutes authentication in Spring Security has quite a simple answer. A user is authenticated when the `SecurityContextHolder` contains a fully populated `Authentication` object.
+////
+당신은 보통 다음과 같은 코드를 적을 필요가 없습니다. 이러한 과정은 보통 예를 들자면 웹어플리케이션 필터에서 내부적으로 일어납니다. 우리는 스프링 시큐리티에서 무엇이 실제적으로 인증을 구성하는 지에 대한 질문에 대한 답을 간단히 보여주기 위해 다음과 같은 코드를 포함하였습니다. `SecurityContextHolder` 가 완벽히 생성된 `Authentication` 객체를 포함할때 인증은 이뤄집니다. 
 
 
+////
 ==== Setting the SecurityContextHolder Contents Directly
 In fact, Spring Security doesn't mind how you put the `Authentication` object inside the `SecurityContextHolder`. The only critical requirement is that the `SecurityContextHolder` contains an `Authentication` which represents a principal before the `AbstractSecurityInterceptor` (which we'll see more about later) needs to authorize a user operation.
+////
 
+==== 직접적으로 SecurityContextHolder 내용을 세팅하기
+실제로, 스프링 시큐리티는 `SecurityContextHolder`내부에  `Authentication` 객체가 어떻게 놓여질지는 신경쓰지 않습니다. 
+중요한 요구사항은 `AbstractSecurityInterceptor`가 유저 작업을 인증할 필요가 있기전에, `SecurityContextHolder`가  principal을 포함하고 있는 `Authentication`를 가지고 있는 것입니다. 
+
+////
 You can (and many users do) write their own filters or MVC controllers to provide interoperability with authentication systems that are not based on Spring Security. For example, you might be using Container-Managed Authentication which makes the current user available from a ThreadLocal or JNDI location. Or you might work for a company that has a legacy proprietary authentication system, which is a corporate "standard" over which you have little control. In situations like this it's quite easy to get Spring Security to work, and still provide authorization capabilities. All you need to do is write a filter (or equivalent) that reads the third-party user information from a location, build a Spring Security-specific `Authentication` object, and put it into the `SecurityContextHolder`. In this case you also need to think about things which are normally taken care of automatically by the built-in authentication infrastructure. For example, you might need to pre-emptively create an HTTP session to <<tech-intro-sec-context-persistence,cache the context between requests>>, before you write the response to the client footnote:[It isn't possible to create a session once the response has been committed.
+////
+
+당신과 많은 사용자들은 그들의 자신의 필터를 만들거나 MVC컨트롤러를 만들어서 스프링 시큐리티에 기반을 두고 있지 않은 인증시스템과 상호작용할 수 있습니다. 예를 들자면 당신이 쓰레드로컬이나 JNDI위치에 기반하여서 사용자를 사용가능하게 하는 인증관리콘테이너를 사용하고 있거나, 레거시 인증 시스템을 사용하는 회사와 일을 하고 있다고 해봅시다. 
 
 If you're wondering how the `AuthenticationManager` is implemented in a real world example, we'll look at that in the <<core-services-authentication-manager,core services chapter>>.
 

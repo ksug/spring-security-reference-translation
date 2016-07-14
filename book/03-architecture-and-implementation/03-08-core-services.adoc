@@ -270,6 +270,11 @@ salt를 주입하는 레거시접근은 `SaltSource`를 `DaoAuthenticationProvid
 When an authentication provider (such as Spring Security's `DaoAuthenticationProvider`) needs to check the password in a submitted authentication request against the known value for a user, and the stored password is encoded in some way, then the submitted value must be encoded using exactly the same algorithm. It's up to you to check that these are compatible as Spring Security has no control over the persistent values. If you add password hashing to your authentication configuration in Spring Security, and your database contains plaintext passwords, then there is no way authentication can succeed. Even if you are aware that your database is using MD5 to encode the passwords, for example, and your application is configured to use Spring Security's `Md5PasswordEncoder`, there are still things that can go wrong. The database may have the passwords encoded in Base 64, for example while the encoder is using hexadecimal strings (the default). Alternatively your database may be using upper-case while the output from the encoder is lower-case. Make sure you write a test to check the output from your configured password encoder with a known password and salt combination and check that it matches the database value before going further and attempting to authenticate through your application. Using a standard like bcrypt will avoid these issues.
 ////
 
-인증 프로바이더가 제출된 인증 요청을 검사할 때   
+(`DaoAuthenticationProvider`같은 ) 인증 프로바이더가 기존 유저에 대해서 제출한 인증 요청을 검사할 때, 비밀번호는 어떤 방식으로 기존에 인코딩되어있었을 것이고, 제출된 값 또한 같은 알고리즘으로 인코딩되어야 합니다. 저장된 값에 대해서 스프링 시큐리티는 어떠한 조정을 하지 못하게 때문에 이러한 양립가능성을 따져봐야합니다. 만약 당신의 비밀번호 해싱이 스프링 시큐리티로 되어있는데 당신의 데이터베이스는 평범으로 되어있다면 인증이 성공할 수가 없습니다. 심지어 당신의 데이터베이스가 MD5를 이용해서 비밀번호를 인코딩되었고, 당신의 스프링 시큐리티가 `Md5PasswordEncoder`를 사용하게 설정되어있다고 해도 여전히 잘못될수 있는 여지가 있습니다. 예를 들자면 데이터베이스는 Base64고 인코더가 hexadecimal 문자열을 기본으로 사용하기 때문입니다. 또 다르게는 당신의 데이터베이스가 대문자를 쓰는 반면에 인코더를 통한 결과는 소문자일 수도 있습니다. 당신의 어플리케이션에 인증을 시도해보기 전에 테스트코드를 작성하여서 설정된 비밀번호가 인코더에서 salt값과 함께 생성되어서, 데이터베이스에 저장된 값과 매칭되는지 살펴보셔야 합니다. 기본 bcrypt를 사용하는 것은 이러한 이슈를 피하게 해줍니다. 
 
+////
 If you want to generate encoded passwords directly in Java for storage in your user database, then you can use the `encode` method on the `PasswordEncoder`.
+////
+
+만약 당신이 당신의 데이터 베이스 저장소에 직접 인코딩한 비밀번호를 저장하고 싶다면, `PasswordEncoder`의 `encode` 메소드를 사용하실 수 있습니다. 
+
