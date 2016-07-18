@@ -80,10 +80,10 @@ boolean supports(Class clazz);
 
 
 [[authz-role-voter]]
-===== RoleVoter
-The most commonly used `AccessDecisionVoter` provided with Spring Security is the simple `RoleVoter`, which treats configuration attributes as simple role names and votes to grant access if the user has been assigned that role.
+===== 역할 투표자
+스프링 시큐리티가 제공하는 것 중에 가장 많이 쓰이는 `AccessDecisionVoter`는 단순한 `RoleVoter`이다. 이 투표자는 configuration attributes를 단순한 역할 이름으로 여기고, 사용자가 그 역할을 갖고있다면 접근허가에 투표한다.
 
-It will vote if any `ConfigAttribute` begins with the prefix `ROLE_`. It will vote to grant access if there is a `GrantedAuthority` which returns a `String` representation (via the `getAuthority()` method) exactly equal to one or more `ConfigAttributes` starting with the prefix `ROLE_`. If there is no exact match of any `ConfigAttribute` starting with `ROLE_`, the `RoleVoter` will vote to deny access. If no `ConfigAttribute` begins with `ROLE_`, the voter will abstain.
+이 투표자는 어떤 `ConfigAttribute`가 접두사 `ROLE_`로 시작한다면 투표할 것이다. 이것은 `ROLE_`로 시작하는 하나 이상의 `ConfigAttributes`와 정확히 일치한 `String`을 반환하는(`getAuthority()`메서드를 통해) `GrantedAuthority`가 있다면 접근허가에 투표할것이다. 만약 `ROLE_`로 시작하는 `ConfigAttribute` 중에 일치하는것이 하나도 없다면, `RoleVoter`는 접근거부에 투표할 것이다. 그리고 만약 `ROLE_`로 시작하는 `ConfigAttribute`가 없다면 기권할 것이다.
 
 
 [[authz-authenticated-voter]]
