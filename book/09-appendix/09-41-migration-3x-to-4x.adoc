@@ -18,7 +18,7 @@ As exploits against applications evolve, so must Spring Security.
 As a major release version, the Spring Security team took the opportunity to make some non-passive changes which focus on:
 ////
 
-애플리케이션에 대한 공격은 {spring-security}를 진화하게 했다.  중요한 출시버전마다, {spring-security} 팀은 자연스런 변화를 유도하는 방향에 촛점을 맞춰왔다:
+애플리케이션에 대한 공격은 {spring-security}를 진화하게 했다.  중요한 출시버전마다, {spring-security} 팀은 자연스런 변화를 유도하는 방향에 초점을 맞춰왔다:
 
 ////
 * Ensuring Spring Security is more https://www.owasp.org/index.php/Establish_secure_defaults[secure by default]
