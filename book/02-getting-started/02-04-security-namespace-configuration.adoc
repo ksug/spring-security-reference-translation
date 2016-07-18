@@ -1,23 +1,35 @@
 [[ns-config]]
 == Security Namespace Configuration
 
+=== 소개
+Namespace 기반 설정 방식은 스프링 프레임웍 2.0 버전부터 가능하다. Namespace 기반 설정 방식은 XML 스키마를 추가하는 방식의 전통적인 스프링 Beans 어플리케이션 문법을 보완한다. 이에 대해 더 많은 정보를 알고 싶다면 http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/[Reference Documentation] 를 참고하라. namespace 요소는 개별 bean 을 더욱 간결하게 설정할 수 있고, 프레임웍 밑단의 복잡함을 사용자에게 드러내지 않을 수 있으며, 전문가에 걸맞는 세련된 문법으로서 기능한다. namespace 기반의 간단한 설정은 여기에 여러개의 bean 설정과 복잡한 processing step들이 어플리케이션 context에 더해져 있다는 사실을 구태여 드러내지 않는다. application context에 있는 security namespace 를 사용한 아래의 예제를 보자. 아래 설정은 이 간단한 한 줄 만으로도 어플리케이션 안에 내재된 LDAP 서버를 구동시킨다. 
+
+////
+[[ns-config]]
+== Security Namespace Configuration
 
 === Introduction
 Namespace configuration has been available since version 2.0 of the Spring framework. It allows you to supplement the traditional Spring beans application context syntax with elements from additional XML schema. You can find more information in the Spring http://docs.spring.io/spring/docs/current/spring-framework-reference/htmlsingle/[Reference Documentation]. A namespace element can be used simply to allow a more concise way of configuring an individual bean or, more powerfully, to define an alternative configuration syntax which more closely matches the problem domain and hides the underlying complexity from the user. A simple element may conceal the fact that multiple beans and processing steps are being added to the application context. For example, adding the following element from the security namespace to an application context will start up an embedded LDAP server for testing use within the application:
-
+////
 [source,xml]
 ----
 <security:ldap-server />
 ----
 
+이것은 Apache Directory Server beans 를 계속해서 덧붙이는 것보다 훨씬 더 간편한 방법이다. 기존 XML 설정을 대체하는 대부분의 설정 요건은 ldap-server 요소가 지닌 속성에서 따왔다. 이제 더 이상 사용자들은 어떤 bean을 생성해야 할지, bean 의 property name을 무엇으로 해야 할지 걱정하지 않아도 된다. 
+footnote:[ldap-server 요소의 사용법에 대해서는 pass:specialcharacters,macros[<<ldap>>] 챕터를 참조하라]
+application context 파일을 작성할 때 좋은 xml 에디터를 사용하면 사용할 수 있는 속성과 요소에 대한 정보들을 제공받을 수 있다. 표준 스프링 namespace 방식으로 작업할 때에는 http://spring.io/tools/sts[Spring Tool Suite] 를 써보라고 권하고 싶다. 
+////
 This is much simpler than wiring up the equivalent Apache Directory Server beans. The most common alternative configuration requirements are supported by attributes on the `ldap-server` element and the user is isolated
 from worrying about which beans they need to create and what the bean property names are. footnote:[You can find out more about the use of the `ldap-server` element in the chapter on pass:specialcharacters,macros[<<ldap>>]. ]. Use of a good XML
 editor while editing the application context file should provide information on the attributes and elements that are available. We would recommend that you try out the
 http://spring.io/tools/sts[Spring Tool Suite] as it has special features for working with standard Spring namespaces.
+////
 
-
+어플리케이션 컨텍스트에서 security namespace를 사용하려면 아래와 같이 classpath 에 'spring-security-config' jar를 추가해야 한다. 그리고나서는 application context file 에 스키마를 선언하기만 하면 된다.
+////
 To start using the security namespace in your application context, you need to have the `spring-security-config` jar on your classpath. Then all you need to do is add the schema declaration to your application context file:
-
+////
 [source,xml]
 ----
 <beans xmlns="http://www.springframework.org/schema/beans"
