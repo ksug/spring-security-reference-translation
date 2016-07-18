@@ -32,8 +32,7 @@ All `AuthenticationProvider` s included with the security architecture use `Gran
 
 
 [[authz-access-decision-manager]]
-==== The AccessDecisionManager
-==== 접근결정관리자
+==== 접근여부결정관리자
 `AbstractSecurityInterceptor`가 호출하는 `AccessDecisionManager`는 최종 접근 제어 결정을 책임진다. `AccessDecisionManager` 인터페이스는 메서드 세개를 갖는다.
 
 [source,java]
@@ -51,8 +50,8 @@ boolean supports(Class clazz);
 `supports(ConfigAttribute)` 메서드는 시작시점에 `AccessDecisionManager`가 넘겨진 `ConfigAttribute`를 처리할 수 있는지 판단하기 위해 `AbstractSecurityInterceptor`가 호출한다. `supports(Class)` 메서드는 설정된 `AccessDecisionManager`가 security interceptor가 제공(present)할 secure object의 type을 지원하는지 보증하기 위해 security interceptor 구현체가 호출한다.
 
 [[authz-voting-based]]
-==== Voting-Based AccessDecisionManager Implementations
-Whilst users can implement their own `AccessDecisionManager` to control all aspects of authorization, Spring Security includes several `AccessDecisionManager` implementations that are based on voting. <<authz-access-voting>> illustrates the relevant classes.
+==== 투표기반 접근여부결정관리자 구현체
+사용자는 모든 관점의 권한부여를 조정하기 위해 자신만의 `AccessDecisionManager`를 구현할 수 있지만, 스프링 시큐리티는 기본적으로 투표기반의 `AccessDecisionManager` 구현체를 몇 개 포함한다. <<authz-access-voting>> 는 관계된 클래스들을 보여준다.illustrates the relevant classes.
 
 [[authz-access-voting]]
 .Voting Decision Manager
@@ -60,9 +59,9 @@ image::images/access-decision-voting.png[]
 
 
 
-Using this approach, a series of `AccessDecisionVoter` implementations are polled on an authorization decision. The `AccessDecisionManager` then decides whether or not to throw an `AccessDeniedException` based on its assessment of the votes.
+이런 접근방법을 사용하면 여러개의 `AccessDecisionVoter` 구현체는 권한부여 판단에 대해 표를 받는다. `AccessDecisionManager`는 그 다음 득표한 평가에 기반해서 `AccessDeniedException`을 던질지 말지 결정한다.
 
-The `AccessDecisionVoter` interface has three methods:
+`AccessDeniedException` 인터페이스는 메서드 세 개를 갖는다.
 
 [source,java]
 ----
@@ -73,11 +72,11 @@ boolean supports(ConfigAttribute attribute);
 boolean supports(Class clazz);
 ----
 
-Concrete implementations return an `int`, with possible values               being reflected in the `AccessDecisionVoter` static fields `ACCESS_ABSTAIN`, `ACCESS_DENIED` and `ACCESS_GRANTED`. A voting implementation will return `ACCESS_ABSTAIN` if it has no opinion on an authorization decision. If it does have an opinion, it must return either `ACCESS_DENIED` or `ACCESS_GRANTED`.
+구체적인 구현체는 `AccessDecisionVoter`의 static fields 인 `ACCESS_ABSTAIN`, `ACCESS_DENIED`, `ACCESS_GRANTED`에 나타난 값을 `int`로 반환한다. 투표하는 구현체는 권한부여 결정에 아무런 의견이 없다면 `ACCESS_ABSTAIN`를 반환할 것이다. 만약 의견을 갖는다면 반드시 `ACCESS_DENIED` 나 `ACCESS_GRANTED`중 하나를 반환해야 한다.
 
-There are three concrete `AccessDecisionManager` s provided with Spring Security that tally the votes. the `ConsensusBased` implementation will grant or deny access based on the consensus of non-abstain votes. Properties are provided to control behavior in the event of an equality of votes or if all votes are abstain. The `AffirmativeBased` implementation will grant access if one or more `ACCESS_GRANTED` votes were received (i.e. a deny vote will be ignored, provided there was at least one grant vote). Like the `ConsensusBased` implementation, there is a parameter that controls the behavior if all voters abstain. The `UnanimousBased` provider expects unanimous `ACCESS_GRANTED` votes in order to grant access, ignoring abstains. It will deny access if there is any `ACCESS_DENIED` vote. Like the other implementations, there is a parameter that controls the behaviour if all voters abstain.
+스프링 시큐리티는 투표를 기록하는 세 개의 `AccessDecisionManager` 구현체를 제공한다. `ConsensusBased` 구현체는 기권 아닌 투표의 합의(다수결)에 기반해 권한을 승인하거나 거부한다. 여기에 득표수가 동일하거나 모든 투표가 기권인 상황을 제어하기 위한 Properties가 제공된다. `AffirmativeBased` 구현체는 하나 이상의 `ACCESS_GRANTED` 표를 받으면 권한을 부여한다. (예를 들어 최소한 하나의 찬성 표가 있다면 반대 표는 무시된다.) `ConsensusBased` 구현체와 비슷하게 모든 투표가 기권일 때 행위를 제어하는 파라미터가 있다. `UnanimousBased` 제공자는 권한을 승인하기 위해 기권표를 무시하고 만장일치로 `ACCESS_GRANTED` 표를 받길 기대한다. 이는 `ACCESS_DENIED` 표가 하나라도 있다면 권한을 거부한다. 다른 구현체와 비슷하게 모든 표가 기권일 때 행위를 제어하는 파라미터가 있다.
 
-It is possible to implement a custom `AccessDecisionManager` that tallies votes differently. For example, votes from a particular `AccessDecisionVoter` might receive additional weighting, whilst a deny vote from a particular voter may have a veto effect.
+투표를 색다르게 집계하는 맞춤형 `AccessDecisionManager`를 구현할 수도 있다. 예를 들어 특정 `AccessDecisionVoter`가 별도의 가중치를 받는다면, 특정 투표자의 반대표가 거부권 효과를 갖을 수 있다.
 
 
 [[authz-role-voter]]
