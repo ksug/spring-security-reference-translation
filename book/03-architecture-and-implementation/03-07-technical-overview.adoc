@@ -448,18 +448,28 @@ For those not familiar with AOP, the key point to understand is that Spring Secu
 AOP와 익숙하지 않은 분들을 위한, 핵심 요점은 스프링 시큐리티는 웹 요청과 마찬가지로 메서드 실행을 protect하는 것을 도울 수 있다는 것을 이해하는 것입니다.대부분의 사람들은 서비스 계층 레이어에서 메서드실행을 보안하는 것에 흥미를 가집니다. 이것은 서비스 레이어가 현재 자바 EE 어플리케이션 세대에서 비즈니스 로직이 있는 곳이기 때문입니다. 만약 서비스레이어에서 메서드 보안이 필요로 한다면 스프링 표준 AOP가 적절할 것이니다. 만약 당신이 직접적으로 시큐어 도메인을 필요로 한다면 AspectJ를 고려하는 것이 좋을 것입니다. 
 
 ////
-You can elect to perform method authorization using AspectJ or Spring AOP, or you can elect to perform web request authorization using filters. You can use zero, one, two or three of these approaches together. The mainstream usage pattern is to perform some web request authorization, coupled with some Spring AOP method invocation authorization on the services layer.
+You can elect to perform method authorization using AspectJ or Spring AOP, or you can elect to perform web request authorization using filters. You can use zero, one, two or three of these approaches together. The mainstream usage pattern is to perform some web request authorization, 하 some Spring AOP method invocation authorization on the services layer.
 ////
 
-당신은 AspectJ나 AOP를 사용하여서,메서드인가를 실행하는 것을 선출할 수있거나 
+당신은 AspectJ나 AOP를 사용하여서, 메서드에 대한 인가를 실행할지에 대한 것을 선택할 수 있습니다.또는 필터를 사용하여서 웹요청에 대한 인가를 수행할 수 있습니다. 당신은 아무것도 안하거나 이러한 접근들 중의 하나 혹은 두세개를 함께 사용할 수 있습니다. 웹 요청 인가를 하기 위한 주요 사용 패턴은 서비스 레이어에서 몇가지 AOP메서드와 함께 인가에 대한 수행을 하는 것입니다. 
 
 
 [[secure-objects]]
+////
 ==== Secure Objects and the AbstractSecurityInterceptor
 So what __is__ a "secure object" anyway? Spring Security uses the term to refer to any object that can have security (such as an authorization decision) applied to it. The most common examples are method invocations and web requests.
+////
 
+==== 비밀객체와 AbstractSecurityInterceptors
+자 그럼 "비밀객체"("secure object")는 무엇일까요? 스프링 시큐리티는 보안을 적용하기 위한 어떤 객체를 언급하기 위하여 이 용어를 사용합니다. 대부분의 흔한 예로는 메소드 실행과 웹요청입니다.
+
+////
 Each supported secure object type has its own interceptor class, which is a subclass of `AbstractSecurityInterceptor`. Importantly, by the time the `AbstractSecurityInterceptor` is called, the `SecurityContextHolder` will contain a valid `Authentication` if the principal has been authenticated.
+////
 
+각각의 지원되는 보안객체타입은 그것 자신의 인터셉터클래스를 가집니다. 이 인터셉터 클래스는 `AbstractSecurityInterceptor`의 하위 클래스입니다. 중요한 것은, `AbstractSecurityInterceptor`가 호출되는 순간에 인증주체가 인증되면 `SecurityContextHolder`가 적합한 `Authentication`를 가지게 됩니다.
+
+////
 `AbstractSecurityInterceptor` provides a consistent workflow for handling secure object requests, typically:
 
 . Look up the "configuration attributes" associated with the present request
@@ -467,6 +477,15 @@ Each supported secure object type has its own interceptor class, which is a subc
 . Optionally change the `Authentication` under which the invocation takes place
 . Allow the secure object invocation to proceed (assuming access was granted)
 . Call the `AfterInvocationManager` if configured, once the invocation has returned. If the invocation raised an exception, the `AfterInvocationManager` will not be invoked.
+////
+
+`AbstractSecurityInterceptor` 가 일반적으로 보안객체요청을 다루기 위하여 일관적인 워크플로우를 제공합니다.
+
+. 현재 요청와 관련된 "설정된 속성"을 찾습니다.
+. 인가 결정을 위하여 `AccessDecisionManager` 에게 보안객체와 현재 `Authentication`와 설정속성을 제출합니다.
+. 선택적으로 인가가 발생하면 `Authentication`를 변경합니다.
+. 처리할 비밀객체의 실행을 허용합니다.(접근이 허용되었다는 가정하에)
+. invocation이 반환되고, 만약 설정이 되었다면 `AfterInvocationManager`를 요청합니다. 만약 예외가 발생한다면 `AfterInvocationManager`는 실행되지 않을 것입니다. 
 
 [[tech-intro-config-attributes]]
 ===== What are Configuration Attributes?
