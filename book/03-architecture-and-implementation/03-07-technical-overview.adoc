@@ -488,16 +488,33 @@ Each supported secure object type has its own interceptor class, which is a subc
 . invocation이 반환되고, 만약 설정이 되었다면 `AfterInvocationManager`를 요청합니다. 만약 예외가 발생한다면 `AfterInvocationManager`는 실행되지 않을 것입니다. 
 
 [[tech-intro-config-attributes]]
+////
 ===== What are Configuration Attributes?
-A "configuration attribute" can be thought of as a String that has special meaning to the classes used by `AbstractSecurityInterceptor`. They are represented by the interface `ConfigAttribute` within the framework. They may be simple role names or have more complex meaning, depending on the how sophisticated the `AccessDecisionManager` implementation is. The `AbstractSecurityInterceptor` is configured with a `SecurityMetadataSource` which it uses to look up the attributes for a secure object. Usually this configuration will be hidden from the user. Configuration attributes will be entered as annotations on secured methods or as access attributes on secured URLs. For example, when we saw something like `<intercept-url pattern='/secure/**' access='ROLE_A,ROLE_B'/>` in the namespace introduction, this is saying that the configuration attributes `ROLE_A` and `ROLE_B` apply to web requests matching the given pattern. In practice, with the default `AccessDecisionManager` configuration, this means that anyone who has a `GrantedAuthority` matching either of these two attributes will be allowed access. Strictly speaking though, they are just attributes and the interpretation is dependent on the `AccessDecisionManager` implementation. The use of the prefix `ROLE_` is a marker to indicate that these attributes are roles and should be consumed by Spring Security's `RoleVoter`. This is only relevant when a voter-based `AccessDecisionManager` is in use. We'll see how the `AccessDecisionManager` is implemented in the <<authz-arch,authorization chapter>>.
+A "configuration attribute" can be thought of as a String that has special meaning to the classes used by `AbstractSecurityInterceptor`. They are represented by the interface `ConfigAttribute` within the framework. They may be simple role names or have more complex meaning, depending on the how sophisticated the `AccessDecisionManager` implementation is. The `AbstractSecurityInterceptor` is configured with a `SecurityMetadataSource` which it uses to look up the attributes for a secure object. Usually this configuration will be hidden from the user. Configuration attributes will be entered as annotations on secured methods or as access attributes on secured URLs. 
+////
+===== 무엇이 설정 속성인가?
+"설정 속성" 은 `AbstractSecurityInterceptor`에게 사용되는 클래스들에 대하여 의도를 가진 문자열일 수 있습니다. 이것들은 프레임워크 내의 `ConfigAttribute` 인터페이스에 의해 표현될 수 있습니다. 이것들은 `AccessDecisionManager`구현체가 얼마나 복잡한 가에 따라서 간단한 규칙이름이거나 좀 더 복잡한 의미를 가지기도 합니다.  `AbstractSecurityInterceptor`는 `SecurityMetadataSource` 와 함께 설정되며 이것은 보안객체를 위한 설정을 찾는데 사용됩니다. 보통 이 설정은 유저로부터 감춰져 있습니다. 설정속성은 보안메서드의 어노테이션으로 입력되거나, 보안되는 URL에 관한 접근속성으로 입력됩니다. 
+
+////
+For example, when we saw something like `<intercept-url pattern='/secure/**' access='ROLE_A,ROLE_B'/>` in the namespace introduction, this is saying that the configuration attributes `ROLE_A` and `ROLE_B` apply to web requests matching the given pattern. In practice, with the default `AccessDecisionManager` configuration, this means that anyone who has a `GrantedAuthority` matching either of these two attributes will be allowed access. Strictly speaking though, they are just attributes and the interpretation is dependent on the `AccessDecisionManager` implementation. The use of the prefix `ROLE_` is a marker to indicate that these attributes are roles and should be consumed by Spring Security's `RoleVoter`. This is only relevant when a voter-based `AccessDecisionManager` is in use. We'll see how the `AccessDecisionManager` is implemented in the <<authz-arch,authorization chapter>>.
+////
+
+예를 들자면, 우리가 네임스페이스 소개에서 `<intercept-url pattern='/secure/**' access='ROLE_A,ROLE_B'/>` 같은 것들을 보았을 때, 이것은 설저속성 `ROLE_A` and `ROLE_B`가 주어진 패턴에 매칭되는 웹요청에 적용된다는 것을 말합니다. 실제로 기본  `AccessDecisionManager`설정과 함께라면 이것은 이러한 두개의 속성에 맞는 `GrantedAuthority`를 가지고 있는 누구건간에 접근이 허용된다는 것을 의미합니다. 엄격하게 말하자면, 이것들은 단지 속성일뿐이며 `AccessDecisionManager` 구현체가 이를 해석합니다. `ROLE_`의 사용은 이 속성이 규칙임을 나타내는 마커이며 스프링시큐리티의 `RoleVoter`에 의해 사용되어지게 됩니다. 이것은 오직 voter기반의 `AccessDecisionManager`가 사용될 때 의미가 있게 돕니다. 우리는 어떻게 `AccessDecisionManager`가 구현되는지 <<authz-arch,authorization chapter>>에서 보도록 하겠습니다. 
 
 
 ===== RunAsManager
+////
 Assuming `AccessDecisionManager` decides to allow the request, the `AbstractSecurityInterceptor` will normally just proceed with the request. Having said that, on rare occasions users may want to replace the `Authentication` inside the `SecurityContext` with a different `Authentication`, which is handled by the `AccessDecisionManager` calling a `RunAsManager`. This might be useful in reasonably unusual situations, such as if a services layer method needs to call a remote system and present a different identity. Because Spring Security automatically propagates security identity from one server to another (assuming you're using a properly-configured RMI or HttpInvoker remoting protocol client), this may be useful.
-
+////
+`AccessDecisionManager`가 요청에 대한 허용을 결정한다고 가정해봅시다. `AbstractSecurityInterceptor`는 보통 이 요청에 대하여 처리를 할 것입니다. 	그럼에도 불구하고 간혹 유저가  `SecurityContext`  내의 `Authentication` 를 `RunAsManager`라 불리우는 `AccessDecisionManager`에 의해 조정되는 다른 `Authentication`로 바꾸고 싶어할 때가 있습니다. 이것은 평범하지 않은 상황에서 유용할 수 있습니다. 만약 서비스 레이어 메소드가 리모트 시스템을 요청하거나 다른 식별을 나타낼 때 같을 때 말입니다. 왜냐하면 스프링 시큐리티는 자동적으로 하나의 서버에서 다른쪽(당신이 적절하게 설정된 RMI나 HttpInvoker를 원격프로토콜 클라이언트로 사용하고 있다고 가정)으로 보안식별을 전파할 것이며 이것은 유용할 것입니다. 
 
 ===== AfterInvocationManager
+////
 Following the secure object invocation proceeding and then returning - which may mean a method invocation completing or a filter chain proceeding - the `AbstractSecurityInterceptor` gets one final chance to handle the invocation. At this stage the `AbstractSecurityInterceptor` is interested in possibly modifying the return object. We might want this to happen because an authorization decision couldn't be made "on the way in" to a secure object invocation. Being highly pluggable, `AbstractSecurityInterceptor` will pass control to an `AfterInvocationManager` to actually modify the object if needed. This class can even entirely replace the object, or throw an exception, or not change it in any way as it chooses. The after-invocation checks will only be executed if the invocation is successful. If an exception occurs, the additional checks will be skipped.
+////
+
+다음의 보안객체 실행이 처리되며 그리고 반환될 것입니다.  - 이것은 아마 메소드 실해이 완료되거나 필터체인이 처리된다는 것을 의미합니다 - `AbstractSecurityInterceptor`는 이러한 실행을 다룰 마지막 찬스를 얻을 것입니다. 이러한 단계에서 `AbstractSecurityInterceptor` 는 반환된 객체를 수정가능한지에 대한 흥미가 있습니다. 우리는 이러한 것(수정)이 일어나길 원하는데 왜냐하면, 인가 결정은 
+
 
 `AbstractSecurityInterceptor` and its related objects are shown in <<abstract-security-interceptor>>
 
