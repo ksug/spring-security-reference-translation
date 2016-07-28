@@ -513,7 +513,7 @@ Assuming `AccessDecisionManager` decides to allow the request, the `AbstractSecu
 Following the secure object invocation proceeding and then returning - which may mean a method invocation completing or a filter chain proceeding - the `AbstractSecurityInterceptor` gets one final chance to handle the invocation. At this stage the `AbstractSecurityInterceptor` is interested in possibly modifying the return object. We might want this to happen because an authorization decision couldn't be made "on the way in" to a secure object invocation. Being highly pluggable, `AbstractSecurityInterceptor` will pass control to an `AfterInvocationManager` to actually modify the object if needed. This class can even entirely replace the object, or throw an exception, or not change it in any way as it chooses. The after-invocation checks will only be executed if the invocation is successful. If an exception occurs, the additional checks will be skipped.
 ////
 
-다음의 보안객체 실행이 처리되며 그리고 반환될 것입니다.  - 이것은 아마 메소드 실해이 완료되거나 필터체인이 처리된다는 것을 의미합니다 - `AbstractSecurityInterceptor`는 이러한 실행을 다룰 마지막 찬스를 얻을 것입니다. 이러한 단계에서 `AbstractSecurityInterceptor` 는 반환된 객체를 수정가능한지에 대한 흥미가 있습니다. 우리는 이러한 것(수정)이 일어나길 원하는데 왜냐하면, 인가 결정은 
+다음의 보안객체 실행이 처리되며 그리고 반환될 것입니다.  - 이것은 아마 메소드 실행이 완료되거나 필터체인이 처리된다는 것을 의미합니다 - `AbstractSecurityInterceptor`는 이러한 실행을 다룰 마지막 찬스를 얻을 것입니다. 이러한 단계에서 `AbstractSecurityInterceptor` 는 반환된 객체를 수정가능한지에 대한 흥미가 있습니다. 우리는 이러한 것(수정)이 일어나길 원하는데 왜냐하면, 인가 결정은 보안객체가 실행하는 동안에는 행해질 수 없기 때문입니다. 만약 필요하면 실제로 객체를 수정하기 위해 `AbstractSecurityInterceptor`는 `AfterInvocationManager`에게 조정을 위임할 것입니다. 이 클래스는 전적으로 객체를 대체하거나 예외를 던지거나 아무것도 수정하지 않을 수도 있습니다. 만약 invocation이 성공적으로 이뤄졌다면 invocation이후의 검사는 그 이후에나 실행될 수 있습니다. 예외가 발생한다면 추가적인 검사는 skip될 것입니다. 
 
 
 `AbstractSecurityInterceptor` and its related objects are shown in <<abstract-security-interceptor>>
@@ -522,17 +522,35 @@ Following the secure object invocation proceeding and then returning - which may
 .Security interceptors and the "secure object" model
 image::images/security-interception.png[Abstract Security Interceptor]
 
+////
 ===== Extending the Secure Object Model
 Only developers contemplating an entirely new way of intercepting and authorizing requests would need to use secure objects directly. For example, it would be possible to build a new secure object to secure calls to a messaging system. Anything that requires security and also provides a way of intercepting a call (like the AOP around advice semantics) is capable of being made into a secure object. Having said that, most Spring applications will simply use the three currently supported secure object types (AOP Alliance `MethodInvocation`, AspectJ `JoinPoint` and web request `FilterInvocation`) with complete transparency.
+////
+
+==== 보안객체 모델을 확장하기
+요청을 인터셉터하여서 인가하려는 새로운 방법을 고려하는 개발자라면, 보안객체를 직접적으로 사용할 수 있습니다. 예를 들자면, 메시징시스템 안에서 보안호출을 하기 위한 새로운 보안 객체를 생성할 수 있습니다. 보안을 필요로 하는 어떤 것이거나, 호출을 인터셉트하는 방법을 제공하는 어떤 것이건간에 보안 객체로 만들어질 수 있습니다. 그렇긴해도 대부분의 스프링 어플리케이션은 단순히 현재 지원되는 보안객체 타입(AOP Alliance `MethodInvocation`, AspectJ `JoinPoint` and web request `FilterInvocation`) 을 사용합니다. 
 
 
 [[localization]]
+////
 === Localization
 Spring Security supports localization of exception messages that end users are likely to see. If your application is designed for English-speaking users, you don't need to do anything as by default all Security messages are in English. If you need to support other locales, everything you need to know is contained in this section.
+////
 
+=== 지역화
+스프링 시큐리티는 최종사용자가 보고 싶어하는, 예외메시지의 지역화를 제공합니다. 만약 당신의 어플리케이션이 영어권사용자를 위해 디자인되었다면 당신은 기본값으로 두고 어떤 것도 할 필요가 없지만, 당신이 다른 지역언어를 설정하기를 원한다면 당신이 알기 원하는 모든것이 이 섹션에 포함되어있습니다. 
+
+////
 All exception messages can be localized, including messages related to authentication failures and access being denied (authorization failures). Exceptions and logging messages that are focused on developers or system deployers (including incorrect attributes, interface contract violations, using incorrect constructors, startup time validation, debug-level logging) are not localized and instead are hard-coded in English within Spring Security's code.
+////
 
+인증 실패와 관련되거나 접근이 거절된 메시지들을 포함하여서 모든 예외메시지는 지역화될 수 있습니다.  (부적합한 속성, 인터페이스 제약위반, 부적합한 생성자, 기동시간 검증 디버그레벨 로깅들을 포함하여서 )개발자들이 접할 수 있는 예외와 로깅메시지는 스프링 시큐리티 내에 영어로 하드코딩되어있습니다. 
+
+////
 Shipping in the `spring-security-core-xx.jar` you will find an `org.springframework.security` package that in turn contains a `messages.properties` file, as well as localized versions for some common languages. This should be referred to by your `ApplicationContext`, as Spring Security classes implement Spring's `MessageSourceAware` interface and expect the message resolver to be dependency injected at application context startup time. Usually all you need to do is register a bean inside your application context to refer to the messages. An example is shown below:
+////
+
+`spring-security-core-xx.jar` 속에서 당신은 `org.springframework.security`패키지를 찾을 수 있을 것이며 이것은 실제로 `messages.properties`를 포함하고 있을 뿐만 아니라, 몇가지 흔한 언어들에대한 지역화된 버젼을 가지고 있습니다. 이것은 당신의 `ApplicationContext`를 통해서 참조될 수 있으며 이는 스프링 시큐리티의 클래스들이 스프링의 `MessageSourceAware`인터페이스를 구현하기 때문입니다. 그리고 메시지리졸버는 어플리케이션 컨텍스트 시동시간에 의존성이 주입되기를 기대합니다. 보통 당신이 할 모든 것은 당시늬 어플리케이션 컨텍스트에 메시지를 참조하기 위하여 빈을 등록하는 것입니다. 예제는 다음과 같습니다. 
 
 [source,xml]
 ----
@@ -542,10 +560,22 @@ Shipping in the `spring-security-core-xx.jar` you will find an `org.springframew
 </bean>
 ----
 
+////
 The `messages.properties` is named in accordance with standard resource bundles and represents the default language supported by Spring Security messages. This default file is in English.
+////
 
+`messages.properties` 는 표준 리소스 번들에 따라서 이름이 지어지고 스프링 시큐리티 메시지에 의해 지원되는 기본 언어를 표현합니다. 이것의 기본값은 다음과 같습니다.
+
+////
 If you wish to customize the `messages.properties` file, or support other languages, you should copy the file, rename it accordingly, and register it inside the above bean definition. There are not a large number of message keys inside this file, so localization should not be considered a major initiative. If you do perform localization of this file, please consider sharing your work with the community by logging a JIRA task and attaching your appropriately-named localized version of `messages.properties`.
+////
 
+만약 당신이 `messages.properties` 파일을 커스터마이징하기를 원하거나 다른 언어를 지원하기를 원한다면 다인은 이 파일을 복사해서 빈 정의의 안에 다시 등록을 할 수 있습니다. 이 파일 안에는 많은 메시지 키들이 있지 않습니다. 그러니 지역화는 그리 큰 이슈가 아닐 것입니다. 만약 당신이 이 파일의 지역화를 하기를 원한다면 지라 태스크에 로깅하고 당신의 적절히 이름지어진 지역화 버젼의 `messages.properties`를 공유해주는 걸 고려해보세요. 
+
+////
 Spring Security relies on Spring's localization support in order to actually lookup the appropriate message. In order for this to work, you have to make sure that the locale from the incoming request is stored in Spring's `org.springframework.context.i18n.LocaleContextHolder`. Spring MVC's `DispatcherServlet` does this for your application automatically, but since Spring Security's filters are invoked before this, the `LocaleContextHolder` needs to be set up to contain the correct `Locale` before the filters are called. You can either do this in a filter yourself (which must come before the Spring Security filters in `web.xml`) or you can use Spring's `RequestContextFilter`.  Please refer to the Spring Framework documentation for further details on using localization with Spring.
 
 The "contacts" sample application is set up to use localized messages.
+////
+
+스프링 시큐리티는 스프링의 지역화 지원에 의지하여 실제로 적합한 메시지를 찾기를 합니다.. 이 일을 하기 위해 당신은 요청에서의 로케일이 스프링의 `org.springframework.context.i18n.LocaleContextHolder`안에 있는지를 확인해야 합니다. 스프링MVC의 `DispatcherServlet` 는 당신의 어플리케이션이 자동으로 이러한 일이 동작하게 해주지만 스프링시큐리티의 필터는 이러한 일이 일어나기 전에 호출됩니다. `LocaleContextHolder`는 필터가 호출되기 전에 올바른 `Locale`이 포함되도록 설정되어야합니다. 당신은 당신이 직접 필터를 사용하여서 이를 하거나 스프링의 `RequestContextFilter`를 사용할 수 있습니다. 더 많은 정보를 원하신다면, 스프링 프레임워크의 지역화 부분을 참조하세요. 
