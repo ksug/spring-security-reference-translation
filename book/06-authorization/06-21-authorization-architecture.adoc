@@ -125,13 +125,24 @@ Like many other parts of Spring Security, `AfterInvocationManager` has a single 
 ////
 `AfterInvocationManager`는 스프링 시큐리티의 다른 부분과 비슷하게 하나의 구현체인 `AfterInvocationProviderManager`를 갖는다. 이 구현체는 `AfterInvocationProvider` 목록을 poll한다. 각각의 `AfterInvocationProvider`는 반환된 객체를 수정하거나 `AccessDeniedException`를 던질 수 있다. 이전 프로바이더의 결과가 그 목록에 있는 다음 프로바이더에게 넘어가기에, 실제로 여러개의 프로바이더가 그 객체를 수정할 수 있다.
 
+////
 Please be aware that if you're using `AfterInvocationManager`, you will still need configuration attributes that allow the ``MethodSecurityInterceptor``'s `AccessDecisionManager` to allow an operation. If you're using the typical Spring Security included `AccessDecisionManager` implementations, having no configuration attributes defined for a particular secure method invocation will cause each `AccessDecisionVoter` to abstain from voting. In turn, if the `AccessDecisionManager` property           "`allowIfAllAbstainDecisions`" is `false`, an `AccessDeniedException` will be thrown. You may avoid this potential issue by either (i) setting "`allowIfAllAbstainDecisions`" to `true` (although this is generally not recommended) or (ii) simply ensure that there is at least one configuration attribute that an `AccessDecisionVoter` will vote to grant access for. This latter (recommended) approach is usually achieved through a `ROLE_USER` or `ROLE_AUTHENTICATED` configuration attribute.
+////
+`AfterInvocationManager` 를 사용하면 주의하길 바란다. 당신은 여전히 ``MethodSecurityInterceptor``의 `AccessDecisionManager`가 작업할 수 있도록 허용하는 configuration attributes가 필요하다. 만약 스프링 시큐리티가 포함하는 전형적인 `AccessDecisionManager` 구현을 사용할 때, 특정 secure method 동작에 정의된 configuration attributes가 없다면, 각 `AccessDecisionVoter`가 투표에 기권하도록 만든다. 결과적으로 만약 `AccessDecisionManager`의 속성 "`allowIfAllAbstainDecisions`" 가 `false`라면, `AccessDeniedException`가 던져질 것이다. 당신은 이 잠재적 이슈를 다음 중 하나의 방법으로 피할 수 있다. 
+(i) "`allowIfAllAbstainDecisions`"를 `true`로 설정하라.(일반적으로 추천하지 않는다.)  아니면 (ii) `AccessDecisionVoter`가 투표할 수 있게 하는 최소한 하나의 configuration attribute 가 있는지 간단히 확인하라. 이 중 두번째 방법은 보통 `ROLE_USER` 나 `ROLE_AUTHENTICATED` configuration attribute로 이루어진다.
 
-
+////
+[[authz-hierarchical-roles]]
+=== Hierarchical Roles
+It is a common requirement that a particular role in an application should automatically "include" other roles. For example, in an application which has the concept of an "admin" and a "user" role, you may want an admin to be able to do everything a normal user can. To achieve this, you can either make sure that all admin users are also assigned the "user" role. Alternatively, you can modify every access constraint which requires the "user" role to also include the "admin" role. This can get quite complicated if you have a lot of different roles in your application.
+////
 [[authz-hierarchical-roles]]
 === Hierarchical Roles
 It is a common requirement that a particular role in an application should automatically "include" other roles. For example, in an application which has the concept of an "admin" and a "user" role, you may want an admin to be able to do everything a normal user can. To achieve this, you can either make sure that all admin users are also assigned the "user" role. Alternatively, you can modify every access constraint which requires the "user" role to also include the "admin" role. This can get quite complicated if you have a lot of different roles in your application.
 
+////
+The use of a role-hierarchy allows you to configure which roles (or authorities) should include others. An extended version of Spring Security's <<authz-role-voter,RoleVoter>>, `RoleHierarchyVoter`, is configured with a `RoleHierarchy`, from which it obtains all the "reachable authorities" which the user is assigned. A typical configuration might look like this:
+////
 The use of a role-hierarchy allows you to configure which roles (or authorities) should include others. An extended version of Spring Security's <<authz-role-voter,RoleVoter>>, `RoleHierarchyVoter`, is configured with a `RoleHierarchy`, from which it obtains all the "reachable authorities" which the user is assigned. A typical configuration might look like this:
 
 [source,xml]
@@ -152,6 +163,12 @@ The use of a role-hierarchy allows you to configure which roles (or authorities)
 </bean>
 ----
 
+////
+Here we have four roles in a hierarchy `ROLE_ADMIN => ROLE_STAFF => ROLE_USER => ROLE_GUEST`. A user who is authenticated with `ROLE_ADMIN`, will behave as if they have all four roles when security contraints are evaluated against an `AccessDecisionManager` cconfigured with the above `RoleHierarchyVoter`. The `>` symbol can be thought of as meaning "includes".
+////
 Here we have four roles in a hierarchy `ROLE_ADMIN => ROLE_STAFF => ROLE_USER => ROLE_GUEST`. A user who is authenticated with `ROLE_ADMIN`, will behave as if they have all four roles when security contraints are evaluated against an `AccessDecisionManager` cconfigured with the above `RoleHierarchyVoter`. The `>` symbol can be thought of as meaning "includes".
 
+////
+Role hierarchies offer a convenient means of simplifying the access-control configuration data for your application and/or reducing the number of authorities which you need to assign to a user. For more complex requirements you may wish to define a logical mapping between the specific access-rights your application requires and the roles that are assigned to users, translating between the two when loading the user information.
+////
 Role hierarchies offer a convenient means of simplifying the access-control configuration data for your application and/or reducing the number of authorities which you need to assign to a user. For more complex requirements you may wish to define a logical mapping between the specific access-rights your application requires and the roles that are assigned to users, translating between the two when loading the user information.
