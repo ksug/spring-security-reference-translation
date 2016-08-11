@@ -137,13 +137,13 @@ Please be aware that if you're using `AfterInvocationManager`, you will still ne
 It is a common requirement that a particular role in an application should automatically "include" other roles. For example, in an application which has the concept of an "admin" and a "user" role, you may want an admin to be able to do everything a normal user can. To achieve this, you can either make sure that all admin users are also assigned the "user" role. Alternatively, you can modify every access constraint which requires the "user" role to also include the "admin" role. This can get quite complicated if you have a lot of different roles in your application.
 ////
 [[authz-hierarchical-roles]]
-=== Hierarchical Roles
-It is a common requirement that a particular role in an application should automatically "include" other roles. For example, in an application which has the concept of an "admin" and a "user" role, you may want an admin to be able to do everything a normal user can. To achieve this, you can either make sure that all admin users are also assigned the "user" role. Alternatively, you can modify every access constraint which requires the "user" role to also include the "admin" role. This can get quite complicated if you have a lot of different roles in your application.
+=== 계층형 역할
+어플리케이션에서 특정한 역할이 자동으로 다른 역할을 "포함" 해야 하는것은 일반적인 요구사항이다. 예를 들면 "관리자"와 "사용자" 역할이 있는 어플리케이션에서, 관리자는 일반 사용자가 할 수 있는 일을 모두 할 수 있길 바랄것이다. 당신은 이를 실현하기 위해 모든 관리자가 "사용자" 역할에 할당되게 만들 수 있다. 그 대신 "사용자" 역할을 요구하는 모든 접근 제한을 "관리자" 역할도 포함하도록 수정 할 수도 있다. 하지만 이 방법은 어플리케이션에 다양한 역할이 있다면 꽤나 복잡해질 것이다.
 
 ////
 The use of a role-hierarchy allows you to configure which roles (or authorities) should include others. An extended version of Spring Security's <<authz-role-voter,RoleVoter>>, `RoleHierarchyVoter`, is configured with a `RoleHierarchy`, from which it obtains all the "reachable authorities" which the user is assigned. A typical configuration might look like this:
 ////
-The use of a role-hierarchy allows you to configure which roles (or authorities) should include others. An extended version of Spring Security's <<authz-role-voter,RoleVoter>>, `RoleHierarchyVoter`, is configured with a `RoleHierarchy`, from which it obtains all the "reachable authorities" which the user is assigned. A typical configuration might look like this:
+role-hierarchy를 사용하면 어떤 역할(아니면 권한)이 다른것을 포함하도록 할 수 있다. 스프링 시큐리티 <<authz-role-voter,RoleVoter>>의 확장버젼인 `RoleHierarchyVoter`는 `RoleHierarchy`로 구성되는데, 이로 부터 사용자가 할당된 "접근 가능한 권한"을 모두 얻는다. 전형적인 설정은 다음과 같다.
 
 [source,xml]
 ----
@@ -166,9 +166,9 @@ The use of a role-hierarchy allows you to configure which roles (or authorities)
 ////
 Here we have four roles in a hierarchy `ROLE_ADMIN => ROLE_STAFF => ROLE_USER => ROLE_GUEST`. A user who is authenticated with `ROLE_ADMIN`, will behave as if they have all four roles when security contraints are evaluated against an `AccessDecisionManager` cconfigured with the above `RoleHierarchyVoter`. The `>` symbol can be thought of as meaning "includes".
 ////
-Here we have four roles in a hierarchy `ROLE_ADMIN => ROLE_STAFF => ROLE_USER => ROLE_GUEST`. A user who is authenticated with `ROLE_ADMIN`, will behave as if they have all four roles when security contraints are evaluated against an `AccessDecisionManager` cconfigured with the above `RoleHierarchyVoter`. The `>` symbol can be thought of as meaning "includes".
+여기 계층구조로 4개의 역할이 있다. `ROLE_ADMIN => ROLE_STAFF => ROLE_USER => ROLE_GUEST`. `ROLE_ADMIN`로 인증받은 사용자는 위의 `RoleHierarchyVoter`로 설정된 `AccessDecisionManager`에 대해 security contraints를 평가받을 때, 네가지 역할을 모두 갖은것 처럼 작동한다. `>`심볼은 "포함한다"란 의미로 생각할 수 있다.
 
 ////
 Role hierarchies offer a convenient means of simplifying the access-control configuration data for your application and/or reducing the number of authorities which you need to assign to a user. For more complex requirements you may wish to define a logical mapping between the specific access-rights your application requires and the roles that are assigned to users, translating between the two when loading the user information.
 ////
-Role hierarchies offer a convenient means of simplifying the access-control configuration data for your application and/or reducing the number of authorities which you need to assign to a user. For more complex requirements you may wish to define a logical mapping between the specific access-rights your application requires and the roles that are assigned to users, translating between the two when loading the user information.
+역할 계층구조는 어플리케이션의 접근조작 설정을 단순화하고, 사용자에게 할당해야 하는 권한의 수를 줄여주는 쉬운 방법을 제공한다. 더 복잡한 요구사항을 위해선, 사용자 정보를 불러오는 동안 특정한 어플리케이션이 요구하는 접근권한과 사용자에게 할당된 역할 간의 논리적인 연결관계를 정의할 수 있다. 
