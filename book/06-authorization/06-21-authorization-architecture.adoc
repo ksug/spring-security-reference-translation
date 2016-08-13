@@ -27,7 +27,7 @@ All `AuthenticationProvider` s included with the security architecture use `Gran
 
 [[authz-pre-invocation]]
 === Pre-Invocation Handling
-=== 호출 전에 다루기
+=== 실행 이전 처리
 우리가 <<secure-objects,기술개관>> 장에서 본 것 처럼, 스프링 시큐리티는 메서드 호출이나 웹 요청 같은 보안객체에 대한 접근을 제어하는 인터셉터를 제공한다. 호출 전 판단은 `AccessDecisionManager`가 호출이 진행되도록 허락할 것인지 여부를 결정한다.
 
 
@@ -87,37 +87,63 @@ boolean supports(Class clazz);
 
 
 [[authz-authenticated-voter]]
-===== AuthenticatedVoter
-Another voter which we've implicitly seen is the `AuthenticatedVoter`, which can be used to differentiate between anonymous, fully-authenticated and remember-me authenticated users. Many sites allow certain limited access under remember-me authentication, but require a user to confirm their identity by logging in for full access.
+===== 인증받은 투표자
+우리가 암묵적으로 본 또 다른 투표자는 `AuthenticatedVoter`이다. 이 투표자는 익명 사용자와 완전히 인증받은 사용자 그리고 remember-me 인증 사용자를 구별하는데 사용한다. 많은 사이트는 remember-me 인증으로 어느정도 제한된 접근만을 허락하고, 완전한 접근을 위해 사용자에게 로그인으로 그들의 신분확인을 요구한다.
 
-When we've used the attribute `IS_AUTHENTICATED_ANONYMOUSLY` to grant anonymous access, this attribute was being processed by the `AuthenticatedVoter`. See the Javadoc for this class for more information.
-
+우리가 익명접근 승인을 위해 `IS_AUTHENTICATED_ANONYMOUSLY` 속성을 사용할 때, 이 속성은 `AuthenticatedVoter`가 처리한다. 이 클래스의 자세한 설명을 위해 자바문서를 보라.
 
 [[authz-custom-voter]]
 ===== Custom Voters
-Obviously, you can also implement a custom `AccessDecisionVoter` and you can put just about any access-control logic you want in it. It might be specific to your application (business-logic related) or it might implement some security administration logic. For example, you'll find a http://spring.io/blog/2009/01/03/spring-security-customization-part-2-adjusting-secured-session-in-real-time[ blog article] on the Spring web site which describes how to use a voter to deny access in real-time to users whose accounts have been suspended.
+===== 커스텀 투표자
+물론 커스텀 `AccessDecisionVoter` 를 구현하고, 당신이 원하는 어떠한 접근제어 로직을 넣을 수도 있다. 이것은 아마도 당신의 어플리케이션에 특정되거나, 아니면 약간의 보안 관리 로직을 구현할 것이다. 예를 들어, 스프링 웹 사이트에서 http://spring.io/blog/2009/01/03/spring-security-customization-part-2-adjusting-secured-session-in-real-time[ 블로그 기사 ]를 찾을 수 있다. 이 기사는 실시간 환경에서 사용자의 계정이 정지당했을 때, 그 사용자의 접근을 거부하기 위해 투표자를 어떻게 사용해야 하는지 설명한다.
 
 
 [[authz-after-invocation-handling]]
+////
 === After Invocation Handling
 Whilst the `AccessDecisionManager` is called by the `AbstractSecurityInterceptor` before proceeding with the secure object invocation, some applications need a way of modifying the object actually returned by the secure object invocation. Whilst you could easily implement your own AOP concern to achieve this, Spring Security provides a convenient hook that has several concrete implementations that integrate with its ACL capabilities.
+////
+=== 실행 이후 처리
+`AbstractSecurityInterceptor`는 secure object 실행을 진행하기 전에 `AccessDecisionManager`를 호출하지만, 몇몇의 어플리케이션은 secure object 실행 이후 반환된 객체를 수정할 방법이 필요하다.
+당신은 당신만의 AOP concern을 구현함으로써 쉽게 이 목적을 달성할 수 있지만, 스프링 시큐리티는 그것의 ACL 능력을 통합한 몇가지 구현체를 가진 간편한 hook을 제공한다.
 
+////
 <<authz-after-invocation>> illustrates Spring Security's `AfterInvocationManager` and its concrete implementations.
 
 [[authz-after-invocation]]
 .After Invocation Implementation
 image::images/after-invocation.png[]
+////
+<<authz-after-invocation>> 는 스프링 시큐리티의 `AfterInvocationManager` 와 그것의 구현체를 보여준다.
 
+[[authz-after-invocation]]
+.실행 이후 구현
+image::images/after-invocation.png[]
+
+////
 Like many other parts of Spring Security, `AfterInvocationManager` has a single concrete implementation, `AfterInvocationProviderManager`, which polls a list of `AfterInvocationProvider` s. Each `AfterInvocationProvider` is allowed to modify the return object or throw an `AccessDeniedException`. Indeed multiple providers can modify the object, as the result of the previous provider is passed to the next in the list.
+////
+`AfterInvocationManager`는 스프링 시큐리티의 다른 부분과 비슷하게 하나의 구현체인 `AfterInvocationProviderManager`를 갖는다. 이 구현체는 `AfterInvocationProvider` 목록을 poll한다. 각각의 `AfterInvocationProvider`는 반환된 객체를 수정하거나 `AccessDeniedException`를 던질 수 있다. 이전 프로바이더의 결과가 그 목록에 있는 다음 프로바이더에게 넘어가기에, 실제로 여러개의 프로바이더가 그 객체를 수정할 수 있다.
 
+////
 Please be aware that if you're using `AfterInvocationManager`, you will still need configuration attributes that allow the ``MethodSecurityInterceptor``'s `AccessDecisionManager` to allow an operation. If you're using the typical Spring Security included `AccessDecisionManager` implementations, having no configuration attributes defined for a particular secure method invocation will cause each `AccessDecisionVoter` to abstain from voting. In turn, if the `AccessDecisionManager` property           "`allowIfAllAbstainDecisions`" is `false`, an `AccessDeniedException` will be thrown. You may avoid this potential issue by either (i) setting "`allowIfAllAbstainDecisions`" to `true` (although this is generally not recommended) or (ii) simply ensure that there is at least one configuration attribute that an `AccessDecisionVoter` will vote to grant access for. This latter (recommended) approach is usually achieved through a `ROLE_USER` or `ROLE_AUTHENTICATED` configuration attribute.
+////
+`AfterInvocationManager` 를 사용하면 주의하길 바란다. 당신은 여전히 ``MethodSecurityInterceptor``의 `AccessDecisionManager`가 작업할 수 있도록 허용하는 configuration attributes가 필요하다. 만약 스프링 시큐리티가 포함하는 전형적인 `AccessDecisionManager` 구현을 사용할 때, 특정 secure method 동작에 정의된 configuration attributes가 없다면, 각 `AccessDecisionVoter`가 투표에 기권하도록 만든다. 결과적으로 만약 `AccessDecisionManager`의 속성 "`allowIfAllAbstainDecisions`" 가 `false`라면, `AccessDeniedException`가 던져질 것이다. 당신은 이 잠재적 이슈를 다음 중 하나의 방법으로 피할 수 있다. 
+(i) "`allowIfAllAbstainDecisions`"를 `true`로 설정하라.(일반적으로 추천하지 않는다.)  아니면 (ii) `AccessDecisionVoter`가 투표할 수 있게 하는 최소한 하나의 configuration attribute 가 있는지 간단히 확인하라. 이 중 두번째 방법은 보통 `ROLE_USER` 나 `ROLE_AUTHENTICATED` configuration attribute로 이루어진다.
 
-
+////
 [[authz-hierarchical-roles]]
 === Hierarchical Roles
 It is a common requirement that a particular role in an application should automatically "include" other roles. For example, in an application which has the concept of an "admin" and a "user" role, you may want an admin to be able to do everything a normal user can. To achieve this, you can either make sure that all admin users are also assigned the "user" role. Alternatively, you can modify every access constraint which requires the "user" role to also include the "admin" role. This can get quite complicated if you have a lot of different roles in your application.
+////
+[[authz-hierarchical-roles]]
+=== 계층형 역할
+어플리케이션에서 특정한 역할이 자동으로 다른 역할을 "포함" 해야 하는것은 일반적인 요구사항이다. 예를 들면 "관리자"와 "사용자" 역할이 있는 어플리케이션에서, 관리자는 일반 사용자가 할 수 있는 일을 모두 할 수 있길 바랄것이다. 당신은 이를 실현하기 위해 모든 관리자가 "사용자" 역할에 할당되게 만들 수 있다. 그 대신 "사용자" 역할을 요구하는 모든 접근 제한을 "관리자" 역할도 포함하도록 수정 할 수도 있다. 하지만 이 방법은 어플리케이션에 다양한 역할이 있다면 꽤나 복잡해질 것이다.
 
+////
 The use of a role-hierarchy allows you to configure which roles (or authorities) should include others. An extended version of Spring Security's <<authz-role-voter,RoleVoter>>, `RoleHierarchyVoter`, is configured with a `RoleHierarchy`, from which it obtains all the "reachable authorities" which the user is assigned. A typical configuration might look like this:
+////
+role-hierarchy를 사용하면 어떤 역할(아니면 권한)이 다른것을 포함하도록 할 수 있다. 스프링 시큐리티 <<authz-role-voter,RoleVoter>>의 확장버젼인 `RoleHierarchyVoter`는 `RoleHierarchy`로 구성되는데, 이로 부터 사용자가 할당된 "접근 가능한 권한"을 모두 얻는다. 전형적인 설정은 다음과 같다.
 
 [source,xml]
 ----
@@ -137,6 +163,12 @@ The use of a role-hierarchy allows you to configure which roles (or authorities)
 </bean>
 ----
 
+////
 Here we have four roles in a hierarchy `ROLE_ADMIN => ROLE_STAFF => ROLE_USER => ROLE_GUEST`. A user who is authenticated with `ROLE_ADMIN`, will behave as if they have all four roles when security contraints are evaluated against an `AccessDecisionManager` cconfigured with the above `RoleHierarchyVoter`. The `>` symbol can be thought of as meaning "includes".
+////
+여기 계층구조로 4개의 역할이 있다. `ROLE_ADMIN => ROLE_STAFF => ROLE_USER => ROLE_GUEST`. `ROLE_ADMIN`로 인증받은 사용자는 위의 `RoleHierarchyVoter`로 설정된 `AccessDecisionManager`에 대해 security contraints를 평가받을 때, 네가지 역할을 모두 갖은것 처럼 작동한다. `>`심볼은 "포함한다"란 의미로 생각할 수 있다.
 
+////
 Role hierarchies offer a convenient means of simplifying the access-control configuration data for your application and/or reducing the number of authorities which you need to assign to a user. For more complex requirements you may wish to define a logical mapping between the specific access-rights your application requires and the roles that are assigned to users, translating between the two when loading the user information.
+////
+역할 계층구조는 어플리케이션의 접근조작 설정을 단순화하고, 사용자에게 할당해야 하는 권한의 수를 줄여주는 쉬운 방법을 제공한다. 더 복잡한 요구사항을 위해선, 사용자 정보를 불러오는 동안 특정한 어플리케이션이 요구하는 접근권한과 사용자에게 할당된 역할 간의 논리적인 연결관계를 정의할 수 있다. 

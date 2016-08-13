@@ -381,46 +381,95 @@ Spring Security has distinct classes responsible for most of the steps described
 ////
 The `AuthenticationEntryPoint` is responsible for step three in the above list. As you can imagine, each web application will have a default authentication strategy (well, this can be configured like nearly everything else in Spring Security, but let's keep it simple for now). Each major authentication system will have its own `AuthenticationEntryPoint` implementation, which typically performs one of the actions described in step 3.
 ////
-`AuthenticationEntryPoint`는 위의 단계에서 3번째 단계에 대해 책임이 있습니다 
+`AuthenticationEntryPoint`는 위의 단계에서 3번째 단계에 대해 책임이 있습니다. 당신이 상상할 수 있듯이 각각의 웹 어플리케이션은 기본 인증 전략을 가지게 됩니다. ( 이것은 스프링 시큐리티에 있는 다른 모든 것들과 같습니다만 지금은 심플하게 가봅시다. ) 각각의 주요 인증 시스템은 그들 자신의 `AuthenticationEntryPoint` 구현체를 가지게 되며 이것은 스텝3에 설명된 액션 중에 하나를 일반적으로 하게 됩니다.
 
-
-
+////
 ==== Authentication Mechanism
 Once your browser submits your authentication credentials (either as an HTTP form post or HTTP header) there needs to be something on the server that"collects" these authentication details. By now we're at step six in the above list. In Spring Security we have a special name for the function of collecting authentication details from a user agent (usually a web browser), referring to it as the "authentication mechanism". Examples are form-base login and Basic authentication. Once the authentication details have been collected from the user agent, an `Authentication` "request" object is built and then presented to the `AuthenticationManager`.
+////
 
+==== 인증 메커니즘
+당신의 브라우저가 당신의 인증 정보를 서브밋하면(HTTP 폼 post나 HTTP Header 같은 것들로), 이러한 인증 디테일을 "모으기"위한 어떤 필요성이 존재합니다. 이 시점에서 우리는 위의 리스트에서 있는 6단계에 있습니다. 우리는 인증 메커니즘으로 참조할 유저에이전트(보통 웹브라우저)로부터 인증정보를 모으는 기능을 위한 특별한 이름을 가지고 있습니다. 예제는 폼기반 로그인이나 기본인증입니다. 인증 세부사항이 유저에이전트로부터 수집되면 `Authentication` "요청" 객체가 만들어지며 `AuthenticationManager`에 보여지게 됩니다. 
+
+////
 After the authentication mechanism receives back the fully-populated `Authentication` object, it will deem the request valid, put the `Authentication` into the `SecurityContextHolder`, and cause the original request to be retried (step seven above). If, on the other hand, the `AuthenticationManager` rejected the request, the authentication mechanism will ask the user agent to retry (step two above).
+////
+
+인증 메커니즘이 완벽하게 생성된 `Authentication` 객체를 받게된 후에는 요청이 유효한지 알아보게 되며, `Authentication`을 `SecurityContextHolder`에 넣고 원래의 요청을 다시 한번 알아보게 됩니다. `AuthenticationManager` 가 요청을 거절하게 되면, 인증 메커니즘은 유저 에이전트에게 (스텝2에 나온대로) 다시 할 것을 요청하게 됩니다. 
 
 
 [[tech-intro-sec-context-persistence]]
+////
 ==== Storing the SecurityContext between requests
 Depending on the type of application, there may need to be a strategy in place to store the security context between user operations. In a typical web application, a user logs in once and is subsequently identified by their session Id. The server caches the principal information for the duration session. In Spring Security, the responsibility for storing the `SecurityContext` between requests falls to the `SecurityContextPersistenceFilter`, which by default stores the context as an `HttpSession` attribute between HTTP requests. It restores the context to the `SecurityContextHolder` for each request and, crucially, clears the `SecurityContextHolder` when the request completes. You shouldn't interact directly with the `HttpSession` for security purposes. There is simply no justification for doing so - always use the `SecurityContextHolder` instead.
+////
 
+==== 요청들 사이에 시큐리티 컨텍스트 저장하기
+어플리케이션의 종류에 따라, 유저 작업들 사이에 시큐리티 컨텍스트를 저장하기 위한 전략이 있습니다. 일반적인 웹 어플리케이션에서는 한번 로그인되면, 세션 아이디에 의해 식별되어집니다.서버는 세션동안에 인증 정보를 캐시하게 됩니다. 스프링 시큐리티에서는 요청들간에 `SecurityContext`를 저장하는 책임이 `SecurityContextPersistenceFilter`에 맡겨지게 되는데, 이것은 기본적으로 HTTP요청간에 `HttpSession` 속성으로써 `SecurityContext`를 저장합니다. 이것은 각각의 요청을 위하여 `SecurityContextHolder`를 저장하고, 요청이 완료되면 결정적으로 `SecurityContextHolder`를 비우게 됩니다. 당신은 보안목적으로 직접적으로 `HttpSession`와 상호작용할 수 가 없습니다. 이러한 작업을 위해서 단순하게 `SecurityContextHolder`를 사용합시다. 
+
+////
 Many other types of application (for example, a stateless RESTful web service) do not use HTTP sessions and will re-authenticate on every request. However, it is still important that the `SecurityContextPersistenceFilter` is included in the chain to make sure that the `SecurityContextHolder` is cleared after each request.
+////
 
+(RESTful 웹서비스같은) 많은 어플리케이션 타입들은 HTTP세션을 사용하지 않고 매번 요청에서 인증을 다시 하게 됩니다. 그러나 `SecurityContextPersistenceFilter`가 chain에 포함되어서 각각의 요청 후에 `SecurityContextHolder` 가 clear된 것을 확인하는 것은 여전히 중요합니다. 
+
+////
 [NOTE]
 ====
 In an application which receives concurrent requests in a single session, the same `SecurityContext` instance will be shared between threads. Even though a `ThreadLocal` is being used, it is the same instance that is retrieved from the `HttpSession` for each thread. This has implications if you wish to temporarily change the context under which a thread is running. If you just use `SecurityContextHolder.getContext()`, and call `setAuthentication(anAuthentication)` on the returned context object, then the `Authentication` object will change in __all__ concurrent threads which share the same `SecurityContext` instance. You can customize the behaviour of `SecurityContextPersistenceFilter` to create a completely new `SecurityContext` for each request, preventing changes in one thread from affecting another. Alternatively you can create a new instance just at the point where you temporarily change the context. The method `SecurityContextHolder.createEmptyContext()` always returns a new context instance.
 ====
+////
 
+[NOTE]
+====
+단일세션에서 동시성 요청을 받는 어플리케이션에서 `SecurityContext`인스턴스는 스레드들 사이에 공유됩니다. 심지어 `ThreadLocal` 가 사용되더라도, 각각의 스레드에서 `HttpSession`으로부터는 같은 인스턴스를 받게됩니다. 이것은 만약 당신이 스레드가 돌아가고 있는 상황에서 컨텍스트를 일시적으로 변경하기를 원한다면 영향이 있을 수가 있습니다. 만약 당신이 반환된 컨텍스트 객체에서 `SecurityContextHolder.getContext()`를 사용하고 `setAuthentication(anAuthentication)`메서드를 사용한다면 그 `Authentication`객체는 같은 `SecurityContext`인스턴스를 공유하는 모든 동시성 스레드를 바꾸게 됩니다. 당신은 `SecurityContextPersistenceFilter`의 이런 행동을 커스터마이징하여서 각각의 요청을 위한 새 `SecurityContext` 를 생성할 수 있고, 다른 스레드로부터 스레드가 가진 내용이 변경되는 것을 예방할 수가 있습니다. 대안으로는 당신은 당신이 컨텍스트를 변경하는 시점에서 새로운 인스턴스를 만들 수도 있습니다. `SecurityContextHolder.createEmptyContext()`메서드는 언제나 새로운 컨텍스트 인스턴스를 반납합니다. 
+
+////
 [[tech-intro-access-control]]
 === Access-Control (Authorization) in Spring Security
 The main interface responsible for making access-control decisions in Spring Security is the `AccessDecisionManager`. It has a `decide` method which takes an `Authentication` object representing the principal requesting access, a "secure object" (see below) and a list of security metadata attributes which apply for the object (such as a list of roles which are required for access to be granted).
+////
 
+=== 스프링 시큐리티에서의 접근 제어 (Authorization)
+스프링 시큐리티에서 접근제어결정을 만들어내는 책임이 있는 주요 인터페이스는 `AccessDecisionManager`입니다. 이것은 인증정보를 나타내는 `Authentication` 객체를 받아서 `결정하는` 메서드를 가집니다. 여기서의 인증정보는 접근에 대한 요청,  "secure object"와 객체에 적용될 보안 메타데이터속성 리스트(접근이 허용되는데 필요한 권한들의 리스트) 등을 요청합니다. 
 
+////
 ==== Security and AOP Advice
 If you're familiar with AOP, you'd be aware there are different types of advice available: before, after, throws and around. An around advice is very useful, because an advisor can elect whether or not to proceed with a method invocation, whether or not to modify the response, and whether or not to throw an exception. Spring Security provides an around advice for method invocations as well as web requests. We achieve an around advice for method invocations using Spring's standard AOP support and we achieve an around advice for web requests using a standard Filter.
+////
 
+==== 스프링과 AOP 어드바이스
+만약 당신이 AOP와 익숙하다면, 사용가능한 어드바이스의 다른 타입들에대해 알고 있을 것입니다. before, after, throws, around 같은 것들말입니다. Around 어드바이스가 매우 유용합니다. 왜냐하면 어드바이저가 메소드가 실행이 처리되건 안되건 간에, 응답을 바꾸건 안바꾸건, 예외를 던지건 안던지건 선출될 수 있기 때문입니다. 스프링 시큐리티는 웹 요청과 마찬가지로 메서드 실행을 위한 어드바이스를 제공합니다. 우리는 스프링의 표준 AOP지원을 사용하여서 메서드 실행을 위한 어라운드어드바이스를 얻을 수가 있고, 표준 필터를 사용하여서 웹요청에 대한 어드바이스를 얻을 수가 있습니다. 
+
+////
 For those not familiar with AOP, the key point to understand is that Spring Security can help you protect method invocations as well as web requests. Most people are interested in securing method invocations on their services layer. This is because the services layer is where most business logic resides in current-generation Java EE applications. If you just need to secure method invocations in the services layer, Spring's standard AOP will be adequate. If you need to secure domain objects directly, you will likely find that AspectJ is worth considering.
+////
 
-You can elect to perform method authorization using AspectJ or Spring AOP, or you can elect to perform web request authorization using filters. You can use zero, one, two or three of these approaches together. The mainstream usage pattern is to perform some web request authorization, coupled with some Spring AOP method invocation authorization on the services layer.
+AOP와 익숙하지 않은 분들을 위한, 핵심 요점은 스프링 시큐리티는 웹 요청과 마찬가지로 메서드 실행을 protect하는 것을 도울 수 있다는 것을 이해하는 것입니다.대부분의 사람들은 서비스 계층 레이어에서 메서드실행을 보안하는 것에 흥미를 가집니다. 이것은 서비스 레이어가 현재 자바 EE 어플리케이션 세대에서 비즈니스 로직이 있는 곳이기 때문입니다. 만약 서비스레이어에서 메서드 보안이 필요로 한다면 스프링 표준 AOP가 적절할 것이니다. 만약 당신이 직접적으로 시큐어 도메인을 필요로 한다면 AspectJ를 고려하는 것이 좋을 것입니다. 
+
+////
+You can elect to perform method authorization using AspectJ or Spring AOP, or you can elect to perform web request authorization using filters. You can use zero, one, two or three of these approaches together. The mainstream usage pattern is to perform some web request authorization, 하 some Spring AOP method invocation authorization on the services layer.
+////
+
+당신은 AspectJ나 AOP를 사용하여서, 메서드에 대한 인가를 실행할지에 대한 것을 선택할 수 있습니다.또는 필터를 사용하여서 웹요청에 대한 인가를 수행할 수 있습니다. 당신은 아무것도 안하거나 이러한 접근들 중의 하나 혹은 두세개를 함께 사용할 수 있습니다. 웹 요청 인가를 하기 위한 주요 사용 패턴은 서비스 레이어에서 몇가지 AOP메서드와 함께 인가에 대한 수행을 하는 것입니다. 
 
 
 [[secure-objects]]
+////
 ==== Secure Objects and the AbstractSecurityInterceptor
 So what __is__ a "secure object" anyway? Spring Security uses the term to refer to any object that can have security (such as an authorization decision) applied to it. The most common examples are method invocations and web requests.
+////
 
+==== 비밀객체와 AbstractSecurityInterceptors
+자 그럼 "비밀객체"("secure object")는 무엇일까요? 스프링 시큐리티는 보안을 적용하기 위한 어떤 객체를 언급하기 위하여 이 용어를 사용합니다. 대부분의 흔한 예로는 메소드 실행과 웹요청입니다.
+
+////
 Each supported secure object type has its own interceptor class, which is a subclass of `AbstractSecurityInterceptor`. Importantly, by the time the `AbstractSecurityInterceptor` is called, the `SecurityContextHolder` will contain a valid `Authentication` if the principal has been authenticated.
+////
 
+각각의 지원되는 보안객체타입은 그것 자신의 인터셉터클래스를 가집니다. 이 인터셉터 클래스는 `AbstractSecurityInterceptor`의 하위 클래스입니다. 중요한 것은, `AbstractSecurityInterceptor`가 호출되는 순간에 인증주체가 인증되면 `SecurityContextHolder`가 적합한 `Authentication`를 가지게 됩니다.
+
+////
 `AbstractSecurityInterceptor` provides a consistent workflow for handling secure object requests, typically:
 
 . Look up the "configuration attributes" associated with the present request
@@ -428,18 +477,44 @@ Each supported secure object type has its own interceptor class, which is a subc
 . Optionally change the `Authentication` under which the invocation takes place
 . Allow the secure object invocation to proceed (assuming access was granted)
 . Call the `AfterInvocationManager` if configured, once the invocation has returned. If the invocation raised an exception, the `AfterInvocationManager` will not be invoked.
+////
+
+`AbstractSecurityInterceptor` 가 일반적으로 보안객체요청을 다루기 위하여 일관적인 워크플로우를 제공합니다.
+
+. 현재 요청와 관련된 "설정된 속성"을 찾습니다.
+. 인가 결정을 위하여 `AccessDecisionManager` 에게 보안객체와 현재 `Authentication`와 설정속성을 제출합니다.
+. 선택적으로 인가가 발생하면 `Authentication`를 변경합니다.
+. 처리할 비밀객체의 실행을 허용합니다.(접근이 허용되었다는 가정하에)
+. invocation이 반환되고, 만약 설정이 되었다면 `AfterInvocationManager`를 요청합니다. 만약 예외가 발생한다면 `AfterInvocationManager`는 실행되지 않을 것입니다. 
 
 [[tech-intro-config-attributes]]
+////
 ===== What are Configuration Attributes?
-A "configuration attribute" can be thought of as a String that has special meaning to the classes used by `AbstractSecurityInterceptor`. They are represented by the interface `ConfigAttribute` within the framework. They may be simple role names or have more complex meaning, depending on the how sophisticated the `AccessDecisionManager` implementation is. The `AbstractSecurityInterceptor` is configured with a `SecurityMetadataSource` which it uses to look up the attributes for a secure object. Usually this configuration will be hidden from the user. Configuration attributes will be entered as annotations on secured methods or as access attributes on secured URLs. For example, when we saw something like `<intercept-url pattern='/secure/**' access='ROLE_A,ROLE_B'/>` in the namespace introduction, this is saying that the configuration attributes `ROLE_A` and `ROLE_B` apply to web requests matching the given pattern. In practice, with the default `AccessDecisionManager` configuration, this means that anyone who has a `GrantedAuthority` matching either of these two attributes will be allowed access. Strictly speaking though, they are just attributes and the interpretation is dependent on the `AccessDecisionManager` implementation. The use of the prefix `ROLE_` is a marker to indicate that these attributes are roles and should be consumed by Spring Security's `RoleVoter`. This is only relevant when a voter-based `AccessDecisionManager` is in use. We'll see how the `AccessDecisionManager` is implemented in the <<authz-arch,authorization chapter>>.
+A "configuration attribute" can be thought of as a String that has special meaning to the classes used by `AbstractSecurityInterceptor`. They are represented by the interface `ConfigAttribute` within the framework. They may be simple role names or have more complex meaning, depending on the how sophisticated the `AccessDecisionManager` implementation is. The `AbstractSecurityInterceptor` is configured with a `SecurityMetadataSource` which it uses to look up the attributes for a secure object. Usually this configuration will be hidden from the user. Configuration attributes will be entered as annotations on secured methods or as access attributes on secured URLs. 
+////
+===== 무엇이 설정 속성인가?
+"설정 속성" 은 `AbstractSecurityInterceptor`에게 사용되는 클래스들에 대하여 의도를 가진 문자열일 수 있습니다. 이것들은 프레임워크 내의 `ConfigAttribute` 인터페이스에 의해 표현될 수 있습니다. 이것들은 `AccessDecisionManager`구현체가 얼마나 복잡한 가에 따라서 간단한 규칙이름이거나 좀 더 복잡한 의미를 가지기도 합니다.  `AbstractSecurityInterceptor`는 `SecurityMetadataSource` 와 함께 설정되며 이것은 보안객체를 위한 설정을 찾는데 사용됩니다. 보통 이 설정은 유저로부터 감춰져 있습니다. 설정속성은 보안메서드의 어노테이션으로 입력되거나, 보안되는 URL에 관한 접근속성으로 입력됩니다. 
+
+////
+For example, when we saw something like `<intercept-url pattern='/secure/**' access='ROLE_A,ROLE_B'/>` in the namespace introduction, this is saying that the configuration attributes `ROLE_A` and `ROLE_B` apply to web requests matching the given pattern. In practice, with the default `AccessDecisionManager` configuration, this means that anyone who has a `GrantedAuthority` matching either of these two attributes will be allowed access. Strictly speaking though, they are just attributes and the interpretation is dependent on the `AccessDecisionManager` implementation. The use of the prefix `ROLE_` is a marker to indicate that these attributes are roles and should be consumed by Spring Security's `RoleVoter`. This is only relevant when a voter-based `AccessDecisionManager` is in use. We'll see how the `AccessDecisionManager` is implemented in the <<authz-arch,authorization chapter>>.
+////
+
+예를 들자면, 우리가 네임스페이스 소개에서 `<intercept-url pattern='/secure/**' access='ROLE_A,ROLE_B'/>` 같은 것들을 보았을 때, 이것은 설저속성 `ROLE_A` and `ROLE_B`가 주어진 패턴에 매칭되는 웹요청에 적용된다는 것을 말합니다. 실제로 기본  `AccessDecisionManager`설정과 함께라면 이것은 이러한 두개의 속성에 맞는 `GrantedAuthority`를 가지고 있는 누구건간에 접근이 허용된다는 것을 의미합니다. 엄격하게 말하자면, 이것들은 단지 속성일뿐이며 `AccessDecisionManager` 구현체가 이를 해석합니다. `ROLE_`의 사용은 이 속성이 규칙임을 나타내는 마커이며 스프링시큐리티의 `RoleVoter`에 의해 사용되어지게 됩니다. 이것은 오직 voter기반의 `AccessDecisionManager`가 사용될 때 의미가 있게 돕니다. 우리는 어떻게 `AccessDecisionManager`가 구현되는지 <<authz-arch,authorization chapter>>에서 보도록 하겠습니다. 
 
 
 ===== RunAsManager
+////
 Assuming `AccessDecisionManager` decides to allow the request, the `AbstractSecurityInterceptor` will normally just proceed with the request. Having said that, on rare occasions users may want to replace the `Authentication` inside the `SecurityContext` with a different `Authentication`, which is handled by the `AccessDecisionManager` calling a `RunAsManager`. This might be useful in reasonably unusual situations, such as if a services layer method needs to call a remote system and present a different identity. Because Spring Security automatically propagates security identity from one server to another (assuming you're using a properly-configured RMI or HttpInvoker remoting protocol client), this may be useful.
-
+////
+`AccessDecisionManager`가 요청에 대한 허용을 결정한다고 가정해봅시다. `AbstractSecurityInterceptor`는 보통 이 요청에 대하여 처리를 할 것입니다. 	그럼에도 불구하고 간혹 유저가  `SecurityContext`  내의 `Authentication` 를 `RunAsManager`라 불리우는 `AccessDecisionManager`에 의해 조정되는 다른 `Authentication`로 바꾸고 싶어할 때가 있습니다. 이것은 평범하지 않은 상황에서 유용할 수 있습니다. 만약 서비스 레이어 메소드가 리모트 시스템을 요청하거나 다른 식별을 나타낼 때 같을 때 말입니다. 왜냐하면 스프링 시큐리티는 자동적으로 하나의 서버에서 다른쪽(당신이 적절하게 설정된 RMI나 HttpInvoker를 원격프로토콜 클라이언트로 사용하고 있다고 가정)으로 보안식별을 전파할 것이며 이것은 유용할 것입니다. 
 
 ===== AfterInvocationManager
+////
 Following the secure object invocation proceeding and then returning - which may mean a method invocation completing or a filter chain proceeding - the `AbstractSecurityInterceptor` gets one final chance to handle the invocation. At this stage the `AbstractSecurityInterceptor` is interested in possibly modifying the return object. We might want this to happen because an authorization decision couldn't be made "on the way in" to a secure object invocation. Being highly pluggable, `AbstractSecurityInterceptor` will pass control to an `AfterInvocationManager` to actually modify the object if needed. This class can even entirely replace the object, or throw an exception, or not change it in any way as it chooses. The after-invocation checks will only be executed if the invocation is successful. If an exception occurs, the additional checks will be skipped.
+////
+
+다음의 보안객체 실행이 처리되며 그리고 반환될 것입니다.  - 이것은 아마 메소드 실행이 완료되거나 필터체인이 처리된다는 것을 의미합니다 - `AbstractSecurityInterceptor`는 이러한 실행을 다룰 마지막 찬스를 얻을 것입니다. 이러한 단계에서 `AbstractSecurityInterceptor` 는 반환된 객체를 수정가능한지에 대한 흥미가 있습니다. 우리는 이러한 것(수정)이 일어나길 원하는데 왜냐하면, 인가 결정은 보안객체가 실행하는 동안에는 행해질 수 없기 때문입니다. 만약 필요하면 실제로 객체를 수정하기 위해 `AbstractSecurityInterceptor`는 `AfterInvocationManager`에게 조정을 위임할 것입니다. 이 클래스는 전적으로 객체를 대체하거나 예외를 던지거나 아무것도 수정하지 않을 수도 있습니다. 만약 invocation이 성공적으로 이뤄졌다면 invocation이후의 검사는 그 이후에나 실행될 수 있습니다. 예외가 발생한다면 추가적인 검사는 skip될 것입니다. 
+
 
 `AbstractSecurityInterceptor` and its related objects are shown in <<abstract-security-interceptor>>
 
@@ -447,17 +522,35 @@ Following the secure object invocation proceeding and then returning - which may
 .Security interceptors and the "secure object" model
 image::images/security-interception.png[Abstract Security Interceptor]
 
+////
 ===== Extending the Secure Object Model
 Only developers contemplating an entirely new way of intercepting and authorizing requests would need to use secure objects directly. For example, it would be possible to build a new secure object to secure calls to a messaging system. Anything that requires security and also provides a way of intercepting a call (like the AOP around advice semantics) is capable of being made into a secure object. Having said that, most Spring applications will simply use the three currently supported secure object types (AOP Alliance `MethodInvocation`, AspectJ `JoinPoint` and web request `FilterInvocation`) with complete transparency.
+////
+
+==== 보안객체 모델을 확장하기
+요청을 인터셉터하여서 인가하려는 새로운 방법을 고려하는 개발자라면, 보안객체를 직접적으로 사용할 수 있습니다. 예를 들자면, 메시징시스템 안에서 보안호출을 하기 위한 새로운 보안 객체를 생성할 수 있습니다. 보안을 필요로 하는 어떤 것이거나, 호출을 인터셉트하는 방법을 제공하는 어떤 것이건간에 보안 객체로 만들어질 수 있습니다. 그렇긴해도 대부분의 스프링 어플리케이션은 단순히 현재 지원되는 보안객체 타입(AOP Alliance `MethodInvocation`, AspectJ `JoinPoint` and web request `FilterInvocation`) 을 사용합니다. 
 
 
 [[localization]]
+////
 === Localization
 Spring Security supports localization of exception messages that end users are likely to see. If your application is designed for English-speaking users, you don't need to do anything as by default all Security messages are in English. If you need to support other locales, everything you need to know is contained in this section.
+////
 
+=== 지역화
+스프링 시큐리티는 최종사용자가 보고 싶어하는, 예외메시지의 지역화를 제공합니다. 만약 당신의 어플리케이션이 영어권사용자를 위해 디자인되었다면 당신은 기본값으로 두고 어떤 것도 할 필요가 없지만, 당신이 다른 지역언어를 설정하기를 원한다면 당신이 알기 원하는 모든것이 이 섹션에 포함되어있습니다. 
+
+////
 All exception messages can be localized, including messages related to authentication failures and access being denied (authorization failures). Exceptions and logging messages that are focused on developers or system deployers (including incorrect attributes, interface contract violations, using incorrect constructors, startup time validation, debug-level logging) are not localized and instead are hard-coded in English within Spring Security's code.
+////
 
+인증 실패와 관련되거나 접근이 거절된 메시지들을 포함하여서 모든 예외메시지는 지역화될 수 있습니다.  (부적합한 속성, 인터페이스 제약위반, 부적합한 생성자, 기동시간 검증 디버그레벨 로깅들을 포함하여서 )개발자들이 접할 수 있는 예외와 로깅메시지는 스프링 시큐리티 내에 영어로 하드코딩되어있습니다. 
+
+////
 Shipping in the `spring-security-core-xx.jar` you will find an `org.springframework.security` package that in turn contains a `messages.properties` file, as well as localized versions for some common languages. This should be referred to by your `ApplicationContext`, as Spring Security classes implement Spring's `MessageSourceAware` interface and expect the message resolver to be dependency injected at application context startup time. Usually all you need to do is register a bean inside your application context to refer to the messages. An example is shown below:
+////
+
+`spring-security-core-xx.jar` 속에서 당신은 `org.springframework.security`패키지를 찾을 수 있을 것이며 이것은 실제로 `messages.properties`를 포함하고 있을 뿐만 아니라, 몇가지 흔한 언어들에대한 지역화된 버젼을 가지고 있습니다. 이것은 당신의 `ApplicationContext`를 통해서 참조될 수 있으며 이는 스프링 시큐리티의 클래스들이 스프링의 `MessageSourceAware`인터페이스를 구현하기 때문입니다. 그리고 메시지리졸버는 어플리케이션 컨텍스트 시동시간에 의존성이 주입되기를 기대합니다. 보통 당신이 할 모든 것은 당시늬 어플리케이션 컨텍스트에 메시지를 참조하기 위하여 빈을 등록하는 것입니다. 예제는 다음과 같습니다. 
 
 [source,xml]
 ----
@@ -467,10 +560,22 @@ Shipping in the `spring-security-core-xx.jar` you will find an `org.springframew
 </bean>
 ----
 
+////
 The `messages.properties` is named in accordance with standard resource bundles and represents the default language supported by Spring Security messages. This default file is in English.
+////
 
+`messages.properties` 는 표준 리소스 번들에 따라서 이름이 지어지고 스프링 시큐리티 메시지에 의해 지원되는 기본 언어를 표현합니다. 이것의 기본값은 다음과 같습니다.
+
+////
 If you wish to customize the `messages.properties` file, or support other languages, you should copy the file, rename it accordingly, and register it inside the above bean definition. There are not a large number of message keys inside this file, so localization should not be considered a major initiative. If you do perform localization of this file, please consider sharing your work with the community by logging a JIRA task and attaching your appropriately-named localized version of `messages.properties`.
+////
 
+만약 당신이 `messages.properties` 파일을 커스터마이징하기를 원하거나 다른 언어를 지원하기를 원한다면 다인은 이 파일을 복사해서 빈 정의의 안에 다시 등록을 할 수 있습니다. 이 파일 안에는 많은 메시지 키들이 있지 않습니다. 그러니 지역화는 그리 큰 이슈가 아닐 것입니다. 만약 당신이 이 파일의 지역화를 하기를 원한다면 지라 태스크에 로깅하고 당신의 적절히 이름지어진 지역화 버젼의 `messages.properties`를 공유해주는 걸 고려해보세요. 
+
+////
 Spring Security relies on Spring's localization support in order to actually lookup the appropriate message. In order for this to work, you have to make sure that the locale from the incoming request is stored in Spring's `org.springframework.context.i18n.LocaleContextHolder`. Spring MVC's `DispatcherServlet` does this for your application automatically, but since Spring Security's filters are invoked before this, the `LocaleContextHolder` needs to be set up to contain the correct `Locale` before the filters are called. You can either do this in a filter yourself (which must come before the Spring Security filters in `web.xml`) or you can use Spring's `RequestContextFilter`.  Please refer to the Spring Framework documentation for further details on using localization with Spring.
 
 The "contacts" sample application is set up to use localized messages.
+////
+
+스프링 시큐리티는 스프링의 지역화 지원에 의지하여 실제로 적합한 메시지를 찾기를 합니다.. 이 일을 하기 위해 당신은 요청에서의 로케일이 스프링의 `org.springframework.context.i18n.LocaleContextHolder`안에 있는지를 확인해야 합니다. 스프링MVC의 `DispatcherServlet` 는 당신의 어플리케이션이 자동으로 이러한 일이 동작하게 해주지만 스프링시큐리티의 필터는 이러한 일이 일어나기 전에 호출됩니다. `LocaleContextHolder`는 필터가 호출되기 전에 올바른 `Locale`이 포함되도록 설정되어야합니다. 당신은 당신이 직접 필터를 사용하여서 이를 하거나 스프링의 `RequestContextFilter`를 사용할 수 있습니다. 더 많은 정보를 원하신다면, 스프링 프레임워크의 지역화 부분을 참조하세요. 
