@@ -1,6 +1,6 @@
 [[test-method]]
 //== Testing Method Security
-== 메서드 보안 테스트
+=== 메서드 보안 테스트
 ////
 This section demonstrates how to  use Spring Security's Test support to test method based security.
 We first introduce a `MessageService` that requires the user to be authenticated in order to access it.
@@ -35,7 +35,8 @@ Hello org.springframework.security.authentication.UsernamePasswordAuthentication
 ----
 
 [[test-method-setup]]
-=== Security Test Setup
+//=== Security Test Setup
+==== 보안 테스트 설정
 
 ////
 Before we can use Spring Security Test support, we must perform some setup. An example can be seen below:
@@ -55,6 +56,7 @@ This is a basic example of how to setup Spring Security Test. The highlights are
 <2> `@ContextConfiguration` instructs the spring-test the configuration to use to create the `ApplicationContext`. Since no configuration is specified, the default configuration locations will be tried. This is no different than using the existing Spring Test support. For additional information, refer to the link:http://docs.spring.io/spring-framework/docs/4.0.x/spring-framework-reference/htmlsingle/#testcontext-ctx-management[Spring Reference]
 ////
 이것은 {spring-security-test} 를 어떻게 설정하는지를 알려주는 기본 예제다. 여기서 중요한 부분들은:
+
 <1> `@RunWith` 는 spring-test 모듈이 ApplicationContext 를 생성할 것을 알려준다. 이는 이미 지원되고 있는 {spring-test} 를 사용하는 것과 다르지 않다. 추가적으로 정보가 필요하다면,  link:http://docs.spring.io/spring-framework/docs/4.0.x/spring-framework-reference/htmlsingle/#integration-testing-annotations-standard[Spring Reference] 를 참조하라.
 <2> `@ContextConfiguration` 는 spring-test 구성이 `ApplicationContext` 을 생성하여 사용한다는 것을 알려준다. 구성 없이 정의되어 있다면 기본 구성 위치에서 시도한다. 이는 지왼되는 {spring-test}를 사용하는 것과 다르지 않다. 추가적으로 정보가 필요하다면  link:http://docs.spring.io/spring-framework/docs/4.0.x/spring-framework-reference/htmlsingle/#testcontext-ctx-management[Spring Reference] 를 참조하라.
 
@@ -84,7 +86,7 @@ public void getMessageUnauthenticated() {
 ----
 
 [[test-method-withmockuser]]
-=== @WithMockUser
+==== @WithMockUser
 
 ////
 The question is "How could we most easily run the test as a specific user?"
@@ -191,7 +193,7 @@ public class WithMockUserTests {
 
 
 [[test-method-withanonymoususer]]
-=== @WithAnonymousUser
+==== @WithAnonymousUser
 
 ////
 Using `@WithAnonymousUser` allows running as an anonymous user.
@@ -225,7 +227,7 @@ public class WithUserClassLevelAuthenticationTests {
 
 
 [[test-method-withuserdetails]]
-=== @WithUserDetails
+==== @WithUserDetails
 
 ////
 While `@WithMockUser` is a very convenient way to get started, it may not work in all instances.
@@ -303,7 +305,7 @@ However unlike `@WithMockUser`, `@WithUserDetails` requires the user to exist.
 
 
 [[test-method-withsecuritycontext]]
-=== @WithSecurityContext
+==== @WithSecurityContext
 
 ////
 We have seen that `@WithMockUser` is an excellent choice if we are not using a custom `Authentication` principal.
@@ -398,7 +400,7 @@ final class WithUserDetailsSecurityContextFactory
 
 [[test-method-meta-annotations]]
 // === Test Meta Annotations
-=== 테스트 메타 애너테이션
+==== 테스트 메타 애너테이션
 
 ////
 If you reuse the same user within your tests often, it is not ideal to have to repeatedly specify the attributes.
