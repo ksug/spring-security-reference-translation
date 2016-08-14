@@ -5,7 +5,6 @@ Ben Alex; Luke Taylor; Rob Winch; Gunnar Hillert
 :docinfo:
 :toc:
 :toclevels: 3
-:numbered:
 :source-highlighter: coderay
 :encoding: utf-8
 :front-cover-image: image:book/cover.jpg[width=1050,height=1600]

@@ -49,23 +49,13 @@ Before we can use Spring Security Test support, we must perform some setup. An e
 @ContextConfiguration // <2>
 public class WithMockUserTests {
 ----
-
 ////
 This is a basic example of how to setup Spring Security Test. The highlights are:
-////
-
-이것은 {spring-security-test} 를 어떻게 설정하는지를 알려주는 기본 예제다. 여기서 중요한 부분들은:
-
-////
 <1> `@RunWith` instructs the spring-test module that it should create an ApplicationContext This is no different than using the existing Spring Test support. For additional information, refer to the http://docs.spring.io/spring-framework/docs/4.0.x/spring-framework-reference/htmlsingle/#integration-testing-annotations-standard[Spring Reference]
+<2> `@ContextConfiguration` instructs the spring-test the configuration to use to create the `ApplicationContext`. Since no configuration is specified, the default configuration locations will be tried. This is no different than using the existing Spring Test support. For additional information, refer to the link:http://docs.spring.io/spring-framework/docs/4.0.x/spring-framework-reference/htmlsingle/#testcontext-ctx-management[Spring Reference]
 ////
-
+이것은 {spring-security-test} 를 어떻게 설정하는지를 알려주는 기본 예제다. 여기서 중요한 부분들은:
 <1> `@RunWith` 는 spring-test 모듈이 ApplicationContext 를 생성할 것을 알려준다. 이는 이미 지원되고 있는 {spring-test} 를 사용하는 것과 다르지 않다. 추가적으로 정보가 필요하다면,  link:http://docs.spring.io/spring-framework/docs/4.0.x/spring-framework-reference/htmlsingle/#integration-testing-annotations-standard[Spring Reference] 를 참조하라.
-
-////
-<2> `@ContextConfiguration` instructs the spring-test the configuration to use to create the `ApplicationContext`. Since no configuration is specified, the default configuration locations will be tried. This is no different than using the existing Spring Test support. For additional information, refer to the http://docs.spring.io/spring-framework/docs/4.0.x/spring-framework-reference/htmlsingle/#testcontext-ctx-management[Spring Reference]
-////
-
 <2> `@ContextConfiguration` 는 spring-test 구성이 `ApplicationContext` 을 생성하여 사용한다는 것을 알려준다. 구성 없이 정의되어 있다면 기본 구성 위치에서 시도한다. 이는 지왼되는 {spring-test}를 사용하는 것과 다르지 않다. 추가적으로 정보가 필요하다면  link:http://docs.spring.io/spring-framework/docs/4.0.x/spring-framework-reference/htmlsingle/#testcontext-ctx-management[Spring Reference] 를 참조하라.
 
 ////
