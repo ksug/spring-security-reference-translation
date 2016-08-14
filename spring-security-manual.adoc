@@ -10,7 +10,11 @@ Ben Alex; Luke Taylor; Rob Winch; Gunnar Hillert
 :encoding: utf-8
 :front-cover-image: image:book/cover.jpg[width=1050,height=1600]
 //==== placeholders
+:role: 역할
+:principal: 주체
 :spring-security: 스프링 시큐리티
+:spring-security-test: 스프링 시큐리티 테스트
+:spring-test: 스프링 테스트
 :security-api-url: http://docs.spring.io/spring-security/site/docs/current/apidocs/
 
 ////
