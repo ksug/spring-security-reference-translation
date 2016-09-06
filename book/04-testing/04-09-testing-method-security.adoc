@@ -1,8 +1,16 @@
 [[test-method]]
+
+////
 == Testing Method Security
 
 This section demonstrates how to  use Spring Security's Test support to test method based security.
 We first introduce a `MessageService` that requires the user to be authenticated in order to access it.
+////
+
+== 테스팅 메소드 시큐리티
+
+이번 섹션에서는 어떻게 스프링 시큐리티의 테스트를 사용하는지 설명하고, 보안에 근거한 메소드의 테스트들을 지원하는지 설명하려고 합니다.
+우리는 먼저 보안접근을 위한 인증과정을 거치는 유저를 필요로 하는 `MessageService`를 소개할 것입니다.
 
 [source,java]
 ----
@@ -17,8 +25,14 @@ public class HelloMessageService implements MessageService {
 }
 ----
 
+////
 The result of `getMessage` is a String saying "Hello" to the current Spring Security `Authentication`.
 An example of the output is displayed below.
+////
+
+`getMessage` 의 결과는 현재 스프링 시큐리티의 `Authentication`에 "Hello" 라고 말하는 문자열이 될 것입니다. 
+예제결과는 다음과 같이 나타납니다.
+
 
 [source,text]
 ----
